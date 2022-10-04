@@ -1,4 +1,5 @@
-import 'package:familia_flutter/components/widgets/scaffold.dart';
+import 'package:familia_flutter/components/widgets/getScaffold.dart';
+import 'package:familia_flutter/components/widgets/primaryButton.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/stores/navigation.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
@@ -13,25 +14,23 @@ import '../../components/widgets/formTextField.dart';
 import '../../components/widgets/linkButton.dart';
 import '../../themes/sizes.dart';
 
-class SetUserDataScreenArgumentsModel {
+class SetUserDataScreen extends StatefulWidget {
+  const SetUserDataScreen(
+      {Key? key,
+      this.title,
+      this.hideGoBack = false,
+      required this.dataSubmit,
+      required this.imageSubmit,
+      this.afterSubmit,
+      this.initialData})
+      : super(key: key);
+
   final String? title;
   final bool hideGoBack;
   final Future<bool> Function(BaseUserDataModel) dataSubmit;
   final Future<bool> Function({required XFile image}) imageSubmit;
   final void Function()? afterSubmit;
   final BaseUserDataModel? initialData;
-
-  SetUserDataScreenArgumentsModel(
-      {this.title,
-      this.hideGoBack = false,
-      required this.dataSubmit,
-      required this.imageSubmit,
-      this.afterSubmit,
-      this.initialData});
-}
-
-class SetUserDataScreen extends StatefulWidget {
-  SetUserDataScreen({Key? key}) : super(key: key);
 
   static const routeName = '/setUserDataScreen';
 
@@ -53,10 +52,10 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
 
     () async {
       await Future.delayed(Duration.zero);
-      final args = ModalRoute.of(context)!.settings.arguments
-          as SetUserDataScreenArgumentsModel;
-      nameTextEditingController.text = args.initialData?.name ?? '';
-      aboutTextEditingController.text = args.initialData?.about ?? '';
+      // final widget = ModalRoute.of(context)!.settings.arguments
+      //     as SetUserDataScreenArgumentsModel;
+      nameTextEditingController.text = widget.initialData?.name ?? '';
+      aboutTextEditingController.text = widget.initialData?.about ?? '';
     }();
   }
 
@@ -70,13 +69,13 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
     });
   }
 
-  void _submit(SetUserDataScreenArgumentsModel args) async {
+  void _submit() async {
     if (_formKey.currentState!.validate()) {}
     if (uploadImage != null) {
-      var uploadResult = await args.imageSubmit(image: uploadImage!);
+      var uploadResult = await widget.imageSubmit(image: uploadImage!);
       if (!uploadResult) return;
     }
-    var result = await args.dataSubmit(BaseUserDataModel(
+    var result = await widget.dataSubmit(BaseUserDataModel(
         name: nameTextEditingController.text != ''
             ? nameTextEditingController.text
             : null,
@@ -84,8 +83,8 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
             ? aboutTextEditingController.text
             : null));
 
-    if (result && args.afterSubmit != null) {
-      args.afterSubmit!();
+    if (result && widget.afterSubmit != null) {
+      widget.afterSubmit!();
     }
   }
 
@@ -102,12 +101,11 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final args = ModalRoute.of(context)!.settings.arguments
-        as SetUserDataScreenArgumentsModel;
 
     return getScaffold(
+        title: 'Редактирование профиля',
         hideUserPick: true,
-        title: args.title,
+        hideNavigationBar: true,
         body: SingleChildScrollView(
           controller: scrollController,
           child: Container(
@@ -118,60 +116,63 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
               children: [
                 Form(
                     key: _formKey,
-                    child: Observer(builder: (_)=>Column(
-                      children: [
-                        Container(
-                            margin: const EdgeInsets.only(bottom: 50),
-                            child: ImageWithUpload(
-                              onUpload: onUpload,
-                              isSquare: true,
-                              path: uploadImage?.path ??
-                                  userStore?.user?.userData?.userPic,
-                            )),
-                        Container(
-                          margin: marginHorizontal,
-                          child: Column(
-                            children: [
-                              Container(
-                                margin: EdgeInsets.only(
-                                  bottom: AppSizes.inputVerticalMargin,
-                                ),
-                                child: getTextFormField(
-                                    controller: nameTextEditingController,
-                                    updateCanSubmit: updateCanSubmit,
-                                    labelText: 'Фамилия Имя'),
+                    child: Observer(
+                      builder: (_) {
+                        var userPic = userStore?.user?.userData?.userPic;
+                       return Column(
+                          children: [
+                            Container(
+                                margin: const EdgeInsets.only(bottom: 50),
+                                child: ImageWithUpload(
+                                  onUpload: onUpload,
+                                  isSquare: true,
+                                  path: uploadImage?.path ?? userPic,
+                                )),
+                            Container(
+                              margin: marginHorizontal,
+                              child: Column(
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                      bottom: AppSizes.inputVerticalMargin,
+                                    ),
+                                    child: getTextFormField(
+                                        controller: nameTextEditingController,
+                                        updateCanSubmit: updateCanSubmit,
+                                        labelText: 'Фамилия Имя'),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: AppSizes.inputVerticalMargin),
+                                    child: getTextFormField(
+                                        controller: aboutTextEditingController,
+                                        minLines: 3,
+                                        maxLines: 15,
+                                        updateCanSubmit: updateCanSubmit,
+                                        labelText: 'Расскажите о себе',
+                                        hintText:
+                                            'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
+                                  ),
+                                  getPrimaryButton(
+                                      title: 'Сохранить',
+                                      onPressed: canSubmit ? _submit : null,
+                                      isLockedOnLoading: true),
+                                ],
                               ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    bottom: AppSizes.inputVerticalMargin),
-                                child: getTextFormField(
-                                    controller: aboutTextEditingController,
-                                    minLines: 3,
-                                    maxLines: 15,
-                                    updateCanSubmit: updateCanSubmit,
-                                    labelText: 'Расскажите о себе',
-                                    hintText:
-                                    'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
-                              ),
-                              ElevatedButton(
-                                onPressed:
-                                canSubmit ? () => _submit(args) : null,
-                                child: const Text('Сохранить'),
-                              )
-                            ],
-                          ),
-                        )
-                      ],
-                    ),)),
+                            )
+                          ],
+                        );
+                      },
+                    )),
                 const SizedBox(
                   height: 20.0,
                 ),
-                if (!args.hideGoBack)
+                if (!widget.hideGoBack)
                   getLinkButton(
-                      text: 'Отменить', onPressed: navigationStore.back),
-                if (args.hideGoBack && args.afterSubmit != null)
+                      text: 'Отменить', onPressed: Navigator.of(context).pop),
+                if (widget.hideGoBack && widget.afterSubmit != null)
                   getLinkButton(
-                      text: 'Пропустить', onPressed: args.afterSubmit)
+                      text: 'Пропустить', onPressed: widget.afterSubmit)
               ],
             ),
           ),

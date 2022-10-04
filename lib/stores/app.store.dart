@@ -16,6 +16,9 @@ class AppStore = AppStoreBase with _$AppStore;
 
 abstract class AppStoreBase with Store {
   @observable
+  var isLoading = false;
+
+  @observable
   var tokens = TokensModel();
 
   String? deviceId;
@@ -76,9 +79,12 @@ abstract class AppStoreBase with Store {
 
   @action
   logOut() async {
-    navigationStore.clear();
     userStore.resetUser();
+    navigationStore.clear();
     await localStorage.remove('access-token');
     await localStorage.remove('refresh-token');
   }
+
+  @action
+  setIsLoading(bool value) => isLoading = value;
 }

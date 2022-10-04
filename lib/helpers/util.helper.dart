@@ -14,6 +14,11 @@ getImageUrl(String? imageUrl) {
   return Config.baseApiOptions.baseUrl + imageUrl;
 }
 
+getOriginalImageUrl(String? imageUrl) {
+  if (imageUrl == null) return null;
+  return imageUrl.substring(Config.baseApiOptions.baseUrl.length);
+}
+
 getBearerToken(){
   return 'Bearer ${localStorage.read('access-token')}';
 }

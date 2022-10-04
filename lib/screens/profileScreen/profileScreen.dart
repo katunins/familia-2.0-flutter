@@ -1,6 +1,5 @@
 import 'package:familia_flutter/components/widgets/linkButton.dart';
 import 'package:familia_flutter/components/widgets/networkImage.dart';
-import 'package:familia_flutter/components/widgets/scaffold.dart';
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/screens/userScreens/setUserDataScreen.dart';
@@ -12,12 +11,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
-import '../../routes.dart';
+import '../../components/widgets/getScaffold.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 
-  static const routeName = '/profileScreen';
+  static const routeName = '/';
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +24,7 @@ class ProfileScreen extends StatelessWidget {
         hideNavigationBar: true,
         hideUserPick: true,
         title: 'Профиль',
+        isAlwaysBack: true,
         body: Observer(builder: (_)=>SingleChildScrollView(
           child: Column(
             children: [
@@ -45,15 +45,22 @@ class ProfileScreen extends StatelessWidget {
                       ),
                     getLinkButton(
                         text: 'Редактировать',
-                        onPressed: () =>
-                            navigationStore.push(SetUserDataScreen.routeName,
-                                arguments: SetUserDataScreenArgumentsModel(
-                                  title: 'Редактирование профиля',
-                                  initialData: BaseUserDataModel(name: userStore.user?.userData?.name, about: userStore.user?.userData?.about),
-                                  imageSubmit: userStore.updateUserPic,
-                                  dataSubmit: userStore.updateUserData,
-                                  afterSubmit: () => navigationStore.back(),
-                                ))),
+                        onPressed: () => Navigator.of(context)
+                                    .push(MaterialPageRoute(
+                                        builder: (_) => SetUserDataScreen(
+                                              title: 'Редактирование профиля',
+                                              initialData: BaseUserDataModel(
+                                                  name: userStore
+                                                      .user?.userData?.name,
+                                                  about: userStore
+                                                      .user?.userData?.about),
+                                              imageSubmit:
+                                                  userStore.updateUserPic,
+                                              dataSubmit:
+                                                  userStore.updateUserData,
+                                              afterSubmit:
+                                                  Navigator.of(context).pop,
+                                            )))),
                     const SizedBox(height: 12),
                     getLinkButton(text: 'Выйти из аккаунта', isGrey: true, onPressed: appStore.logOut),
                     const SizedBox(height: 50),

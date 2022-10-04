@@ -16,6 +16,22 @@ mixin _$AppStore on AppStoreBase, Store {
           Computed<bool>(() => super.isAuth, name: 'AppStoreBase.isAuth'))
       .value;
 
+  late final _$isLoadingAtom =
+      Atom(name: 'AppStoreBase.isLoading', context: context);
+
+  @override
+  bool get isLoading {
+    _$isLoadingAtom.reportRead();
+    return super.isLoading;
+  }
+
+  @override
+  set isLoading(bool value) {
+    _$isLoadingAtom.reportWrite(value, super.isLoading, () {
+      super.isLoading = value;
+    });
+  }
+
   late final _$tokensAtom = Atom(name: 'AppStoreBase.tokens', context: context);
 
   @override
@@ -64,9 +80,24 @@ mixin _$AppStore on AppStoreBase, Store {
     return _$logOutAsyncAction.run(() => super.logOut());
   }
 
+  late final _$AppStoreBaseActionController =
+      ActionController(name: 'AppStoreBase', context: context);
+
+  @override
+  dynamic setIsLoading(bool value) {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.setIsLoading');
+    try {
+      return super.setIsLoading(value);
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
+isLoading: ${isLoading},
 tokens: ${tokens},
 isAuth: ${isAuth}
     ''';

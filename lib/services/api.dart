@@ -11,7 +11,7 @@ class Api {
 
   Api({this.needToRefresh = true, this.isMultipartData = false}) {
     dio.interceptors
-        .add(QueuedInterceptorsWrapper(onRequest: onRequest, onError: onError));
+        .add(QueuedInterceptorsWrapper(onRequest: onRequest, onResponse: onResponse, onError: onError));
   }
 
   onRequest(
@@ -19,20 +19,28 @@ class Api {
     requestOptions.headers['authorization'] = getBearerToken();
     requestOptions.headers['device-id'] = appStore.deviceId;
     if (isMultipartData) {
+      appStore.setIsLoading(true);
       requestOptions.headers["Content-Type"] = "multipart/form-data";
     }
     return handler.next(requestOptions);
+  }
+
+  onResponse(Response response, ResponseInterceptorHandler handler,){
+    appStore.setIsLoading(false);
+    return handler.next(response);
   }
 
   onError(DioError error, ErrorInterceptorHandler handler) async {
     var response = error.response;
     if (response != null && response.statusCode == 403 && needToRefresh) {
       await refreshTokenAndRepeatRequest(response: response, handler: handler);
+      // appStore.setIsLoading(false);
       return;
     }
 
     var errorMessage = error.response?.data['message'];
     // appStore.logOut();
+    appStore.setIsLoading(false);
     if (errorMessage != null && errorMessage != '') {
       showDialog(middleText: errorMessage);
     }
