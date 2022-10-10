@@ -58,6 +58,7 @@ abstract class RelativesStoreBase with Store {
 
   @action
   setSearch(String search) {
+    pagination.page = 0;
     searchData.search = search;
     loadData();
   }

@@ -1,5 +1,5 @@
+import 'package:familia_flutter/components/widgets/imageWidget.dart';
 import 'package:familia_flutter/components/widgets/linkButton.dart';
-import 'package:familia_flutter/components/widgets/networkImage.dart';
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/screens/userScreens/setUserDataScreen.dart';
@@ -28,7 +28,7 @@ class ProfileScreen extends StatelessWidget {
         body: Observer(builder: (_)=>SingleChildScrollView(
           child: Column(
             children: [
-              if (userStore.user?.userData?.userPic != null) Image(image: getNetworkImage(userStore.user!.userData!.userPic!)),
+              if (userStore.user?.userData?.userPic != null) getImageWidget(path: userStore.user!.userData!.userPic!),
               Container(
                 margin: EdgeInsets.all(marginHorizontal.horizontal),
                 child: Column(
