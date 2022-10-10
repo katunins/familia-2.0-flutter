@@ -13,10 +13,12 @@ getScaffold({
   bool hideNavigationBar = false,
   bool hideUserPick = false,
   bool isAlwaysBack = false,
+  Widget? customAppBarTitle,
   required Widget body,
 }) =>
     Observer(
         builder: (_) => Scaffold(
+            resizeToAvoidBottomInset: false,
             bottomNavigationBar: !hideNavigationBar && appStore.isAuth
                 ? getBottomNavigationBar()
                 : null,
@@ -28,6 +30,7 @@ getScaffold({
             appBar: appStore.isAuth
                 ? getAppBar(
                     hideUserPic: hideUserPick,
+                    customTitle: customAppBarTitle,
                     title: title,
                     leading: isAlwaysBack
                         ? IconButton(

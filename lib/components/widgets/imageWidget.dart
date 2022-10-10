@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 
 import 'networkImage.dart';
 
-getImageWidget (String path){
+getImageWidget ({required String path, double? width, double? height, BoxFit? fit}){
   var isNetwork = path.contains(Config.baseApiOptions.baseUrl);
   if (isNetwork){
-    return Image(image: getNetworkImage(path));
+    return Image(image: getNetworkImage(path), width: width, height: height, fit: fit,);
   } else {
-    return Image.file(File(path));
+    return Image.file(File(path), width: width, fit: fit);
   }
 }

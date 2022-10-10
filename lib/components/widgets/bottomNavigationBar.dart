@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../navigation/tabRoutes.dart';
+import '../../stores/navigation.store.dart';
 import '../../themes/colors.dart';
 
 getBottomNavigationBar() => BottomAppBar(
@@ -23,7 +25,7 @@ getBottomNavigationBar() => BottomAppBar(
           IconButton(
             icon: const Icon(Icons.supervised_user_circle_sharp,
                 color: Colors.white),
-            onPressed: () {},
+            onPressed: () => navigationStore.setCurrentTab(TabRoutes.relatives),
           ),
         ],
       ),

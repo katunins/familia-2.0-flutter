@@ -45,11 +45,11 @@ class ImageWithUpload extends StatelessWidget {
       );
     }
     if (onUpload == null) {
-      return getImageWidget(path!);
+      return getImageWidget(path: path!);
     }
     return Stack(
       children: [
-        getImageWidget(path!),
+        getImageWidget(path: path!),
         Positioned(
             right: 20,
             bottom: 20,

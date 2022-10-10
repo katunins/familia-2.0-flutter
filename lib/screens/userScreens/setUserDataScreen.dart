@@ -10,7 +10,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../components/imageWithUpload.dart';
-import '../../components/widgets/formTextField.dart';
+import '../../components/widgets/textFieldWidget.dart';
 import '../../components/widgets/linkButton.dart';
 import '../../themes/sizes.dart';
 
@@ -136,19 +136,19 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                     margin: EdgeInsets.only(
                                       bottom: AppSizes.inputVerticalMargin,
                                     ),
-                                    child: getTextFormField(
+                                    child: TextFieldWidget(
                                         controller: nameTextEditingController,
-                                        updateCanSubmit: updateCanSubmit,
+                                        onChanged: (_) => updateCanSubmit(),
                                         labelText: 'Фамилия Имя'),
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
                                         bottom: AppSizes.inputVerticalMargin),
-                                    child: getTextFormField(
+                                    child: TextFieldWidget(
                                         controller: aboutTextEditingController,
                                         minLines: 3,
                                         maxLines: 15,
-                                        updateCanSubmit: updateCanSubmit,
+                                        onChanged: (_) => updateCanSubmit(),
                                         labelText: 'Расскажите о себе',
                                         hintText:
                                             'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),

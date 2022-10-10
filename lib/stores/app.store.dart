@@ -2,6 +2,7 @@ import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/tokens.model.dart';
 import 'package:familia_flutter/services/auth.service.dart';
 import 'package:familia_flutter/stores/navigation.store.dart';
+import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
 import 'package:mobx/mobx.dart';
 import 'package:platform_device_id/platform_device_id.dart';
@@ -38,9 +39,10 @@ abstract class AppStoreBase with Store {
 
   initAuthApp() async {
     await userStore.init();
-    if (!appStore.isAuth) {
-      return;
-    }
+    await relativesStore.init();
+    // if (!appStore.isAuth) {
+    //   return;
+    // }
   }
 
   @action

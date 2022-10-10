@@ -1,4 +1,5 @@
 import 'package:familia_flutter/config.dart';
+import 'package:familia_flutter/models/searchData.model.dart';
 
 import '../main.dart';
 
@@ -22,3 +23,9 @@ getOriginalImageUrl(String? imageUrl) {
 getBearerToken(){
   return 'Bearer ${localStorage.read('access-token')}';
 }
+
+getPaginationQueryParams({required int page, required SearchDataModel searchData}) => {
+  'page': page.toString(),
+  'pageSize': Config.pageSize.toString(),
+  'searchData': searchData.toMap()
+};

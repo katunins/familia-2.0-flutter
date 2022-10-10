@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 getRemoveSuffix(
-    {required VoidCallback onPressed,
-    required TextEditingController textEditingController}) {
-  if (textEditingController.text.isEmpty) {
-    return null;
-  }
+    {required VoidCallback onPressed}) {
   return IconButton(
     onPressed: onPressed,
     icon: const Icon(

@@ -1,4 +1,5 @@
-import 'package:familia_flutter/components/widgets/removeSuffix.dart';
+import 'package:familia_flutter/components/widgets/textFieldWidget.dart';
+
 import 'package:familia_flutter/main.dart';
 import 'package:familia_flutter/services/auth.service.dart';
 import 'package:familia_flutter/stores/app.store.dart';
@@ -58,40 +59,20 @@ class _SignInFormState extends State<SignInForm> {
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: Column(
                 children: [
-                  TextFormField(
-                    controller: emailTextEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'email',
-                      labelText: 'email',
-                      suffixIcon: getRemoveSuffix(
-                          onPressed: () {
-                            emailTextEditingController.clear();
-                            updateCanSubmit();
-                          },
-                          textEditingController: emailTextEditingController),
-                    ),
-                    onChanged: (value) {
-                      updateCanSubmit();
-                    },
+                  TextFieldWidget(
+                      controller: emailTextEditingController,
+                      onChanged: (_) => updateCanSubmit(),
+                    hintText: 'email',
+                    labelText: 'email',
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
-                  TextFormField(
+                  TextFieldWidget(
                     controller: passwordTextEditingController,
-                    decoration: InputDecoration(
-                        hintText: 'Пароль',
-                        labelText: 'Пароль',
-                        suffixIcon: getRemoveSuffix(
-                            onPressed: () {
-                              passwordTextEditingController.clear();
-                              updateCanSubmit();
-                            },
-                            textEditingController:
-                                passwordTextEditingController)),
-                    onChanged: (value) {
-                      updateCanSubmit();
-                    },
+                    onChanged: (_) => updateCanSubmit(),
+                    hintText: 'Пароль',
+                    labelText: 'Пароль',
                   ),
                 ],
               ),

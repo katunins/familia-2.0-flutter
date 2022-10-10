@@ -1,9 +1,6 @@
-import 'package:familia_flutter/main.dart';
+import 'package:familia_flutter/components/widgets/textFieldWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-
-import '../../components/widgets/removeSuffix.dart';
 import '../../helpers/util.helper.dart';
 import '../../services/auth.service.dart';
 import '../../stores/app.store.dart';
@@ -55,75 +52,33 @@ class _SignUpFormState extends State<SignUpForm> {
               margin: const EdgeInsets.symmetric(vertical: 40),
               child: Column(
                 children: [
-                  TextFormField(
-                    controller: emailTextEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'email',
+                  TextFieldWidget(
+                      controller: emailTextEditingController,
+                      onChanged: (_) => updateCanSubmit(),
                       labelText: 'email',
-                      suffixIcon: getRemoveSuffix(
-                          onPressed: () {
-                            emailTextEditingController.clear();
-                            updateCanSubmit();
-                          },
-                          textEditingController: emailTextEditingController),
-                    ),
-                    validator: (value) {
-                      if (!isEmailFormat(value)) {
-                        return 'Не верный формат email';
-                      }
-                    },
-                    onChanged: (value) {
-                      updateCanSubmit();
-                    },
+                    hintText: 'email',
+                    validator: (value) => !isEmailFormat(value) ? 'Не верный формат email' : null,
                   ),
                   const SizedBox(
                     height: 30.0,
                   ),
-                  TextFormField(
+                  TextFieldWidget(
                     controller: passwordTextEditingController,
-                    decoration: InputDecoration(
-                        hintText: 'Пароль',
-                        labelText: 'Пароль',
-                        suffixIcon: getRemoveSuffix(
-                            onPressed: () {
-                              passwordTextEditingController.clear();
-                              updateCanSubmit();
-                            },
-                            textEditingController:
-                                passwordTextEditingController)),
-                    validator: (value) {
-                      if (value != null && value.length < 8) {
-                        return 'Длинна пароля не менее 8 символов';
-                      }
-                    },
-                    onChanged: (value) {
-                      updateCanSubmit();
-                    },
+                    onChanged: (_) => updateCanSubmit(),
+                    labelText: 'Пароль',
+                    hintText: 'Пароль',
+                    validator: (value) => (value != null && value.length < 8) ? 'Длинна пароля не менее 8 символов' : null,
                   ),
                   const SizedBox(
                     height: 10.0,
                   ),
-                  TextFormField(
+                  TextFieldWidget(
                     controller: passwordDoubleTextEditingController,
-                    decoration: InputDecoration(
-                        hintText: 'Пароль',
-                        labelText: 'Повторите пароль',
-                        suffixIcon: getRemoveSuffix(
-                            onPressed: () {
-                              passwordDoubleTextEditingController.clear();
-                              updateCanSubmit();
-                            },
-                            textEditingController:
-                                passwordDoubleTextEditingController)),
-                    validator: (value) {
-                      if (value != passwordTextEditingController.text) {
-                        return 'Пароли не совпадают';
-                      }
-                    },
-                    onChanged: (value) {
-                      updateCanSubmit();
-                    },
-                  )
+                    onChanged: (_) => updateCanSubmit(),
+                    hintText: 'Пароль',
+                    labelText: 'Повторите пароль',
+                    validator: (value) => (value != passwordTextEditingController.text) ? 'Длинна пароля не менее 8 символов' : null,
+                  ),
                 ],
               ),
             ),
