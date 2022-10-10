@@ -5,24 +5,40 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../components/appBarSearch.dart';
 import '../../components/widgets/textFieldWidget.dart';
 import '../../themes/margins.theme.dart';
 
-class RelativesListScreen extends StatelessWidget {
+class RelativesListScreen extends StatefulWidget {
   RelativesListScreen({Key? key}) : super(key: key);
 
   static const routeName = '/';
 
+  @override
+  State<RelativesListScreen> createState() => _RelativesListScreenState();
+}
+
+class _RelativesListScreenState extends State<RelativesListScreen> {
   Future<void> _onRefresh() async {}
-  var controller = TextEditingController(text: relativesStore.searchData.search);
+
+  final _scrollController = ScrollController();
+  
+  @override
+  void initState() {
+    _scrollController.addListener(() async {
+      if (_scrollController.offset > _scrollController.position.maxScrollExtent && relativesStore.canLoadMore) {
+        await relativesStore.loadMore();
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return getScaffold(
-      customAppBarTitle:  TextFieldWidget(
-          controller: controller,
-          onChanged: relativesStore.setSearch,
-          isNoBorder: true
+      customAppBarTitle:  AppBarSearchInput(
+        initialValue: '',
+        onChange: relativesStore.setSearch
       ),
         body: RefreshIndicator(
             onRefresh: _onRefresh,
@@ -30,7 +46,8 @@ class RelativesListScreen extends StatelessWidget {
                 builder: (_) => Container(
                   margin: marginHorizontal,
                   child: ListView(
-                    children: relativesStore.relatives.data.map((item) => RelativeListItem(relative: item)).toList()
+                    controller: _scrollController,
+                    children: relativesStore.relatives.map((item) => RelativeListItem(relative: item)).toList(),
                   ),
                 ))));
   }

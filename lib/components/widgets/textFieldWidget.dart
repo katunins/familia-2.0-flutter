@@ -2,18 +2,17 @@ import 'package:familia_flutter/components/widgets/removeSuffix.dart';
 import 'package:flutter/material.dart';
 
 class TextFieldWidget extends StatelessWidget {
-  TextFieldWidget(
-      {Key? key,
-      required this.controller,
-      required this.onChanged,
-      this.labelText,
-      this.maxLines,
-      this.minLines,
-      this.hintText,
-      this.isNoBorder = false,
-      this.validator,
-      })
-      : super(key: key);
+  TextFieldWidget({
+    Key? key,
+    required this.controller,
+    required this.onChanged,
+    this.labelText,
+    this.maxLines,
+    this.minLines,
+    this.hintText,
+    this.isMini = false,
+    this.validator,
+  }) : super(key: key);
 
   TextEditingController controller;
   Function(String) onChanged;
@@ -21,7 +20,7 @@ class TextFieldWidget extends StatelessWidget {
   int? maxLines;
   int? minLines;
   String? hintText;
-  bool isNoBorder;
+  bool isMini;
   String? Function(String?)? validator;
 
   @override
@@ -33,7 +32,12 @@ class TextFieldWidget extends StatelessWidget {
         onChanged: onChanged,
         validator: validator,
         decoration: InputDecoration(
-            border: isNoBorder ? InputBorder.none : null,
+            isDense: isMini ? true : null,
+            contentPadding: isMini
+                ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16)
+                : null,
+            filled: isMini ? true : null,
+            border: isMini ? InputBorder.none : null,
             hintText: hintText,
             labelText: labelText,
             alignLabelWithHint: true,

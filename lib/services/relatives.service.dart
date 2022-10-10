@@ -8,8 +8,9 @@ import 'api.dart';
 class RelativesService {
   final apiUrl = 'relatives';
 
-  Future<RelativesModel?> getRelatives(
+  Future<Map<String, dynamic>?> getRelatives(
       {required int page, required SearchDataModel searchData}) async {
+
     var response = await Api().dio.get(apiUrl,
         queryParameters:
             getPaginationQueryParams(page: page, searchData: searchData));
@@ -17,7 +18,7 @@ class RelativesService {
     if (response.statusCode != 200) {
       return null;
     }
-    return RelativesModel.fromJson(response.data);
+    return response.data;
   }
 
   Future<RelativeModel?> updateRelative(Map<String, dynamic> dataObj) async {

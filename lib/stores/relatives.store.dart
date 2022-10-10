@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/pagination.model.dart';
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
@@ -12,47 +15,59 @@ var relativesStore = RelativesStore();
 class RelativesStore = RelativesStoreBase with _$RelativesStore;
 
 abstract class RelativesStoreBase with Store {
+  var isLoading = false;
 
   @observable
-  SearchDataModel searchData = SearchDataModel(search: '',fields: ['name', 'about']);
+  SearchDataModel searchData =
+      SearchDataModel(search: '', fields: ['name', 'about']);
 
   @observable
-  RelativesModel relatives =
-      RelativesModel(data: [], pagination: PaginationModel(page: 0, total: 0, pageSize: 0));
+  var relatives = ObservableList<RelativeModel>.of([]);
+  PaginationModel pagination =
+      PaginationModel(page: 0, total: 0, pageSize: Config.pageSize);
 
   init() async {
-    loadData(page: 0);
+    await loadData();
   }
 
   @action
-  loadData({required int page}) async {
-    var relativesResponse = await RelativesService().getRelatives(page: page, searchData: searchData);
-    if (relativesResponse != null) {
-      relatives = relativesResponse;
+  loadData({bool loadMore = false}) async {
+    isLoading = true;
+    var page = pagination.page;
+    if (loadMore) {
+      page ++;
     }
+    var json = await RelativesService()
+        .getRelatives(page: page, searchData: searchData);
+    if (json != null) {
+      var newData = (json['data'] as List<dynamic>)
+          .map((item) => RelativeModel.fromJson(item))
+          .toList();
+      if (!loadMore) {
+        relatives.clear();
+      }
+      relatives.addAll(newData);
+      pagination = PaginationModel.fromJson(json['pagination']);
+    }
+    isLoading = false;
+  }
+
+  loadMore() async {
+    await loadData(loadMore: true);
   }
 
   @action
-  setSearch(String search){
+  setSearch(String search) {
     searchData.search = search;
-    loadData(page: 0);
+    loadData();
   }
 
   @action
   resetSearch() {
     searchData.search = '';
-    loadData(page: 0);
-  }
-
-  @action
-  loadMore() async {
-    var relativesResponse = await loadData(page: relatives.pagination.page + 1);
-    if (relativesResponse != null) {
-      relatives.data.addAll(relativesResponse.data);
-      relatives.pagination = relativesResponse.pagination;
-    }
+    loadData();
   }
 
   @computed
-  bool get canLoadMore => relatives.data.length < relatives.pagination.total;
+  bool get canLoadMore => !isLoading && relatives.length < pagination.total;
 }

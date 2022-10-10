@@ -1,23 +1,7 @@
-import 'dart:convert';
-import 'dart:developer';
-
 import 'package:familia_flutter/models/baseUserData.model.dart';
-import 'package:familia_flutter/models/pagination.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
 
 import '../helpers/util.helper.dart';
-
-class RelativesModel {
-  late List<RelativeModel> data;
-  late PaginationModel pagination;
-
-  RelativesModel({required this.data, required this.pagination});
-
-  RelativesModel.fromJson(Map<String, dynamic> json) {
-    data = (json['data'] as List<dynamic>).map((item) => RelativeModel.fromJson(item)).toList();
-    pagination = PaginationModel.fromJson(json['pagination']);
-  }
-}
 
 class RelativeModel {
   late String id;

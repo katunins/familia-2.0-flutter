@@ -37,13 +37,13 @@ mixin _$RelativesStore on RelativesStoreBase, Store {
       Atom(name: 'RelativesStoreBase.relatives', context: context);
 
   @override
-  RelativesModel get relatives {
+  ObservableList<RelativeModel> get relatives {
     _$relativesAtom.reportRead();
     return super.relatives;
   }
 
   @override
-  set relatives(RelativesModel value) {
+  set relatives(ObservableList<RelativeModel> value) {
     _$relativesAtom.reportWrite(value, super.relatives, () {
       super.relatives = value;
     });
@@ -53,16 +53,8 @@ mixin _$RelativesStore on RelativesStoreBase, Store {
       AsyncAction('RelativesStoreBase.loadData', context: context);
 
   @override
-  Future loadData({required int page}) {
-    return _$loadDataAsyncAction.run(() => super.loadData(page: page));
-  }
-
-  late final _$loadMoreAsyncAction =
-      AsyncAction('RelativesStoreBase.loadMore', context: context);
-
-  @override
-  Future loadMore() {
-    return _$loadMoreAsyncAction.run(() => super.loadMore());
+  Future loadData({bool loadMore = false}) {
+    return _$loadDataAsyncAction.run(() => super.loadData(loadMore: loadMore));
   }
 
   late final _$RelativesStoreBaseActionController =
