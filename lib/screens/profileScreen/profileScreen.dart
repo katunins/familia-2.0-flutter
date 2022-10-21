@@ -49,11 +49,7 @@ class ProfileScreen extends StatelessWidget {
                                     .push(MaterialPageRoute(
                                         builder: (_) => SetUserDataScreen(
                                               title: 'Редактирование профиля',
-                                              initialData: BaseUserDataModel(
-                                                  name: userStore
-                                                      .user?.userData?.name,
-                                                  about: userStore
-                                                      .user?.userData?.about),
+                                              initialData: userStore.user?.userData,
                                               imageSubmit:
                                                   userStore.updateUserPic,
                                               dataSubmit:

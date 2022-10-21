@@ -2,6 +2,9 @@ import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/parents.model.dart';
 
 import 'baseUserData.model.dart';
+import 'gender.enum.dart';
+
+
 
 class UserModel {
   late String id;
@@ -18,6 +21,7 @@ class UserModel {
     id = json['_id'];
     email = json['email'];
     userData = BaseUserDataModel(
+      gender: getGenderFromJson(json['gender']),
       userPic: getImageUrl(json['userPic']),
       about: json['about'],
       name: json['name'],
@@ -30,6 +34,7 @@ class UserModel {
     if (userData.name != null) dataObj['userPic'] = userData.name;
     if (userData.userPic != null) dataObj['userPic'] = userData.userPic;
     if (userData.about != null) dataObj['about'] = userData.about;
+    if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
     return dataObj;
   }
 }

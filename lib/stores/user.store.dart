@@ -40,6 +40,7 @@ abstract class UserStoreBase with Store {
     Map<String, dynamic> dataObj = {};
     if (userData.name != null) dataObj['name'] = userData.name;
     if (userData.about != null) dataObj['about'] = userData.about;
+    if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
     var newUser = await UserService().updateUser(dataObj);
 
     if (newUser == null) {

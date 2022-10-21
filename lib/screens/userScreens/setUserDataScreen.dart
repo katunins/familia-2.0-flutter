@@ -1,7 +1,7 @@
+import 'package:familia_flutter/components/widgets/genderSwitch.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
 import 'package:familia_flutter/components/widgets/primaryButton.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
-import 'package:familia_flutter/stores/navigation.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,6 +12,7 @@ import 'package:image_picker/image_picker.dart';
 import '../../components/imageWithUpload.dart';
 import '../../components/widgets/textFieldWidget.dart';
 import '../../components/widgets/linkButton.dart';
+import '../../stores/genderSelector.controller.dart';
 import '../../themes/sizes.dart';
 
 class SetUserDataScreen extends StatefulWidget {
@@ -43,24 +44,32 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   final _formKey = GlobalKey<FormState>();
   final nameTextEditingController = TextEditingController();
   final aboutTextEditingController = TextEditingController();
+  final genderSelectorController = GenderSelectorController();
   var canSubmit = false;
   XFile? uploadImage;
 
   @override
   void initState() {
     super.initState();
-
     () async {
       await Future.delayed(Duration.zero);
-      // final widget = ModalRoute.of(context)!.settings.arguments
-      //     as SetUserDataScreenArgumentsModel;
+      genderSelectorController.setGender(widget.initialData?.gender);
       nameTextEditingController.text = widget.initialData?.name ?? '';
       aboutTextEditingController.text = widget.initialData?.about ?? '';
     }();
   }
 
   void updateCanSubmit() {
-    var res = nameTextEditingController.text.isNotEmpty;
+    var res = false;
+    if (nameTextEditingController.text.isNotEmpty && nameTextEditingController.text != widget.initialData?.name) {
+     res = true;
+    }
+    if (aboutTextEditingController.text != widget.initialData?.about) {
+      res = true;
+    }
+    if (genderSelectorController.gender != widget.initialData?.gender) {
+      res = true;
+    }
     if (uploadImage != null) {
       res = true;
     }
@@ -70,18 +79,24 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   }
 
   void _submit() async {
-    if (_formKey.currentState!.validate()) {}
+    _formKey.currentState!.validate();
+    if (genderSelectorController.validate()) {
+      return;
+    }
     if (uploadImage != null) {
       var uploadResult = await widget.imageSubmit(image: uploadImage!);
       if (!uploadResult) return;
     }
-    var result = await widget.dataSubmit(BaseUserDataModel(
-        name: nameTextEditingController.text != ''
-            ? nameTextEditingController.text
-            : null,
-        about: aboutTextEditingController.text != ''
-            ? aboutTextEditingController.text
-            : null));
+    var result = await widget.dataSubmit(
+      BaseUserDataModel(
+          name: nameTextEditingController.text != ''
+              ? nameTextEditingController.text
+              : null,
+          about: aboutTextEditingController.text != ''
+              ? aboutTextEditingController.text
+              : null,
+          gender: genderSelectorController.gender),
+    );
 
     if (result && widget.afterSubmit != null) {
       widget.afterSubmit!();
@@ -101,7 +116,6 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return getScaffold(
         title: 'Редактирование профиля',
         hideUserPick: true,
@@ -119,7 +133,7 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                     child: Observer(
                       builder: (_) {
                         var userPic = userStore?.user?.userData?.userPic;
-                       return Column(
+                        return Column(
                           children: [
                             Container(
                                 margin: const EdgeInsets.only(bottom: 50),
@@ -140,6 +154,14 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                         controller: nameTextEditingController,
                                         onChanged: (_) => updateCanSubmit(),
                                         labelText: 'Фамилия Имя'),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        bottom: AppSizes.inputVerticalMargin),
+                                    child: GenderSelector(
+                                      controller: genderSelectorController,
+                                      onChanged: (_) => updateCanSubmit(),
+                                    ),
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
