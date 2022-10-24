@@ -11,7 +11,7 @@ import '../../components/widgets/textFieldWidget.dart';
 import '../../themes/margins.theme.dart';
 
 class RelativesListScreen extends StatefulWidget {
-  RelativesListScreen({Key? key}) : super(key: key);
+  const RelativesListScreen({Key? key}) : super(key: key);
 
   static const routeName = '/';
 
@@ -20,8 +20,9 @@ class RelativesListScreen extends StatefulWidget {
 }
 
 class _RelativesListScreenState extends State<RelativesListScreen> {
-  Future<void> _onRefresh() async {}
+  // Future<void> _onRefresh() async {}
   String search = '';
+  final data = relativesStore.relatives.map((item) => RelativeListItem(relative: item)).toList();
 
   setSearch(String val){
     setState(() {
@@ -30,7 +31,7 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
   }
   // final _scrollController = ScrollController();
   
-  @override
+  // @override
   // void initState() {
   //   _scrollController.addListener(() async {
   //     if (_scrollController.offset > _scrollController.position.maxScrollExtent && relativesStore.canLoadMore) {
@@ -40,6 +41,16 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
   //   super.initState();
   // }
 
+  getFilteredData () {
+    if (search == '') {
+      return data;
+    }
+    return data.where((element) {
+      if ((element.relative.data.userData.name ?? '').contains(search) || (element.relative.data.userData.about ?? '').contains(search)) return true;
+      return false;
+    }).toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     return getScaffold(
@@ -47,15 +58,12 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
         initialValue: '',
         onChange: setSearch
       ),
-        body: RefreshIndicator(
-            onRefresh: _onRefresh,
-            child: Observer(
-                builder: (_) => Container(
-                  margin: marginHorizontal,
-                  child: ListView(
-                    // controller: _scrollController,
-                    children: relativesStore.relatives.map((item) => RelativeListItem(relative: item)).toList(),
-                  ),
-                ))));
+        body: Container(
+          margin: marginHorizontal,
+          child: ListView(
+            // controller: _scrollController,
+            children: getFilteredData(),
+          ),
+        ));
   }
 }
