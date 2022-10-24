@@ -12,6 +12,7 @@ class RelativeModel {
     id = json['_id'];
     userData = BaseUserDataModel(
       userPic: getImageUrl(json['userPic']),
+      gender: getGenderFromJson(json['gender']),
       about: json['about'],
       name: json['name'],
       parents: ParentsModel.fromJson(json['parents']),

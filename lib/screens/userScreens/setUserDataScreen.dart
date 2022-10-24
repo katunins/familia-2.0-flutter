@@ -23,6 +23,8 @@ class SetUserDataScreen extends StatefulWidget {
       required this.dataSubmit,
       required this.imageSubmit,
       this.afterSubmit,
+      this.aboutDescription,
+      this.aboutHint,
       this.initialData})
       : super(key: key);
 
@@ -32,6 +34,8 @@ class SetUserDataScreen extends StatefulWidget {
   final Future<bool> Function({required XFile image}) imageSubmit;
   final void Function()? afterSubmit;
   final BaseUserDataModel? initialData;
+  final String? aboutDescription;
+  final String? aboutHint;
 
   static const routeName = '/setUserDataScreen';
 
@@ -61,8 +65,9 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
 
   void updateCanSubmit() {
     var res = false;
-    if (nameTextEditingController.text.isNotEmpty && nameTextEditingController.text != widget.initialData?.name) {
-     res = true;
+    if (nameTextEditingController.text.isNotEmpty &&
+        nameTextEditingController.text != widget.initialData?.name) {
+      res = true;
     }
     if (aboutTextEditingController.text != widget.initialData?.about) {
       res = true;
@@ -116,8 +121,9 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var userPic = widget.initialData?.userPic;
     return getScaffold(
-        title: 'Редактирование профиля',
+        title: widget.title,
         hideUserPick: true,
         hideNavigationBar: true,
         body: SingleChildScrollView(
@@ -130,61 +136,57 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
               children: [
                 Form(
                     key: _formKey,
-                    child: Observer(
-                      builder: (_) {
-                        var userPic = userStore?.user?.userData?.userPic;
-                        return Column(
-                          children: [
-                            Container(
-                                margin: const EdgeInsets.only(bottom: 50),
-                                child: ImageWithUpload(
-                                  onUpload: onUpload,
-                                  isSquare: true,
-                                  path: uploadImage?.path ?? userPic,
-                                )),
-                            Container(
-                              margin: marginHorizontal,
-                              child: Column(
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                      bottom: AppSizes.inputVerticalMargin,
-                                    ),
-                                    child: TextFieldWidget(
-                                        controller: nameTextEditingController,
-                                        onChanged: (_) => updateCanSubmit(),
-                                        labelText: 'Фамилия Имя'),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        bottom: AppSizes.inputVerticalMargin),
-                                    child: GenderSelector(
-                                      controller: genderSelectorController,
-                                      onChanged: (_) => updateCanSubmit(),
-                                    ),
-                                  ),
-                                  Container(
-                                    margin: EdgeInsets.only(
-                                        bottom: AppSizes.inputVerticalMargin),
-                                    child: TextFieldWidget(
-                                        controller: aboutTextEditingController,
-                                        minLines: 3,
-                                        maxLines: 15,
-                                        onChanged: (_) => updateCanSubmit(),
-                                        labelText: 'Расскажите о себе',
-                                        hintText:
-                                            'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
-                                  ),
-                                  getPrimaryButton(
-                                      title: 'Сохранить',
-                                      onPressed: canSubmit ? _submit : null,
-                                      isLockedOnLoading: true),
-                                ],
+                    child: Column(
+                      children: [
+                        Container(
+                            margin: const EdgeInsets.only(bottom: 50),
+                            child: ImageWithUpload(
+                              onUpload: onUpload,
+                              isSquare: true,
+                              path: uploadImage?.path ?? userPic,
+                            )),
+                        Container(
+                          margin: marginHorizontal,
+                          child: Column(
+                            children: [
+                              Container(
+                                margin: EdgeInsets.only(
+                                  bottom: AppSizes.inputVerticalMargin,
+                                ),
+                                child: TextFieldWidget(
+                                    controller: nameTextEditingController,
+                                    onChanged: (_) => updateCanSubmit(),
+                                    labelText: 'Фамилия Имя'),
                               ),
-                            )
-                          ],
-                        );
-                      },
+                              Container(
+                                margin: EdgeInsets.only(
+                                    bottom: AppSizes.inputVerticalMargin),
+                                child: GenderSelector(
+                                  controller: genderSelectorController,
+                                  onChanged: (_) => updateCanSubmit(),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(
+                                    bottom: AppSizes.inputVerticalMargin),
+                                child: TextFieldWidget(
+                                    controller: aboutTextEditingController,
+                                    minLines: 3,
+                                    maxLines: 15,
+                                    onChanged: (_) => updateCanSubmit(),
+                                    labelText: widget.aboutDescription ??
+                                        'Расскажите о себе',
+                                    hintText: widget.aboutHint ??
+                                        'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
+                              ),
+                              getPrimaryButton(
+                                  title: 'Сохранить',
+                                  onPressed: canSubmit ? _submit : null,
+                                  isLockedOnLoading: true),
+                            ],
+                          ),
+                        )
+                      ],
                     )),
                 const SizedBox(
                   height: 20.0,

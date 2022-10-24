@@ -9,41 +9,17 @@ part of 'relatives.store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$RelativesStore on RelativesStoreBase, Store {
-  Computed<bool>? _$canLoadMoreComputed;
-
-  @override
-  bool get canLoadMore =>
-      (_$canLoadMoreComputed ??= Computed<bool>(() => super.canLoadMore,
-              name: 'RelativesStoreBase.canLoadMore'))
-          .value;
-
-  late final _$searchDataAtom =
-      Atom(name: 'RelativesStoreBase.searchData', context: context);
-
-  @override
-  SearchDataModel get searchData {
-    _$searchDataAtom.reportRead();
-    return super.searchData;
-  }
-
-  @override
-  set searchData(SearchDataModel value) {
-    _$searchDataAtom.reportWrite(value, super.searchData, () {
-      super.searchData = value;
-    });
-  }
-
   late final _$relativesAtom =
       Atom(name: 'RelativesStoreBase.relatives', context: context);
 
   @override
-  ObservableList<RelativeModel> get relatives {
+  ObservableList<RelativeItemStore> get relatives {
     _$relativesAtom.reportRead();
     return super.relatives;
   }
 
   @override
-  set relatives(ObservableList<RelativeModel> value) {
+  set relatives(ObservableList<RelativeItemStore> value) {
     _$relativesAtom.reportWrite(value, super.relatives, () {
       super.relatives = value;
     });
@@ -57,37 +33,10 @@ mixin _$RelativesStore on RelativesStoreBase, Store {
     return _$loadDataAsyncAction.run(() => super.loadData(loadMore: loadMore));
   }
 
-  late final _$RelativesStoreBaseActionController =
-      ActionController(name: 'RelativesStoreBase', context: context);
-
-  @override
-  dynamic setSearch(String search) {
-    final _$actionInfo = _$RelativesStoreBaseActionController.startAction(
-        name: 'RelativesStoreBase.setSearch');
-    try {
-      return super.setSearch(search);
-    } finally {
-      _$RelativesStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic resetSearch() {
-    final _$actionInfo = _$RelativesStoreBaseActionController.startAction(
-        name: 'RelativesStoreBase.resetSearch');
-    try {
-      return super.resetSearch();
-    } finally {
-      _$RelativesStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
   @override
   String toString() {
     return '''
-searchData: ${searchData},
-relatives: ${relatives},
-canLoadMore: ${canLoadMore}
+relatives: ${relatives}
     ''';
   }
 }

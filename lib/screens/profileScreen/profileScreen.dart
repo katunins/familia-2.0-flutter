@@ -36,6 +36,7 @@ class ProfileScreen extends StatelessWidget {
                     Text(
                       userStore.user?.userData?.name ?? Config.defaultUserName,
                       style: Theme.of(context).textTheme.headlineMedium,
+                      textAlign: TextAlign.center,
                     ),
                     if (userStore.user?.userData?.about != null)
                       Container(

@@ -4,6 +4,7 @@ import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:mobx/mobx.dart';
 
 import '../../components/appBarSearch.dart';
 import '../../components/widgets/textFieldWidget.dart';
@@ -20,25 +21,31 @@ class RelativesListScreen extends StatefulWidget {
 
 class _RelativesListScreenState extends State<RelativesListScreen> {
   Future<void> _onRefresh() async {}
+  String search = '';
 
-  final _scrollController = ScrollController();
+  setSearch(String val){
+    setState(() {
+      search = val;
+    });
+  }
+  // final _scrollController = ScrollController();
   
   @override
-  void initState() {
-    _scrollController.addListener(() async {
-      if (_scrollController.offset > _scrollController.position.maxScrollExtent && relativesStore.canLoadMore) {
-        await relativesStore.loadMore();
-      }
-    });
-    super.initState();
-  }
+  // void initState() {
+  //   _scrollController.addListener(() async {
+  //     if (_scrollController.offset > _scrollController.position.maxScrollExtent && relativesStore.canLoadMore) {
+  //       await relativesStore.loadMore();
+  //     }
+  //   });
+  //   super.initState();
+  // }
 
   @override
   Widget build(BuildContext context) {
     return getScaffold(
       customAppBarTitle:  AppBarSearchInput(
         initialValue: '',
-        onChange: relativesStore.setSearch
+        onChange: setSearch
       ),
         body: RefreshIndicator(
             onRefresh: _onRefresh,
@@ -46,7 +53,7 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
                 builder: (_) => Container(
                   margin: marginHorizontal,
                   child: ListView(
-                    controller: _scrollController,
+                    // controller: _scrollController,
                     children: relativesStore.relatives.map((item) => RelativeListItem(relative: item)).toList(),
                   ),
                 ))));

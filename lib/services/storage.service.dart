@@ -10,9 +10,10 @@ class StorageApi {
   final apiUrl = 'storage';
 
   Future<String?> uploadImage(
-      {required XFile image, List<String> filesToDelete = const []}) async {
+      {required XFile image, String? folderId,List<String> filesToDelete = const []}) async {
     var formData = FormData.fromMap({
       'files': [MultipartFile.fromFileSync(image.path, filename: image.name)],
+      'folderId': folderId,
       'filesToDelete[]': filesToDelete.map((item) => getOriginalImageUrl(item)).toList()
     });
     var response =
