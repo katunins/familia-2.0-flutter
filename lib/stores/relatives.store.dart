@@ -5,10 +5,12 @@ import 'package:familia_flutter/models/pagination.model.dart';
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
+import 'package:familia_flutter/stores/user.store.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/baseUserData.model.dart';
+import 'familyTires.store.dart';
 import '../models/searchData.model.dart';
 import '../services/storage.service.dart';
 
@@ -27,11 +29,13 @@ abstract class RelativesStoreBase with Store {
 
   @observable
   var relatives = ObservableList<RelativeItemStore>.of([]);
+
   // PaginationModel pagination =
   //     PaginationModel(page: 0, total: 0, pageSize: Config.pageSize);
 
   init() async {
     await loadData();
+    familyTires.init(userStore.user!);
   }
 
   Future<bool> updateUserPic({required XFile image, required String relativeId}) async {

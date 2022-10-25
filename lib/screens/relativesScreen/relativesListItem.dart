@@ -1,4 +1,3 @@
-import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/screens/relativesScreen/relativeDetailScreen.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/themes/sizes.dart';
@@ -6,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../components/widgets/imageWidget.dart';
+import '../../stores/familyTires.store.dart';
 
 class RelativeListItem extends StatelessWidget {
   const RelativeListItem({Key? key, required this.relative}) : super(key: key);
@@ -13,7 +13,9 @@ class RelativeListItem extends StatelessWidget {
   final RelativeItemStore relative;
 
   @override
-  Widget build(BuildContext context) => Container(
+  Widget build(BuildContext context) {
+    var tireType = familyTires.getType(relative.data);
+    return Container(
         margin: EdgeInsets.only(bottom: AppSizes.insideMargin),
         child: Observer(builder: (_)=>GestureDetector(
           onTap: () => Navigator.of(context).push(MaterialPageRoute(
@@ -41,18 +43,18 @@ class RelativeListItem extends StatelessWidget {
                         style: Theme.of(context).textTheme.subtitle2,
                       ),
                       const SizedBox(height: 5),
-                      // Text(relative.userData.gender?.name ?? '-'),
-                      if (relative.data.userData?.about != null)
-                        Text(
-                          relative.data.userData!.about!,
-                          style: Theme.of(context).textTheme.bodyMedium,
-                          maxLines: 2,
-                        ),
+                      if (tireType != null) Text(tireType),
+                      // if (relative.data.userData?.about != null)
+                      //   Text(
+                      //     relative.data.userData!.about!,
+                      //     style: Theme.of(context).textTheme.bodyMedium,
+                      //     maxLines: 2,
+                      //   ),
                     ],
                   )),
               const Icon(Icons.keyboard_arrow_right)
             ],
           ),
         ),),
-      );
+      );}
 }
