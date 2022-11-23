@@ -34,16 +34,15 @@ class Api {
     var response = error.response;
     if (response != null && response.statusCode == 403 && needToRefresh) {
       await refreshTokenAndRepeatRequest(response: response, handler: handler);
-      // appStore.setIsLoading(false);
       return;
     }
 
-    var errorMessage = error.response?.data['message'];
-    // appStore.logOut();
+    // var errorMessage = error.response?.data['message'];
+    appStore.logOut();
     appStore.setIsLoading(false);
-    if (errorMessage != null && errorMessage != '') {
-      showDialog(middleText: errorMessage);
-    }
+    // if (errorMessage != null && errorMessage != '') {
+    //   showDialog(middleText: errorMessage);
+    // }
   }
 
   refreshTokenAndRepeatRequest(

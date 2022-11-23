@@ -34,9 +34,16 @@ class _RootState extends State<Root> {
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      navigatorKey: globalKey,
+      debugShowCheckedModeBanner: false,
+      theme: getThemeData(context),
+      home: const NavBody(),
+    );
     return FutureBuilder(
         future: isAppInit,
         builder: (BuildContext context, AsyncSnapshot snapshot) {
+          print(snapshot.connectionState);
           var isReadyToInit = snapshot.connectionState == ConnectionState.done;
           return MaterialApp(
             navigatorKey: globalKey,
