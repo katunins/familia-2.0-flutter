@@ -105,10 +105,10 @@ abstract class FamilyTiresBase with Store {
       }
     }
     var parents = rootUser?.userData?.parents;
-    if (parents?.father != null && parents!.father == rootUser?.userData.parents?.father) {
+    if (parents?.father == relative.id) {
       return 'Отец';
     }
-    if (parents?.mother != null && parents!.mother == rootUser?.userData.parents?.mother) {
+    if (parents?.mother == relative.id) {
       return 'Мать';
     }
     return null;

@@ -71,6 +71,10 @@ abstract class RelativesStoreBase with Store {
     return true;
   }
 
+  deleteRelative(String id) async {
+    return true;
+  }
+
   updateRelative(RelativeModel relative){
     var relativeItem = relatives.firstWhere((element) => element.data.id == relative.id);
     relativeItem.set(relative);
@@ -120,5 +124,10 @@ abstract class RelativesStoreBase with Store {
   // @computed
   // bool get canLoadMore => !isLoading && relatives.length < pagination.total;
 
-  RelativeModel? getRelativeById(relativeId) => relatives.firstWhere((element) => element.data.id == relativeId).data;
+  RelativeModel? getRelativeById(relativeId) {
+    if (relativeId == '') {
+      return null;
+    }
+    return relatives.firstWhere((element) => element.data.id == relativeId).data;
+  }
 }

@@ -20,11 +20,10 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return getScaffold(
+    return AppScaffold(
         hideNavigationBar: true,
-        hideUserPick: true,
         title: 'Профиль',
-        isAlwaysBack: true,
+        isHomeButton: true,
         body: Observer(builder: (_)=>SingleChildScrollView(
           child: Column(
             children: [

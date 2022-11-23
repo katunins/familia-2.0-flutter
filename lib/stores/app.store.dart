@@ -20,6 +20,9 @@ abstract class AppStoreBase with Store {
   var isLoading = false;
 
   @observable
+  var appReady = true;
+
+  @observable
   var tokens = TokensModel();
 
   String? deviceId;
@@ -28,21 +31,24 @@ abstract class AppStoreBase with Store {
   bool get isAuth => userStore.user != null;
 
   Future? initApp() async {
+    setAppReady(false);
     await localStorage.initStorage;
     await initDeviceId();
     initTokensFromStorage();
     if (tokens?.accessToken != null) {
       await initAuthApp();
     }
-    return;
+    setAppReady(true);
   }
 
   initAuthApp() async {
     await userStore.init();
     await relativesStore.init();
-    // if (!appStore.isAuth) {
-    //   return;
-    // }
+  }
+
+  @action
+  setAppReady(bool val){
+    appReady = val;
   }
 
   @action

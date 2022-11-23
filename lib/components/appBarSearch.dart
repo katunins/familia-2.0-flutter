@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 
 class AppBarSearchInput extends StatefulWidget {
   const AppBarSearchInput(
-      {Key? key, required this.initialValue, required this.onChange})
+      {Key? key,
+      required this.initialValue,
+      required this.onChange})
       : super(key: key);
 
   final String initialValue;
@@ -25,6 +27,11 @@ class _AppBarSearchInputState extends State<AppBarSearchInput> {
     super.initState();
   }
 
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
   setValue(String value) {
     setState(() => _text = value);
     widget.onChange(value);
@@ -33,10 +40,11 @@ class _AppBarSearchInputState extends State<AppBarSearchInput> {
   @override
   Widget build(BuildContext context) {
     return TextFieldWidget(
-        controller: controller,
-        isMini: true,
-        onChanged: setValue,
-        hintText: 'Поиск',
+      maxLines: 1,
+      controller: controller,
+      isMini: true,
+      onChanged: setValue,
+      hintText: 'Поиск',
     );
   }
 }

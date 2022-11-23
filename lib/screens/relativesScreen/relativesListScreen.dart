@@ -4,11 +4,7 @@ import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 
-import '../../components/appBarSearch.dart';
-import '../../components/widgets/textFieldWidget.dart';
 import '../../themes/margins.theme.dart';
 
 class RelativesListScreen extends StatefulWidget {
@@ -21,49 +17,37 @@ class RelativesListScreen extends StatefulWidget {
 }
 
 class _RelativesListScreenState extends State<RelativesListScreen> {
-  // Future<void> _onRefresh() async {}
-  String search = '';
-  // List<RelativeItemStore> data = [];
+  var search = '';
+  var hideLeading = false;
 
-  setSearch(String val){
+  setSearch(String val) {
     setState(() {
       search = val;
     });
   }
-  // final _scrollController = ScrollController();
-  
-  @override
-  void initState() {
-    // data = relativesStore.relatives.map((item) => RelativeListItem(relative: item)).toList();
-    // _scrollController.addListener(() async {
-    //   if (_scrollController.offset > _scrollController.position.maxScrollExtent && relativesStore.canLoadMore) {
-    //     await relativesStore.loadMore();
-    //   }
-    // });
-    super.initState();
-  }
 
-  List<RelativeItemStore> getFilteredData () {
+  List<RelativeItemStore> getFilteredData() {
     return relativesStore.relatives.where((element) {
-      if (search == ''){
+      if (search == '') {
         return true;
       }
-      return (element.data.userData.name ?? '').contains(search) || (element.data.userData.about ?? '').contains(search);
+      return (element.data.userData.name ?? '').contains(search) ||
+          (element.data.userData.about ?? '').contains(search);
     }).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    return getScaffold(
-      customAppBarTitle:  AppBarSearchInput(
-        initialValue: '',
-        onChange: setSearch
-      ),
+    return AppScaffold(
+        isUserPick: true,
+        isHomeButton: true,
+        setSearch: setSearch,
         body: Container(
           margin: marginHorizontal,
           child: ListView(
-            // controller: _scrollController,
-            children: getFilteredData().map((item) => RelativeListItem(relative: item)).toList(),
+            children: getFilteredData()
+                .map((item) => RelativeListItem(relative: item))
+                .toList(),
           ),
         ));
   }

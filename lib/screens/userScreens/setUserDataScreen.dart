@@ -2,11 +2,9 @@ import 'package:familia_flutter/components/widgets/genderSwitch.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
 import 'package:familia_flutter/components/widgets/primaryButton.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
-import 'package:familia_flutter/stores/user.store.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../components/imageWithUpload.dart';
@@ -122,9 +120,8 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   @override
   Widget build(BuildContext context) {
     var userPic = widget.initialData?.userPic;
-    return getScaffold(
+    return AppScaffold(
         title: widget.title,
-        hideUserPick: true,
         hideNavigationBar: true,
         body: SingleChildScrollView(
           controller: scrollController,

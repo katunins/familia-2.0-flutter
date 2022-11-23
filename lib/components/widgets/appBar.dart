@@ -13,7 +13,7 @@ import '../../themes/colors.dart';
 const _padding = 20.0;
 
 getAppBar(
-        {hideUserPic = false,
+        {isUserPick = false,
         String? title,
         IconButton? leading,
         Widget? customTitle}) =>
@@ -26,7 +26,7 @@ getAppBar(
         leading: leading,
         toolbarHeight: 60,
         actions: [
-          if (!hideUserPic)
+          if (isUserPick)
             Padding(
                 padding: const EdgeInsets.only(right: _padding),
                 child: Observer(

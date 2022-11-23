@@ -6,6 +6,7 @@ import 'package:familia_flutter/stores/app.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
 import 'package:familia_flutter/themes/main.theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,7 +31,11 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
-  var isAppInit = appStore.initApp();
+  @override
+  void initState() {
+    appStore.initApp();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +43,10 @@ class _RootState extends State<Root> {
       navigatorKey: globalKey,
       debugShowCheckedModeBanner: false,
       theme: getThemeData(context),
-      home: const NavBody(),
+      home: Observer(
+        builder: (_) =>
+            appStore.appReady ? const NavBody() : const LoadingPage(),
+      ),
     );
-    return FutureBuilder(
-        future: isAppInit,
-        builder: (BuildContext context, AsyncSnapshot snapshot) {
-          print(snapshot.connectionState);
-          var isReadyToInit = snapshot.connectionState == ConnectionState.done;
-          return MaterialApp(
-            navigatorKey: globalKey,
-            debugShowCheckedModeBanner: false,
-            theme: getThemeData(context),
-            home: isReadyToInit ? const NavBody() : const LoadingPage(),
-          );
-        });
   }
 }

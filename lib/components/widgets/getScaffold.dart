@@ -1,42 +1,95 @@
-import 'package:familia_flutter/main.dart';
-import 'package:familia_flutter/navigation/tabRoutes.dart';
+import 'dart:async';
+
 import 'package:familia_flutter/stores/app.store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../stores/navigation.store.dart';
+import '../appBarSearch.dart';
+import '../homeIcon.dart';
 import 'appBar.dart';
+import 'backIcon.dart';
 import 'bottomNavigationBar.dart';
 import 'floatingButton.dart';
 
-getScaffold({
-  String? title,
-  bool hideNavigationBar = false,
-  bool hideUserPick = false,
-  bool isAlwaysBack = false,
-  Widget? customAppBarTitle,
-  required Widget body,
-}) =>
-    Observer(
-        builder: (_) => Scaffold(
-            resizeToAvoidBottomInset: false,
-            bottomNavigationBar: !hideNavigationBar && appStore.isAuth
-                ? getBottomNavigationBar()
-                : null,
-            floatingActionButton: !hideNavigationBar && appStore.isAuth
-                ? getFloatingButton()
-                : null,
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerDocked,
-            appBar: appStore.isAuth
-                ? getAppBar(
-                    hideUserPic: hideUserPick,
-                    customTitle: customAppBarTitle,
-                    title: title,
-                    leading: isAlwaysBack
-                        ? IconButton(
-                            onPressed: () =>
-                                navigationStore.setCurrentTab(TabRoutes.home),
-                            icon: const Icon(Icons.arrow_back_ios))
-                        : null)
-                : null,
-            body: body));
+class AppScaffold extends StatefulWidget {
+  const AppScaffold(
+      {Key? key,
+      this.title,
+      this.setSearch,
+      required this.body,
+      this.hideNavigationBar = false,
+      this.isUserPick = false,
+      this.isBackButton = false,
+      this.isHomeButton = false})
+      : super(key: key);
+
+  final String? title;
+  final Function(String)? setSearch;
+  final bool hideNavigationBar;
+  final bool isUserPick;
+  final bool isBackButton;
+  final bool isHomeButton;
+  final Widget body;
+
+  @override
+  State<AppScaffold> createState() => _AppScaffoldState();
+}
+
+class _AppScaffoldState extends State<AppScaffold> {
+  var hideLeading = false;
+  late StreamSubscription<bool> keyboardSubscription;
+
+  setHideLeading(bool val){
+    setState(() {
+      hideLeading = val;
+    });
+  }
+
+  @override
+  void initState() {
+    var keyboardVisibilityController = KeyboardVisibilityController();
+    keyboardSubscription = keyboardVisibilityController.onChange.listen(setHideLeading);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var leading = widget.isBackButton
+        ? getBackIcon
+        : (widget.isHomeButton ? getHomeIcon : null);
+
+    var customTitle = widget.setSearch != null
+        ? AppBarSearchInput(
+            initialValue: '',
+            onChange: widget.setSearch!,
+          )
+        : null;
+
+    return Observer(builder: (_) {
+      return Scaffold(
+          resizeToAvoidBottomInset: false,
+          bottomNavigationBar: !widget.hideNavigationBar && appStore.isAuth
+              ? getBottomNavigationBar()
+              : null,
+          floatingActionButton: !widget.hideNavigationBar && appStore.isAuth
+              ? getFloatingButton()
+              : null,
+          floatingActionButtonLocation:
+              FloatingActionButtonLocation.centerDocked,
+          appBar: appStore.isAuth
+              ? getAppBar(
+                  isUserPick: widget.isUserPick,
+                  customTitle: customTitle,
+                  title: widget.title,
+                  leading: hideLeading ? null : leading)
+              : null,
+          body: widget.body);
+    });
+  }
+}

@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:familia_flutter/config.dart';
-import 'package:familia_flutter/helpers/get.helper.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 

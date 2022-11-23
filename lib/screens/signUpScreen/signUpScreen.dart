@@ -12,7 +12,7 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return getScaffold(
+    return AppScaffold(
         body: Center(
             child: Container(
                 constraints: maxWidthConstraints,
