@@ -16,6 +16,13 @@ mixin _$NavigationStore on NavigationStoreBase, Store {
           Computed<dynamic>(() => super.currentAppRoute,
               name: 'NavigationStoreBase.currentAppRoute'))
       .value;
+  Computed<dynamic>? _$currentKeyComputed;
+
+  @override
+  dynamic get currentKey =>
+      (_$currentKeyComputed ??= Computed<dynamic>(() => super.currentKey,
+              name: 'NavigationStoreBase.currentKey'))
+          .value;
 
   late final _$_currentAppRouteAtom =
       Atom(name: 'NavigationStoreBase._currentAppRoute', context: context);
@@ -50,7 +57,8 @@ mixin _$NavigationStore on NavigationStoreBase, Store {
   @override
   String toString() {
     return '''
-currentAppRoute: ${currentAppRoute}
+currentAppRoute: ${currentAppRoute},
+currentKey: ${currentKey}
     ''';
   }
 }

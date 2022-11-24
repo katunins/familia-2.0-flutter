@@ -50,9 +50,8 @@ class ProfileScreen extends StatelessWidget {
                                         builder: (_) => SetUserDataScreen(
                                               title: 'Редактирование профиля',
                                               initialData: userStore.user?.userData,
-                                              imageSubmit:
-                                                  userStore.updateUserPic,
-                                              dataSubmit:
+                                              imageSubmit: userStore.updateUserPic,
+                                              dataSaveFunction:
                                                   userStore.updateUserData,
                                               afterSubmit:
                                                   Navigator.of(context).pop,

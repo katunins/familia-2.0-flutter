@@ -58,7 +58,7 @@ class ImageWithUpload extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white30,
+                  color: Colors.white,
                 ),
                 padding: const EdgeInsets.all(7),
                 child: const Icon(

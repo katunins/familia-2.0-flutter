@@ -16,6 +16,9 @@ abstract class NavigationStoreBase with Store {
   @computed
   get currentAppRoute => appStore.isAuth ? _currentAppRoute : TabRoutes.guest;
 
+  @computed
+  get currentKey => TabRoutes.navigatorPages[_currentAppRoute.index].navKey;
+
   @action
   void setCurrentTab(TabRoutes appRoute) {
     _currentAppRoute = appRoute;

@@ -1,6 +1,7 @@
 import 'package:familia_flutter/components/widgets/genderSwitch.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
 import 'package:familia_flutter/components/widgets/primaryButton.dart';
+import 'package:familia_flutter/helpers/get.helper.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,22 +19,23 @@ class SetUserDataScreen extends StatefulWidget {
       {Key? key,
       this.title,
       this.hideGoBack = false,
-      required this.dataSubmit,
+      required this.dataSaveFunction,
       required this.imageSubmit,
       this.afterSubmit,
-      this.aboutDescription,
-      this.aboutHint,
+      this.isRelativeMode = false,
+      this.isNewUser = false,
       this.initialData})
       : super(key: key);
 
   final String? title;
   final bool hideGoBack;
-  final Future<bool> Function(BaseUserDataModel) dataSubmit;
-  final Future<bool> Function({required XFile image}) imageSubmit;
+  final Future<String?> Function(BaseUserDataModel) dataSaveFunction;
+  final Future<bool> Function({required XFile image, required String id})
+      imageSubmit;
   final void Function()? afterSubmit;
   final BaseUserDataModel? initialData;
-  final String? aboutDescription;
-  final String? aboutHint;
+  final bool isRelativeMode;
+  final bool isNewUser;
 
   static const routeName = '/setUserDataScreen';
 
@@ -59,9 +61,16 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
       nameTextEditingController.text = widget.initialData?.name ?? '';
       aboutTextEditingController.text = widget.initialData?.about ?? '';
     }();
+    if (widget.isNewUser) {
+      canSubmit = true;
+    }
   }
 
   void updateCanSubmit() {
+    if (widget.isNewUser) {
+      return;
+    }
+
     var res = false;
     if (nameTextEditingController.text.isNotEmpty &&
         nameTextEditingController.text != widget.initialData?.name) {
@@ -86,11 +95,7 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
     if (genderSelectorController.validate()) {
       return;
     }
-    if (uploadImage != null) {
-      var uploadResult = await widget.imageSubmit(image: uploadImage!);
-      if (!uploadResult) return;
-    }
-    var result = await widget.dataSubmit(
+    var resultId = await widget.dataSaveFunction(
       BaseUserDataModel(
           name: nameTextEditingController.text != ''
               ? nameTextEditingController.text
@@ -101,8 +106,19 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
           gender: genderSelectorController.gender),
     );
 
-    if (result && widget.afterSubmit != null) {
-      widget.afterSubmit!();
+    if (resultId != null) {
+
+      if (uploadImage != null) {
+        var uploadResult =
+            await widget.imageSubmit(image: uploadImage!, id: resultId);
+        if (!uploadResult) {
+          showPopup(middleText: 'Ну удалось обновить фотографию.');
+        }
+      }
+
+      if (widget.afterSubmit != null) {
+        widget.afterSubmit!();
+      }
     }
   }
 
@@ -153,6 +169,9 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                 child: TextFieldWidget(
                                     controller: nameTextEditingController,
                                     onChanged: (_) => updateCanSubmit(),
+                                    validator: (val) => val == ''
+                                        ? 'Заполните обязательные поля'
+                                        : null,
                                     labelText: 'Фамилия Имя'),
                               ),
                               Container(
@@ -171,10 +190,12 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                     minLines: 3,
                                     maxLines: 15,
                                     onChanged: (_) => updateCanSubmit(),
-                                    labelText: widget.aboutDescription ??
-                                        'Расскажите о себе',
-                                    hintText: widget.aboutHint ??
-                                        'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
+                                    labelText: widget.isRelativeMode
+                                        ? 'Расскажите о родственнике'
+                                        : 'Расскажите о себе',
+                                    hintText: widget.isRelativeMode
+                                        ? 'Кратко опишите ключевые события из жизни человека, его профессию, особенности'
+                                        : 'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
                               ),
                               getPrimaryButton(
                                   title: 'Сохранить',

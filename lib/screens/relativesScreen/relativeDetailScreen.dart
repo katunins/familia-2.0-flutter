@@ -76,16 +76,10 @@ class RelativeDetailScreen extends StatelessWidget {
                               Navigator.of(context).push(MaterialPageRoute(
                                   builder: (_) => SetUserDataScreen(
                                         title: 'Редактирование родственника',
-                                        aboutDescription:
-                                            'Расскажите о родственнике',
-                                        aboutHint:
-                                            'Кратко опишите ключевые события из жизни человека, его профессию, особенности',
+                                        isRelativeMode: true,
                                         initialData: relative.data.userData,
-                                        imageSubmit: ({required image}) =>
-                                            relativesStore.updateUserPic(
-                                                image: image,
-                                                relativeId: relative.data.id),
-                                        dataSubmit: (userData) =>
+                                        imageSubmit: relativesStore.updateUserPic,
+                                        dataSaveFunction: (userData) =>
                                             relativesStore.updateUserData(
                                                 userData: userData,
                                                 relativeId: relative.data.id),

@@ -25,12 +25,35 @@ mixin _$RelativesStore on RelativesStoreBase, Store {
     });
   }
 
+  late final _$deleteRelativeAsyncAction =
+      AsyncAction('RelativesStoreBase.deleteRelative', context: context);
+
+  @override
+  Future deleteRelative(String relativeId) {
+    return _$deleteRelativeAsyncAction
+        .run(() => super.deleteRelative(relativeId));
+  }
+
   late final _$loadDataAsyncAction =
       AsyncAction('RelativesStoreBase.loadData', context: context);
 
   @override
   Future loadData({bool loadMore = false}) {
     return _$loadDataAsyncAction.run(() => super.loadData(loadMore: loadMore));
+  }
+
+  late final _$RelativesStoreBaseActionController =
+      ActionController(name: 'RelativesStoreBase', context: context);
+
+  @override
+  dynamic addRelative(RelativeModel relative) {
+    final _$actionInfo = _$RelativesStoreBaseActionController.startAction(
+        name: 'RelativesStoreBase.addRelative');
+    try {
+      return super.addRelative(relative);
+    } finally {
+      _$RelativesStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

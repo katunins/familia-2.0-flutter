@@ -11,7 +11,8 @@ abstract class GenderSelectorControllerBase with Store {
   Gender? _gender;
 
   @observable
-  var isError = false;
+  var
+  isError = false;
 
   @computed
   Gender? get gender => _gender;

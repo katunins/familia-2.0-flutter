@@ -38,18 +38,21 @@ abstract class RelativesStoreBase with Store {
     familyTires.init(userStore.user!);
   }
 
-  Future<bool> updateUserPic({required XFile image, required String relativeId}) async {
-    var relative = getRelativeById(relativeId);
+  Future<bool> updateUserPic(
+      {required XFile image, required String id}) async {
+    var relative = getRelativeById(id);
     if (relative == null) {
       return false;
     }
     List<String> filesToDelete =
-    relative.userData?.userPic != null ? [relative.userData!.userPic!] : [];
-    var imageUrl = await StorageApi().uploadImage(image: image, folderId: relativeId, filesToDelete: filesToDelete);
+        relative.userData?.userPic != null ? [relative.userData!.userPic!] : [];
+    var imageUrl = await StorageApi().uploadImage(
+        image: image, pathType: 'relatives', filesToDelete: filesToDelete);
     if (imageUrl == null) {
       return false;
     }
-    var newRelative = await RelativesService().updateRelative(relativeId: relativeId, dataObj: {'userPic': imageUrl});
+    var newRelative = await RelativesService()
+        .updateRelative(relativeId: id, dataObj: {'userPic': imageUrl});
 
     if (newRelative == null) {
       return false;
@@ -58,26 +61,47 @@ abstract class RelativesStoreBase with Store {
     return true;
   }
 
-  Future<bool> updateUserData({required BaseUserDataModel userData, required String relativeId}) async {
+  Future<String?> updateUserData(
+      {required BaseUserDataModel userData, required String relativeId}) async {
     Map<String, dynamic> dataObj = {};
     if (userData.name != null) dataObj['name'] = userData.name;
     if (userData.about != null) dataObj['about'] = userData.about;
     if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
-    var newRelative = await RelativesService().updateRelative(relativeId: relativeId, dataObj: dataObj);
-    if (newRelative == null) {
-      return false;
+    var newRelative = await RelativesService()
+        .updateRelative(relativeId: relativeId, dataObj: dataObj);
+    if (newRelative != null) {
+      updateRelative(newRelative);
     }
-    updateRelative(newRelative);
-    return true;
+    return newRelative?.id ;
   }
 
-  deleteRelative(String id) async {
-    return true;
+  Future<String?> newUser(BaseUserDataModel userData) async {
+    Map<String, dynamic> dataObj = {};
+    if (userData.name != null) dataObj['name'] = userData.name;
+    if (userData.about != null) dataObj['about'] = userData.about;
+    if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
+    var newRelative = await RelativesService().createRelative(dataObj: dataObj);
+
+    if (newRelative != null) {
+      addRelative(newRelative);
+    }
+
+    return newRelative?.id;
   }
 
-  updateRelative(RelativeModel relative){
-    var relativeItem = relatives.firstWhere((element) => element.data.id == relative.id);
+  updateRelative(RelativeModel relative) {
+    var relativeItem =
+        relatives.firstWhere((element) => element.data.id == relative.id);
     relativeItem.set(relative);
+  }
+
+  @action
+  deleteRelative(String relativeId) async {
+    var result = await RelativesService().deleteRelative(relativeId);
+    if (result){
+      relatives.removeWhere((element) => element.data.id == relativeId);
+    }
+    return result;
   }
 
   @action
@@ -104,6 +128,11 @@ abstract class RelativesStoreBase with Store {
     isLoading = false;
   }
 
+  @action
+  addRelative(RelativeModel relative) {
+    relatives.add(RelativeItemStore(relative));
+  }
+
   // loadMore() async {
   //   await loadData(loadMore: true);
   // }
@@ -128,6 +157,8 @@ abstract class RelativesStoreBase with Store {
     if (relativeId == '') {
       return null;
     }
-    return relatives.firstWhere((element) => element.data.id == relativeId).data;
+    return relatives
+        .firstWhere((element) => element.data.id == relativeId)
+        .data;
   }
 }

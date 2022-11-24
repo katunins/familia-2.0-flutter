@@ -18,19 +18,6 @@ class RelativesService {
     return response.data;
   }
 
-  // Future<Map<String, dynamic>?> getRelatives(
-  //     {required int page, required SearchDataModel searchData}) async {
-  //
-  //   var response = await Api().dio.get(apiUrl,
-  //       queryParameters:
-  //           getPaginationQueryParams(page: page, searchData: searchData));
-  //
-  //   if (response.statusCode != 200) {
-  //     return null;
-  //   }
-  //   return response.data;
-  // }
-
   Future<RelativeModel?> updateRelative({required Map<String, dynamic> dataObj, required String relativeId}) async {
     var response = await Api()
         .dio
@@ -40,5 +27,24 @@ class RelativesService {
       return null;
     }
     return RelativeModel.fromJson(response.data);
+  }
+
+  Future<RelativeModel?> createRelative({required Map<String, dynamic> dataObj}) async {
+    var response = await Api()
+        .dio
+        .put(apiUrl, data: {'data': dataObj});
+
+    if (response.statusCode != 200) {
+      return null;
+    }
+    return RelativeModel.fromJson(response.data);
+  }
+
+  Future<bool> deleteRelative(String relativeId) async {
+    var response = await Api()
+        .dio
+        .delete(apiUrl, data: {'relativeId': relativeId});
+
+    return response.statusCode == 200;
   }
 }

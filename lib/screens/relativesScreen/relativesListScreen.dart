@@ -4,6 +4,7 @@ import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../themes/margins.theme.dart';
 
@@ -44,10 +45,12 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
         setSearch: setSearch,
         body: Container(
           margin: marginHorizontal,
-          child: ListView(
-            children: getFilteredData()
-                .map((item) => RelativeListItem(relative: item))
-                .toList(),
+          child: Observer(
+            builder: (_) => ListView(
+              children: getFilteredData()
+                  .map((item) => RelativeListItem(relative: item))
+                  .toList(),
+            ),
           ),
         ));
   }
