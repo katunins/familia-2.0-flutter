@@ -23,7 +23,7 @@ showPopup({
       content: content,
       middleText: middleText,
       buttonColor: AppColors.primaryColor,
-      confirmTextColor: Colors.white,
+      confirmTextColor: AppColors.whiteColor,
       confirm: _getButton(
           text: textConfirm ?? 'ok', callback: _getCallBack(onConfirm)),
       cancel: onCancel == null

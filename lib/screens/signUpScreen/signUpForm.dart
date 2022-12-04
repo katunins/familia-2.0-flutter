@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/textFieldWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -53,11 +54,12 @@ class _SignUpFormState extends State<SignUpForm> {
               child: Column(
                 children: [
                   TextFieldWidget(
-                      controller: emailTextEditingController,
-                      onChanged: (_) => updateCanSubmit(),
-                      labelText: 'email',
+                    controller: emailTextEditingController,
+                    onChanged: (_) => updateCanSubmit(),
+                    labelText: 'email',
                     hintText: 'email',
-                    validator: (value) => !isEmailFormat(value) ? 'Не верный формат email' : null,
+                    validator: (value) =>
+                        !isEmailFormat(value) ? 'Не верный формат email' : null,
                   ),
                   const SizedBox(
                     height: 30.0,
@@ -67,7 +69,9 @@ class _SignUpFormState extends State<SignUpForm> {
                     onChanged: (_) => updateCanSubmit(),
                     labelText: 'Пароль',
                     hintText: 'Пароль',
-                    validator: (value) => (value != null && value.length < 8) ? 'Длинна пароля не менее 8 символов' : null,
+                    validator: (value) => (value != null && value.length < 8)
+                        ? 'Длинна пароля не менее 8 символов'
+                        : null,
                   ),
                   const SizedBox(
                     height: 10.0,
@@ -77,14 +81,19 @@ class _SignUpFormState extends State<SignUpForm> {
                     onChanged: (_) => updateCanSubmit(),
                     hintText: 'Пароль',
                     labelText: 'Повторите пароль',
-                    validator: (value) => (value != passwordTextEditingController.text) ? 'Длинна пароля не менее 8 символов' : null,
+                    validator: (value) =>
+                        (value != passwordTextEditingController.text)
+                            ? 'Длинна пароля не менее 8 символов'
+                            : null,
                   ),
                 ],
               ),
             ),
-            ElevatedButton(
-              onPressed: canSubmit ? _submit : null,
-              child: const Text('Зарегистрироваться'),
+            AppButton(
+              title: 'Зарегистрироваться',
+              type: IAppButtonTypes.primary,
+              onPressed: _submit,
+              disabled: !canSubmit,
             )
           ],
         ));

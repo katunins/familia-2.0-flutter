@@ -44,7 +44,7 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
         isHomeButton: true,
         setSearch: setSearch,
         body: Container(
-          margin: marginHorizontal,
+          margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
           child: Observer(
             builder: (_) => ListView(
               children: getFilteredData()

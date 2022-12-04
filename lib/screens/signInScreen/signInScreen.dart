@@ -1,5 +1,5 @@
+import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
-import 'package:familia_flutter/components/widgets/linkButton.dart';
 import 'package:familia_flutter/screens/signInScreen/signInForm.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,7 +18,7 @@ class SignInScreen extends StatelessWidget {
         body: Center(
       child: Container(
         constraints: maxWidthConstraints,
-        margin: marginHorizontal,
+        margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -27,11 +27,9 @@ class SignInScreen extends StatelessWidget {
               style: Theme.of(context).textTheme.headline5,
             ),
             const SignInForm(),
-            const SizedBox(
-              height: 20.0,
-            ),
-            getLinkButton(
-                text: 'Зарегистрироваться',
+            AppButton(
+                title: 'Зарегистрироваться',
+                type: IAppButtonTypes.secondary,
                 onPressed: () =>
                     Navigator.of(context).pushNamed(SignUpScreen.routeName))
           ],

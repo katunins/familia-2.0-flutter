@@ -1,8 +1,9 @@
+import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/genderSwitch.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
-import 'package:familia_flutter/components/widgets/primaryButton.dart';
 import 'package:familia_flutter/helpers/get.helper.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
+import 'package:familia_flutter/stores/app.store.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,6 @@ import 'package:image_picker/image_picker.dart';
 
 import '../../components/imageWithUpload.dart';
 import '../../components/widgets/textFieldWidget.dart';
-import '../../components/widgets/linkButton.dart';
 import '../../stores/genderSelector.controller.dart';
 import '../../themes/sizes.dart';
 
@@ -18,7 +18,7 @@ class SetUserDataScreen extends StatefulWidget {
   const SetUserDataScreen(
       {Key? key,
       this.title,
-      this.hideGoBack = false,
+      this.canSkip = false,
       required this.dataSaveFunction,
       required this.imageSubmit,
       this.afterSubmit,
@@ -28,7 +28,7 @@ class SetUserDataScreen extends StatefulWidget {
       : super(key: key);
 
   final String? title;
-  final bool hideGoBack;
+  final bool canSkip;
   final Future<String?> Function(BaseUserDataModel) dataSaveFunction;
   final Future<bool> Function({required XFile image, required String id})
       imageSubmit;
@@ -107,7 +107,6 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
     );
 
     if (resultId != null) {
-
       if (uploadImage != null) {
         var uploadResult =
             await widget.imageSubmit(image: uploadImage!, id: resultId);
@@ -159,7 +158,8 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                               path: uploadImage?.path ?? userPic,
                             )),
                         Container(
-                          margin: marginHorizontal,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: marginHorizontal),
                           child: Column(
                             children: [
                               Container(
@@ -197,24 +197,27 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                         ? 'Кратко опишите ключевые события из жизни человека, его профессию, особенности'
                                         : 'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
                               ),
-                              getPrimaryButton(
-                                  title: 'Сохранить',
-                                  onPressed: canSubmit ? _submit : null,
-                                  isLockedOnLoading: true),
+                              AppButton(
+                                title: 'Сохранить',
+                                type: IAppButtonTypes.primary,
+                                onPressed: _submit,
+                                disabled: !canSubmit ?? appStore.isLoading,
+                              ),
+                              // TODO разобраться с возможностью пропускать заполнение основного профиля
+                              widget.canSkip
+                                  ? AppButton(
+                                      title: 'Пропустить',
+                                      type: IAppButtonTypes.link,
+                                      onPressed: widget.afterSubmit)
+                                  : AppButton(
+                                      title: 'Отменить',
+                                      type: IAppButtonTypes.secondary,
+                                      onPressed: Navigator.of(context).pop),
                             ],
                           ),
-                        )
+                        ),
                       ],
                     )),
-                const SizedBox(
-                  height: 20.0,
-                ),
-                if (!widget.hideGoBack)
-                  getLinkButton(
-                      text: 'Отменить', onPressed: Navigator.of(context).pop),
-                if (widget.hideGoBack && widget.afterSubmit != null)
-                  getLinkButton(
-                      text: 'Пропустить', onPressed: widget.afterSubmit)
               ],
             ),
           ),

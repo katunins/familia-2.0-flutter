@@ -23,7 +23,7 @@ Future<XFile?> getImagePicker({
         AndroidUiSettings(
             toolbarTitle: 'Cropper',
             toolbarColor: AppColors.primaryColor,
-            toolbarWidgetColor: Colors.white,
+            toolbarWidgetColor: AppColors.whiteColor,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: isSquare
         ),

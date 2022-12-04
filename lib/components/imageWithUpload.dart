@@ -3,6 +3,8 @@ import 'package:familia_flutter/helpers/getImagePicker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../themes/colors.dart';
+
 class ImageWithUpload extends StatelessWidget {
   const ImageWithUpload(
       {Key? key, this.onUpload, this.path, this.isSquare = false})
@@ -58,7 +60,7 @@ class ImageWithUpload extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                  color: Colors.white,
+                  color: AppColors.whiteColor,
                 ),
                 padding: const EdgeInsets.all(7),
                 child: const Icon(

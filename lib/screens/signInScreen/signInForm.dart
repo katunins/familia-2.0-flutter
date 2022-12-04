@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/textFieldWidget.dart';
 
 import 'package:familia_flutter/main.dart';
@@ -77,9 +78,11 @@ class _SignInFormState extends State<SignInForm> {
                 ],
               ),
             ),
-            ElevatedButton(
-              onPressed: canSubmit ? _submit : null,
-              child: const Text('Войти'),
+            AppButton(
+              onPressed: _submit,
+              type: IAppButtonTypes.primary,
+              title: 'Войти',
+              disabled: !canSubmit,
             )
           ],
         ));

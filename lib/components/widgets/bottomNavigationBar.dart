@@ -13,9 +13,9 @@ getBottomNavigationBar() => BottomAppBar(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            icon: const Icon(
+            icon: Icon(
               Icons.photo_library_sharp,
-              color: Colors.white,
+              color: AppColors.whiteColor,
             ),
             onPressed: () {},
           ),
@@ -23,8 +23,8 @@ getBottomNavigationBar() => BottomAppBar(
             width: 170,
           ),
           IconButton(
-            icon: const Icon(Icons.supervised_user_circle_sharp,
-                color: Colors.white),
+            icon: Icon(Icons.supervised_user_circle_sharp,
+                color: AppColors.whiteColor),
             onPressed: () => navigationStore.setCurrentTab(TabRoutes.relatives),
           ),
         ],

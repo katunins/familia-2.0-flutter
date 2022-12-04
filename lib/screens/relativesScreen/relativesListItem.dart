@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/widgets/userPick.dart';
 import 'package:familia_flutter/screens/relativesScreen/relativeDetailScreen.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/themes/colors.dart';
@@ -27,14 +28,7 @@ class RelativeListItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             direction: Axis.horizontal,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: getImageWidget(
-                    width: AppSizes.userPickWidth,
-                    height: AppSizes.userPickWidth,
-                    fit: BoxFit.cover,
-                    path: userPic),
-              ),
+              UserPick(userPic: userPic),
               SizedBox(width: AppSizes.insideMargin),
               Expanded(
                   child: Column(

@@ -1,8 +1,8 @@
+import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
 import 'package:familia_flutter/screens/signUpScreen/signUpForm.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../../components/widgets/linkButton.dart';
 import '../../themes/margins.theme.dart';
 
 class SignUpScreen extends StatelessWidget {
@@ -16,7 +16,7 @@ class SignUpScreen extends StatelessWidget {
         body: Center(
             child: Container(
                 constraints: maxWidthConstraints,
-                margin: marginHorizontal,
+                margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
                 child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -25,11 +25,9 @@ class SignUpScreen extends StatelessWidget {
                         style: Theme.of(context).textTheme.headline5,
                       ),
                       const SignUpForm(),
-                      const SizedBox(
-                        height: 16.0,
-                      ),
-                      getLinkButton(
-                          text: 'Вернуться назад',
+                      AppButton(
+                          title: 'Вернуться назад',
+                          type: IAppButtonTypes.secondary,
                           onPressed: Navigator.of(context).pop)
                     ]))));
   }

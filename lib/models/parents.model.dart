@@ -12,4 +12,15 @@ class ParentsModel {
   toMap() {
     return {'mother': mother, 'father': father};
   }
+
+  List<String> toList() {
+    List<String> list = [];
+    if (mother != null) {
+      list.add(mother!);
+    }
+    if (father != null) {
+      list.add(father!);
+    }
+    return list;
+  }
 }

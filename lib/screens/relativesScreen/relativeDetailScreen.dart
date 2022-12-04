@@ -1,11 +1,11 @@
-import 'package:familia_flutter/stores/navigation.store.dart';
+import 'package:familia_flutter/components/parentsBlock.dart';
+import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/themes/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../components/widgets/getScaffold.dart';
 import '../../components/widgets/imageWidget.dart';
-import '../../components/widgets/linkButton.dart';
 import '../../config.dart';
 import '../../helpers/get.helper.dart';
 import '../../stores/relativeItem.store.dart';
@@ -20,7 +20,6 @@ class RelativeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     deleteRelative() async {
       var success = await relativesStore.deleteRelative(relative.data.id);
       if (success) {
@@ -32,69 +31,97 @@ class RelativeDetailScreen extends StatelessWidget {
       showPopup(
         title: 'Удаление',
         middleText:
-            'Подтвердите удаление родственника ${relative.data.userData.name} из системы?',
+        'Подтвердите удаление родственника ${relative.data.userData
+            .name} из системы?',
         textConfirm: 'Удалить',
-        onCancel: (){},
+        onCancel: () {},
         onConfirm: deleteRelative,
       );
     }
 
+    editOnPressed(){
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (_) =>
+              SetUserDataScreen(
+                title: 'Редактирование родственника',
+                isRelativeMode: true,
+                initialData: relative.data.userData,
+                imageSubmit:
+                relativesStore.updateUserPic,
+                dataSaveFunction: (userData) =>
+                    relativesStore.updateUserData(
+                        userData: userData,
+                        relativeId: relative.data
+                            .id),
+                afterSubmit: Navigator
+                    .of(context)
+                    .pop,
+              )));
+    }
+
     return AppScaffold(
         title: relative.data.userData.name,
+        hideNavigationBar: true,
         body: SingleChildScrollView(
           child: Observer(
-            builder: (_) => Column(
-              children: [
-                if (relative.data.userData?.userPic != null)
-                  getImageWidget(path: relative.data.userData!.userPic!),
-                Container(
-                  margin: EdgeInsets.all(marginHorizontal.horizontal),
-                  child: Column(
-                    children: [
-                      Text(
-                        relative.data.userData.name ??
-                            Config.defaultRelativeName,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                        textAlign: TextAlign.center,
+            builder: (_) =>
+                Column(
+                  children: [
+                    if (relative.data.userData?.userPic != null)
+                      getImageWidget(path: relative.data.userData!.userPic!),
+                    Container(
+                      margin: EdgeInsets.all(marginHorizontal),
+                      child: Column(
+                        children: [
+                          Text(
+                            relative.data.userData.name ??
+                                Config.defaultRelativeName,
+                            style: Theme
+                                .of(context)
+                                .textTheme
+                                .headlineMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          if (relative.data.userData?.about != '')
+                            Container(
+                              margin: const EdgeInsets.symmetric(
+                                  vertical: 32.0),
+                              child: Text(relative.data.userData!.about!,
+                                  style: Theme
+                                      .of(context)
+                                      .textTheme
+                                      .bodyText1),
+                            )
+                          else
+                            SizedBox(
+                              height: AppSizes.inputVerticalMargin,
+                            ),
+                          if (relative.data.userData?.parents != null)
+                            Container(
+                              margin: const EdgeInsets.only(bottom: 20),
+                              child: ParentsBlock(parents: relative.data.userData
+                                  .parents!),
+                            ),
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 20),
+                            child: const Divider(
+                              thickness: 2.0,
+                            ),
+                          ),
+                          AppButton(title: 'Редактировать',
+                              type: IAppButtonTypes.secondary,
+                              onPressed: editOnPressed
+                          ),
+                          AppButton(title: 'Удалить родственника',
+                              type: IAppButtonTypes.link,
+                              onPressed: deleteRelativeSubmit
+                          ),
+                          const SizedBox(height: 50),
+                        ],
                       ),
-                      if (relative.data.userData?.about != '')
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 32.0),
-                          child: Text(relative.data.userData!.about!,
-                              style: Theme.of(context).textTheme.bodyText1),
-                        )
-                      else
-                        SizedBox(
-                          height: AppSizes.inputVerticalMargin,
-                        ),
-                      const Divider(
-                        thickness: 2.0,
-                      ),
-                      getLinkButton(
-                          text: 'Редактировать',
-                          onPressed: () =>
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (_) => SetUserDataScreen(
-                                        title: 'Редактирование родственника',
-                                        isRelativeMode: true,
-                                        initialData: relative.data.userData,
-                                        imageSubmit: relativesStore.updateUserPic,
-                                        dataSaveFunction: (userData) =>
-                                            relativesStore.updateUserData(
-                                                userData: userData,
-                                                relativeId: relative.data.id),
-                                        afterSubmit: Navigator.of(context).pop,
-                                      )))),
-                      getLinkButton(
-                          text: 'Удалить родственника',
-                          isGrey: true,
-                          onPressed: deleteRelativeSubmit),
-                      const SizedBox(height: 50),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                ),
           ),
         ));
   }
