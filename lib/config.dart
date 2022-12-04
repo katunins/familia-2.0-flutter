@@ -9,6 +9,7 @@ class Config {
   static const defaultUserName = 'Мой профиль';
   static const defaultRelativeName = 'Мой родственник';
   static const maxImageWidth = 600.0;
+  static const branchLineHeight = 20.0;
   static BaseOptions baseApiOptions = BaseOptions(
     baseUrl: 'https://familia.ikatunin.ru/',
     receiveTimeout: 15000,

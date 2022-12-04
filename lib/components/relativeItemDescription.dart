@@ -1,4 +1,3 @@
-import 'package:familia_flutter/components/widgets/imageWidget.dart';
 import 'package:familia_flutter/components/widgets/userPick.dart';
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:flutter/cupertino.dart';
@@ -8,16 +7,15 @@ import '../themes/sizes.dart';
 
 class RelativeItemWithDescription extends StatelessWidget {
   const RelativeItemWithDescription(
-      {Key? key, required this.relative, this.margin})
+      {Key? key, required this.relative})
       : super(key: key);
 
   final RelativeModel relative;
-  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: margin,
+      // margin: const EdgeInsets.symmetric(horizontal: 20),
       width: AppSizes.userPickWidth,
       child: Column(
         children: [
