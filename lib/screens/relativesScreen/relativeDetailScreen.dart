@@ -1,6 +1,9 @@
+import 'package:familia_flutter/components/parents.dart';
 import 'package:familia_flutter/components/relativesLineBlock.dart';
 import 'package:familia_flutter/components/widgets/button.dart';
+import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/relative.model.dart';
+import 'package:familia_flutter/stores/user.store.dart';
 import 'package:familia_flutter/themes/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +14,7 @@ import '../../config.dart';
 import '../../helpers/get.helper.dart';
 import '../../stores/relativeItem.store.dart';
 import '../../stores/relatives.store.dart';
+import '../../themes/colors.dart';
 import '../../themes/margins.theme.dart';
 import '../userScreens/setUserDataScreen.dart';
 
@@ -19,20 +23,8 @@ class RelativeDetailScreen extends StatelessWidget {
       : super(key: key);
   final RelativeItemStore relative;
 
-  List<RelativeModel> getParents() {
-    var parents = relative.data.userData.parents;
-    if (parents == null) {
-      return [];
-    }
-    return parents
-        .toList()
-        .map((relativeId) => relativesStore.getRelativeById(relativeId)!)
-        .toList();
-  }
-
   @override
   Widget build(BuildContext context) {
-
     deleteRelative() async {
       var success = await relativesStore.deleteRelative(relative.data.id);
       if (success) {
@@ -44,7 +36,7 @@ class RelativeDetailScreen extends StatelessWidget {
       showPopup(
         title: 'Удаление',
         middleText:
-        'Подтвердите удаление родственника ${relative.data.userData.name} из системы?',
+            'Подтвердите удаление родственника ${relative.data.userData.name} из системы?',
         textConfirm: 'Удалить',
         onCancel: () {},
         onConfirm: deleteRelative,
@@ -54,14 +46,14 @@ class RelativeDetailScreen extends StatelessWidget {
     editOnPressed() {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => SetUserDataScreen(
-            title: 'Редактирование родственника',
-            isRelativeMode: true,
-            initialData: relative.data.userData,
-            imageSubmit: relativesStore.updateUserPic,
-            dataSaveFunction: (userData) => relativesStore.updateUserData(
-                userData: userData, relativeId: relative.data.id),
-            afterSubmit: Navigator.of(context).pop,
-          )));
+                title: 'Редактирование родственника',
+                isRelativeMode: true,
+                initialData: relative.data.userData,
+                imageSubmit: relativesStore.updateUserPic,
+                dataSaveFunction: (userData) => relativesStore.updateUserData(
+                    userData: userData, relativeId: relative.data.id),
+                afterSubmit: Navigator.of(context).pop,
+              )));
     }
 
     return AppScaffold(
@@ -93,12 +85,11 @@ class RelativeDetailScreen extends StatelessWidget {
                         SizedBox(
                           height: AppSizes.inputVerticalMargin,
                         ),
-                      if (relative.data.userData?.parents != null)
-                        Container(
-                            margin: const EdgeInsets.only(bottom: 20),
-                            child: RelativesLineBlock(
-                              relatives: getParents(),
-                            )),
+                      if (relative.data.userData?.parents != null &&
+                          relative.data.userData!.parents!.toList().isNotEmpty)
+                        Parents(
+                            elements: getTreeElements(
+                                relative.data.userData.parents!.toList())),
                       Container(
                         margin: const EdgeInsets.symmetric(vertical: 20),
                         child: const Divider(

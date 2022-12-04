@@ -1,5 +1,6 @@
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/parents.model.dart';
+import 'package:familia_flutter/models/treeElement.dart';
 
 import 'baseUserData.model.dart';
 import 'gender.enum.dart';
@@ -36,5 +37,13 @@ class UserModel {
     if (userData.about != null) dataObj['about'] = userData.about;
     if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
     return dataObj;
+  }
+
+  toTreeElement(){
+    return TreeElementModel(
+        id: id,
+        userPic: userData.userPic,
+        title: userData.name
+    );
   }
 }

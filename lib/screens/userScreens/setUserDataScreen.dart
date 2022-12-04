@@ -97,9 +97,7 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
     }
     var resultId = await widget.dataSaveFunction(
       BaseUserDataModel(
-          name: nameTextEditingController.text != ''
-              ? nameTextEditingController.text
-              : null,
+          name: nameTextEditingController.text,
           about: aboutTextEditingController.text != ''
               ? aboutTextEditingController.text
               : null,

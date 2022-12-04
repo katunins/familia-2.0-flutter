@@ -1,9 +1,12 @@
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/searchData.model.dart';
+import 'package:familia_flutter/models/treeElement.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../main.dart';
 import '../models/gender.enum.dart';
+import '../stores/relatives.store.dart';
+import '../stores/user.store.dart';
 
 isEmailFormat(String? email) {
   if (email == null) {
@@ -54,4 +57,13 @@ RenderBox? getRenderBox(GlobalKey globalKey){
     return null;
   }
   return globalKey.currentContext!.findRenderObject() as RenderBox;
+}
+
+List<TreeElementModel> getTreeElements(List<String> userIds) {
+  return userIds.map<TreeElementModel>((id) {
+    if (userStore.user != null && userStore.user!.id == id) {
+      return userStore.user!.toTreeElement();
+    }
+    return relativesStore.getRelativeById(id)!.toTreeElement();
+  }).toList();
 }

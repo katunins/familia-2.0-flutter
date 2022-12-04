@@ -6,6 +6,7 @@ import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
@@ -38,8 +39,7 @@ abstract class RelativesStoreBase with Store {
     familyTires.init(userStore.user!);
   }
 
-  Future<bool> updateUserPic(
-      {required XFile image, required String id}) async {
+  Future<bool> updateUserPic({required XFile image, required String id}) async {
     var relative = getRelativeById(id);
     if (relative == null) {
       return false;
@@ -72,7 +72,7 @@ abstract class RelativesStoreBase with Store {
     if (newRelative != null) {
       updateRelative(newRelative);
     }
-    return newRelative?.id ;
+    return newRelative?.id;
   }
 
   Future<String?> newUser(BaseUserDataModel userData) async {
@@ -98,7 +98,7 @@ abstract class RelativesStoreBase with Store {
   @action
   deleteRelative(String relativeId) async {
     var result = await RelativesService().deleteRelative(relativeId);
-    if (result){
+    if (result) {
       relatives.removeWhere((element) => element.data.id == relativeId);
     }
     return result;
@@ -153,12 +153,7 @@ abstract class RelativesStoreBase with Store {
   // @computed
   // bool get canLoadMore => !isLoading && relatives.length < pagination.total;
 
-  RelativeModel? getRelativeById(relativeId) {
-    if (relativeId == '') {
-      return null;
-    }
-    return relatives
-        .firstWhere((element) => element.data.id == relativeId)
-        .data;
-  }
+  RelativeModel? getRelativeById(relativeId) => relatives
+      .firstWhereOrNull((element) => element.data.id == relativeId)
+      ?.data;
 }

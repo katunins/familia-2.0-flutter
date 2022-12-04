@@ -7,22 +7,23 @@ import '../themes/sizes.dart';
 
 class RelativeItemWithDescription extends StatelessWidget {
   const RelativeItemWithDescription(
-      {Key? key, required this.relative})
+      {Key? key, this.userPick, required this.title})
       : super(key: key);
 
-  final RelativeModel relative;
+  final String? userPick;
+  final String title;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      // margin: const EdgeInsets.symmetric(horizontal: 20),
+      margin: const EdgeInsets.symmetric(horizontal: 20),
       width: AppSizes.userPickWidth,
       child: Column(
         children: [
-          UserPick(userPic: relative.userData.userPic),
+          UserPick(userPic: userPick),
           const SizedBox(height: 4),
           Text(
-            relative.userData.name!,
+            title,
             textAlign: TextAlign.center,
           )
         ],

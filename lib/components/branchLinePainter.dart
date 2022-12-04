@@ -4,35 +4,69 @@ import 'package:familia_flutter/themes/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+enum BranchElementPositionType { left, middle, right }
+
+enum BranchDirection { up, down }
+
 class BranchLinePainter extends StatelessWidget {
   const BranchLinePainter(
       {Key? key,
       required this.containerRenderBox,
-      required this.elementsXPositions})
+      required this.elementsRenderBoxes,
+      required this.direction})
       : super(key: key);
 
   final RenderBox containerRenderBox;
-  final Map<String, double> elementsXPositions;
+  final Map<String, RenderBox> elementsRenderBoxes;
+  final BranchDirection direction;
 
   @override
   Widget build(BuildContext context) {
-
-
     return CustomPaint(
       size: Size(containerRenderBox.size.width, Config.branchLineHeight),
-      painter: _BranchLinePainterPainter(elementsXPositions),
+      painter: _BranchLinePainterPainter(
+          elementsRenderBoxes: elementsRenderBoxes,
+          containerRenderBox: containerRenderBox,
+          direction: direction),
     );
   }
 }
 
 class _BranchLinePainterPainter extends CustomPainter {
-  _BranchLinePainterPainter(this.xPositions);
+  _BranchLinePainterPainter(
+      {required this.containerRenderBox,
+      required this.elementsRenderBoxes,
+      required this.direction});
 
-  final Map<String, double> xPositions;
+  final Map<String, RenderBox> elementsRenderBoxes;
+  final RenderBox containerRenderBox;
+  final BranchDirection direction;
+
+  // get Offset relative parent widget
+  Offset getRelativeOffset(RenderBox child) {
+    Offset childOffset = child.localToGlobal(Offset.zero);
+    RenderBox parent = containerRenderBox;
+    return parent.globalToLocal(childOffset);
+  }
+
+  getPositionType(MapEntry<String, RenderBox> item) {
+    if (elementsRenderBoxes.length == 1) {
+      return BranchElementPositionType.middle;
+    }
+
+    if (item.key == elementsRenderBoxes.keys.first) {
+      return BranchElementPositionType.left;
+    }
+
+    if (item.key == elementsRenderBoxes.keys.last) {
+      return BranchElementPositionType.right;
+    }
+
+    return BranchElementPositionType.middle;
+  }
 
   @override
   void paint(Canvas canvas, Size size) {
-
     var paint = Paint()
       ..color = AppColors.primaryColor
       ..strokeWidth = 2.0
@@ -40,21 +74,31 @@ class _BranchLinePainterPainter extends CustomPainter {
       ..strokeJoin = StrokeJoin.round;
 
     var path = Path();
-    for(var xPosition in xPositions.entries){
-      var middleX =
-      path.moveTo(xPosition.value, size.height);
-      path.lineTo(xPosition.value, 0);
+    for (var item in elementsRenderBoxes.entries) {
+      var xPosition = getRelativeOffset(item.value);
+      var centerX = xPosition.dx + item.value.size.width / 2;
+      var type = getPositionType(item);
+
+      var yStart = direction == BranchDirection.up ? 0.0 : size.height;
+      var yEnd = direction == BranchDirection.up ? size.height : 0.0;
+
+      path.moveTo(centerX, yStart);
+
+      switch (type) {
+        case BranchElementPositionType.left:
+          path.quadraticBezierTo(centerX, yEnd, centerX + size.height, yEnd);
+          path.lineTo(containerRenderBox.size.width / 2, yEnd);
+          break;
+        case BranchElementPositionType.right:
+          path.quadraticBezierTo(centerX, yEnd, centerX - size.height, yEnd);
+          path.lineTo(containerRenderBox.size.width / 2, yEnd);
+          break;
+        default:
+          path.lineTo(centerX, yEnd);
+      }
     }
-    // path.moveTo(0, size.height);
-    // path.lineTo(100, size.height);
-    // ..moveTo(0, 0)
-    // ..lineTo(size.width, 0);
-    // ..moveTo(size.width / 2, 0)
-    // ..lineTo(10, 0)
-    // ..quadraticBezierTo(0, 0, 0, 10);
-    // ..lineTo(size.width, size.height / 2);
+
     canvas.drawPath(path, paint);
-    // TODO: implement paint
   }
 
   @override

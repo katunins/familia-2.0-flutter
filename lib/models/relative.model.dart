@@ -1,5 +1,6 @@
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
+import 'package:familia_flutter/models/treeElement.dart';
 
 import '../helpers/util.helper.dart';
 
@@ -18,6 +19,14 @@ class RelativeModel {
       parents: ParentsModel.fromJson(json['parents']),
     );
     access = RelativeAccessModel.fromJson(json['access']);
+  }
+
+  toTreeElement(){
+    return TreeElementModel(
+        id: id,
+        userPic: userData.userPic,
+        title: userData.name
+    );
   }
 }
 

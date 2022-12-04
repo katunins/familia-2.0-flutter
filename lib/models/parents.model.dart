@@ -15,10 +15,10 @@ class ParentsModel {
 
   List<String> toList() {
     List<String> list = [];
-    if (mother != null) {
+    if (mother != '') {
       list.add(mother!);
     }
-    if (father != null) {
+    if (father != '') {
       list.add(father!);
     }
     return list;
