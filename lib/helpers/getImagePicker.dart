@@ -2,7 +2,6 @@ import 'package:familia_flutter/themes/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:familia_flutter/helpers/get.helper.dart' as helper;
 
 import '../main.dart';
 
@@ -39,7 +38,6 @@ Future<XFile?> getImagePicker({
     return uploadImage;
   } on Exception catch (error) {
     print(error);
-    // helper.showDialog(middleText: 'Не удалось загрузить фотографию ($error)');
   }
   return null;
 }

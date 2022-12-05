@@ -13,6 +13,14 @@ class ParentsModel {
     return {'mother': mother, 'father': father};
   }
 
+  setMother(String id){
+    mother = id;
+  }
+
+  setFather(String id){
+    father = id;
+  }
+
   List<String> toList() {
     List<String> list = [];
     if (mother != '') {

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:familia_flutter/components/branchLinePainter.dart';
 import 'package:familia_flutter/components/relativeItemDescription.dart';
 import 'package:familia_flutter/components/verticalBrachLine.dart';
@@ -8,35 +10,29 @@ import 'package:familia_flutter/themes/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-final GlobalKey _containerKey = GlobalKey();
-final Map<String, GlobalKey> parentsElementsKeys = {};
-
 class RelativesLineBlock extends StatefulWidget {
   final List<TreeElementModel> elements;
+  final Function(String userId)? onPressed;
 
-  RelativesLineBlock({super.key, required this.elements}) {
-    // init elementsKeys
-    for (var element in elements) {
-      parentsElementsKeys[element.id] = GlobalKey();
-    }
-  }
+  final GlobalKey _containerKey = GlobalKey();
+  final Map<String, GlobalKey> parentsElementsKeys = {};
+
+  RelativesLineBlock({super.key, required this.elements, this.onPressed});
 
   @override
   State<RelativesLineBlock> createState() => _RelativesLineBlockState();
 }
 
 class _RelativesLineBlockState extends State<RelativesLineBlock> {
-  RenderBox? containerRenderBox;
 
-  // get RenderBoxes for elements positions
+  bool buildIsReady = false;
+
   Map<String, RenderBox> getElementsRenderBoxes() {
     Map<String, RenderBox> result = {};
-    if (containerRenderBox == null) {
-      return result;
-    }
 
-    for (var element in parentsElementsKeys.entries) {
+    for (var element in widget.parentsElementsKeys.entries) {
       var renderBox = getRenderBox(element.value);
+
       if (renderBox != null) {
         result[element.key] = renderBox;
       }
@@ -46,38 +42,57 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
 
   @override
   void initState() {
-    // calculate containers params after render
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    for (var element in widget.elements) {
+      if (widget.parentsElementsKeys[element.id] == null) {
+        widget.parentsElementsKeys[element.id] = GlobalKey();
+      }
+    }
+
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_){
       setState(() {
-        containerRenderBox = getRenderBox(_containerKey);
+        buildIsReady = true;
       });
     });
+
     super.initState();
   }
+
+  // @override
+  // void dispose() {
+  //   parentsElementsKeys = {};
+  //   buildIsReady = false;
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
     var elementsRenderBoxes = getElementsRenderBoxes();
+    var containerRenderBox = getRenderFromContext(context);
 
-    return Column(key: _containerKey, children: [
+    return Column(key: widget._containerKey, children: [
       const VerticalBranchLine(),
-      if (containerRenderBox != null)
+      if (buildIsReady && containerRenderBox != null)
         Container(
           margin: const EdgeInsets.only(bottom: 8),
           child: BranchLinePainter(
-            containerRenderBox: containerRenderBox!,
+            containerRenderBox: containerRenderBox,
             elementsRenderBoxes: elementsRenderBoxes,
             direction: BranchDirection.down,
           ),
         ),
       Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: widget.elements
               .map((item) => RelativeItemWithDescription(
-                    key: parentsElementsKeys[item.id],
+                    key: widget.parentsElementsKeys[item.id],
                     title: item.title,
                     userPick: item.userPic,
+                    userId: item.id,
+                    onPressed: widget.onPressed,
                   ))
               .toList()),
     ]);

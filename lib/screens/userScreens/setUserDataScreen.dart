@@ -1,8 +1,10 @@
+import 'package:familia_flutter/components/updateParents.dart';
 import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/genderSwitch.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
 import 'package:familia_flutter/helpers/get.helper.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
+import 'package:familia_flutter/models/parents.model.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
@@ -51,19 +53,23 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   final genderSelectorController = GenderSelectorController();
   var canSubmit = false;
   XFile? uploadImage;
+  ParentsModel? parents;
 
   @override
   void initState() {
-    super.initState();
-    () async {
-      await Future.delayed(Duration.zero);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       genderSelectorController.setGender(widget.initialData?.gender);
       nameTextEditingController.text = widget.initialData?.name ?? '';
       aboutTextEditingController.text = widget.initialData?.about ?? '';
-    }();
+      setState(() {
+        parents = widget.initialData?.parents;
+      });
+    });
+
     if (widget.isNewUser) {
       canSubmit = true;
     }
+    super.initState();
   }
 
   void updateCanSubmit() {
@@ -130,9 +136,26 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
             duration: const Duration(milliseconds: 500), curve: Curves.ease));
   }
 
+  onParentSelected({required String oldParentId, required String newParentId}) {
+    setState(() {
+      if (parents == null) {
+        parents = ParentsModel(father: newParentId);
+      } else {
+        if (parents!.father == oldParentId) {
+          parents!.setFather(newParentId);
+        }
+
+        if (parents!.mother == oldParentId) {
+          parents!.setMother(newParentId);
+        }
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     var userPic = widget.initialData?.userPic;
+
     return AppScaffold(
         title: widget.title,
         hideNavigationBar: true,
@@ -195,11 +218,19 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                         ? 'Кратко опишите ключевые события из жизни человека, его профессию, особенности'
                                         : 'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
                               ),
+                              //TODO не работает обновление родителя при его смене
+                              Container(
+                                  margin: EdgeInsets.only(
+                                      bottom: AppSizes.inputVerticalMargin),
+                                  child: UpdateParents(
+                                    parents: parents,
+                                    onSelected: onParentSelected,
+                                  )),
                               AppButton(
                                 title: 'Сохранить',
                                 type: IAppButtonTypes.primary,
                                 onPressed: _submit,
-                                disabled: !canSubmit ?? appStore.isLoading,
+                                disabled: !canSubmit,
                               ),
                               // TODO разобраться с возможностью пропускать заполнение основного профиля
                               widget.canSkip

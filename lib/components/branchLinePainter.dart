@@ -9,6 +9,7 @@ enum BranchElementPositionType { left, middle, right }
 enum BranchDirection { up, down }
 
 class BranchLinePainter extends StatelessWidget {
+
   const BranchLinePainter(
       {Key? key,
       required this.containerRenderBox,
@@ -22,9 +23,10 @@ class BranchLinePainter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return CustomPaint(
       size: Size(containerRenderBox.size.width, Config.branchLineHeight),
-      painter: _BranchLinePainterPainter(
+      painter: _BranchLinePainter(
           elementsRenderBoxes: elementsRenderBoxes,
           containerRenderBox: containerRenderBox,
           direction: direction),
@@ -32,8 +34,9 @@ class BranchLinePainter extends StatelessWidget {
   }
 }
 
-class _BranchLinePainterPainter extends CustomPainter {
-  _BranchLinePainterPainter(
+class _BranchLinePainter extends CustomPainter {
+
+  _BranchLinePainter(
       {required this.containerRenderBox,
       required this.elementsRenderBoxes,
       required this.direction});

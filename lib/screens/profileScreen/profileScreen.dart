@@ -1,6 +1,6 @@
+import 'package:familia_flutter/components/userDetail.dart';
 import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/imageWidget.dart';
-import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/screens/userScreens/setUserDataScreen.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
@@ -9,7 +9,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
+import '../../components/parents.dart';
 import '../../components/widgets/getScaffold.dart';
+import '../../helpers/util.helper.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
@@ -18,7 +20,6 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     editOnPressed() {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => SetUserDataScreen(
@@ -34,45 +35,34 @@ class ProfileScreen extends StatelessWidget {
         hideNavigationBar: true,
         title: 'Профиль',
         isHomeButton: true,
-        body: Observer(
-            builder: (_) => SingleChildScrollView(
+        body: Observer(builder: (_) {
+          var userData = userStore.user?.userData;
+
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                if (userData?.userPic != null)
+                  getImageWidget(path: userData!.userPic!),
+                Container(
+                  margin: EdgeInsets.all(marginHorizontal),
                   child: Column(
                     children: [
-                      if (userStore.user?.userData?.userPic != null)
-                        getImageWidget(
-                            path: userStore.user!.userData!.userPic!),
-                      Container(
-                        margin: EdgeInsets.all(marginHorizontal),
-                        child: Column(
-                          children: [
-                            Text(
-                              userStore.user?.userData?.name ??
-                                  Config.defaultUserName,
-                              style: Theme.of(context).textTheme.headlineMedium,
-                              textAlign: TextAlign.center,
-                            ),
-                            if (userStore.user?.userData?.about != null)
-                              Container(
-                                margin:
-                                    const EdgeInsets.symmetric(vertical: 32.0),
-                                child: Text(userStore.user!.userData!.about!,
-                                    style:
-                                        Theme.of(context).textTheme.bodyText1),
-                              ),
-                            AppButton(
-                                title: 'Редактировать',
-                                type: IAppButtonTypes.primary,
-                                onPressed: editOnPressed),
-                            AppButton(
-                                title: 'Выйти из аккаунта',
-                                type: IAppButtonTypes.link,
-                                onPressed: appStore.logOut),
-                            const SizedBox(height: 50),
-                          ],
-                        ),
-                      )
+                      UserDetail(
+                          name: userData?.name ?? '',
+                          about: userData?.about,
+                          parents: userData?.parents,
+                          editOnPressed: editOnPressed),
+                      AppButton(
+                          title: 'Выйти из аккаунта',
+                          type: IAppButtonTypes.link,
+                          onPressed: appStore.logOut),
+                      const SizedBox(height: 50),
                     ],
                   ),
-                )));
+                )
+              ],
+            ),
+          );
+        }));
   }
 }

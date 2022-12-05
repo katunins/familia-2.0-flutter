@@ -1,4 +1,5 @@
 import 'package:familia_flutter/themes/colors.dart';
+import 'package:familia_flutter/themes/text.theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -34,9 +35,10 @@ showPopup({
               backgroundColor: AppColors.greyColor),
       radius: 10.0,
       titlePadding: const EdgeInsets.only(top: 20.0),
-      titleStyle: const TextStyle(fontFamily: 'Raleway', fontSize: 25.0),
+      titleStyle: headlineStyle,
+      middleTextStyle: bodyTextStyle,
       contentPadding:
-          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0));
+          const EdgeInsets.all(30.0));
 }
 
 _getCallBack(Function? callback) {
@@ -56,8 +58,9 @@ Widget _getButton(
         backgroundColor:
             MaterialStatePropertyAll(backgroundColor ?? AppColors.primaryColor),
         shadowColor: const MaterialStatePropertyAll(Colors.transparent),
+        textStyle: MaterialStatePropertyAll(bodyTextStyle),
         padding: const MaterialStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 25.0, vertical: 10.0)),
+            EdgeInsets.symmetric(horizontal: 30.0, vertical: 14.0)),
       ),
       child: Text(text));
 }

@@ -11,7 +11,14 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return AppScaffold(
       isUserPick: true,
-        body: Container(
+        body: Center(
+          child: Column(
+            children: [
+              Text('headline5', style: Theme.of(context).textTheme.headline5),
+            Text('subtitle1', style: Theme.of(context).textTheme.subtitle1),
+            Text('subtitle2', style: Theme.of(context).textTheme.subtitle2),
+            ],
+          ),
       )
     );
   }

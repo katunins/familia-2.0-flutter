@@ -59,6 +59,11 @@ RenderBox? getRenderBox(GlobalKey globalKey){
   return globalKey.currentContext!.findRenderObject() as RenderBox;
 }
 
+RenderBox? getRenderFromContext(BuildContext context){
+  if (context.findRenderObject() == null) return null;
+  return context.findRenderObject() as RenderBox;
+}
+
 List<TreeElementModel> getTreeElements(List<String> userIds) {
   return userIds.map<TreeElementModel>((id) {
     if (userStore.user != null && userStore.user!.id == id) {

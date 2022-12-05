@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:familia_flutter/config.dart';
+import 'package:familia_flutter/helpers/get.helper.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 
@@ -36,12 +37,12 @@ class Api {
       return;
     }
 
-    // var errorMessage = error.response?.data['message'];
+    var errorMessage = error.response?.data['message'];
     appStore.logOut();
     appStore.setIsLoading(false);
-    // if (errorMessage != null && errorMessage != '') {
-    //   showDialog(middleText: errorMessage);
-    // }
+    if (errorMessage != null && errorMessage != '') {
+      showPopup(middleText: errorMessage);
+    }
   }
 
   refreshTokenAndRepeatRequest(

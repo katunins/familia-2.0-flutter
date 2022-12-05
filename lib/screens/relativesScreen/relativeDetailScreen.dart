@@ -8,6 +8,7 @@ import 'package:familia_flutter/themes/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import '../../components/userDetail.dart';
 import '../../components/widgets/getScaffold.dart';
 import '../../components/widgets/imageWidget.dart';
 import '../../config.dart';
@@ -61,55 +62,33 @@ class RelativeDetailScreen extends StatelessWidget {
         hideNavigationBar: true,
         body: SingleChildScrollView(
           child: Observer(
-            builder: (_) => Column(
-              children: [
-                if (relative.data.userData?.userPic != null)
-                  getImageWidget(path: relative.data.userData!.userPic!),
-                Container(
-                  margin: EdgeInsets.all(marginHorizontal),
-                  child: Column(
-                    children: [
-                      Text(
-                        relative.data.userData.name ??
-                            Config.defaultRelativeName,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                        textAlign: TextAlign.center,
-                      ),
-                      if (relative.data.userData?.about != '')
-                        Container(
-                          margin: const EdgeInsets.symmetric(vertical: 32.0),
-                          child: Text(relative.data.userData!.about!,
-                              style: Theme.of(context).textTheme.bodyText1),
-                        )
-                      else
-                        SizedBox(
-                          height: AppSizes.inputVerticalMargin,
-                        ),
-                      if (relative.data.userData?.parents != null &&
-                          relative.data.userData!.parents!.toList().isNotEmpty)
-                        Parents(
-                            elements: getTreeElements(
-                                relative.data.userData.parents!.toList())),
-                      Container(
-                        margin: const EdgeInsets.symmetric(vertical: 20),
-                        child: const Divider(
-                          thickness: 2.0,
-                        ),
-                      ),
-                      AppButton(
-                          title: 'Редактировать',
-                          type: IAppButtonTypes.secondary,
-                          onPressed: editOnPressed),
-                      AppButton(
-                          title: 'Удалить родственника',
-                          type: IAppButtonTypes.link,
-                          onPressed: deleteRelativeSubmit),
-                      const SizedBox(height: 50),
-                    ],
-                  ),
-                )
-              ],
-            ),
+            builder: (_) {
+              var userData = relative.data.userData;
+
+              return Column(
+                children: [
+                  if (userData?.userPic != null)
+                    getImageWidget(path: userData!.userPic!),
+                  Container(
+                    margin: EdgeInsets.all(marginHorizontal),
+                    child: Column(
+                      children: [
+                        UserDetail(
+                            name: userData?.name ?? '',
+                            about: userData?.about,
+                            parents: userData?.parents,
+                            editOnPressed: editOnPressed),
+                        AppButton(
+                            title: 'Удалить родственника',
+                            type: IAppButtonTypes.link,
+                            onPressed: deleteRelativeSubmit),
+                        const SizedBox(height: 50),
+                      ],
+                    ),
+                  )
+                ],
+              );
+            },
           ),
         ));
   }

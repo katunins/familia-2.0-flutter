@@ -1,9 +1,5 @@
 import 'package:familia_flutter/screens/loadingScreen.dart';
-import 'package:familia_flutter/screens/mainScreen/mainScreen.dart';
-import 'package:familia_flutter/screens/signInScreen/signInScreen.dart';
-import 'package:familia_flutter/screens/userScreens/setUserDataScreen.dart';
 import 'package:familia_flutter/stores/app.store.dart';
-import 'package:familia_flutter/stores/user.store.dart';
 import 'package:familia_flutter/themes/main.theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
