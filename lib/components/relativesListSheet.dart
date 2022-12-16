@@ -17,23 +17,26 @@ class RelativesListSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(vertical: 30.0),
-      itemCount: elements.length,
-      prototypeItem: ListTile(
-        title: Text(elements.first.title),
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 20.0),
+      child: ListView.builder(
+        padding: const EdgeInsets.symmetric(horizontal: 0.0),
+        itemCount: elements.length,
+        prototypeItem: ListTile(
+          title: Text(elements.first.title),
+        ),
+        itemBuilder: (context, index) {
+          return ListTile(
+            title: GestureDetector(
+              onTap: () {
+                onSelected(elements[index].id);
+                Navigator.of(context).pop();
+              },
+              child: Text(elements[index].title),
+            ),
+          );
+        },
       ),
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: GestureDetector(
-            onTap: () {
-              onSelected(elements[index].id);
-              Navigator.of(context).pop();
-            },
-            child: Text(elements[index].title),
-          ),
-        );
-      },
     );
   }
 }

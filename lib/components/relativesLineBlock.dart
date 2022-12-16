@@ -15,7 +15,7 @@ class RelativesLineBlock extends StatefulWidget {
   final Function(String userId)? onPressed;
 
   final GlobalKey _containerKey = GlobalKey();
-  final Map<String, GlobalKey> parentsElementsKeys = {};
+  late Map<String, GlobalKey> parentsElementsKeys = {};
 
   RelativesLineBlock({super.key, required this.elements, this.onPressed});
 
@@ -27,53 +27,46 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
 
   bool buildIsReady = false;
 
-  Map<String, RenderBox> getElementsRenderBoxes() {
-    Map<String, RenderBox> result = {};
+  RenderBox? containerRenderBox;
+  Map<String, RenderBox> elementsRenderBoxes = {};
+
+
+  void getElementsRenderBoxes() {
 
     for (var element in widget.parentsElementsKeys.entries) {
       var renderBox = getRenderBox(element.value);
 
       if (renderBox != null) {
-        result[element.key] = renderBox;
+        elementsRenderBoxes[element.key] = renderBox;
       }
     }
-    return result;
   }
 
   @override
   void initState() {
+
     for (var element in widget.elements) {
       if (widget.parentsElementsKeys[element.id] == null) {
         widget.parentsElementsKeys[element.id] = GlobalKey();
       }
     }
 
-
-
     WidgetsBinding.instance.addPostFrameCallback((_){
-      setState(() {
-        buildIsReady = true;
-      });
+
+      getElementsRenderBoxes();
+      containerRenderBox = getRenderFromContext(context);
+      setState(() {});
     });
 
     super.initState();
   }
 
-  // @override
-  // void dispose() {
-  //   parentsElementsKeys = {};
-  //   buildIsReady = false;
-  //   super.dispose();
-  // }
-
   @override
   Widget build(BuildContext context) {
-    var elementsRenderBoxes = getElementsRenderBoxes();
-    var containerRenderBox = getRenderFromContext(context);
 
     return Column(key: widget._containerKey, children: [
       const VerticalBranchLine(),
-      if (buildIsReady && containerRenderBox != null)
+      if (containerRenderBox != null)
         Container(
           margin: const EdgeInsets.only(bottom: 8),
           child: BranchLinePainter(

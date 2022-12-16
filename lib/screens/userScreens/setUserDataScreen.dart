@@ -52,23 +52,33 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   final aboutTextEditingController = TextEditingController();
   final genderSelectorController = GenderSelectorController();
   var canSubmit = false;
+
   XFile? uploadImage;
   ParentsModel? parents;
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      genderSelectorController.setGender(widget.initialData?.gender);
-      nameTextEditingController.text = widget.initialData?.name ?? '';
-      aboutTextEditingController.text = widget.initialData?.about ?? '';
-      setState(() {
-        parents = widget.initialData?.parents;
-      });
-    });
+    //TODO если нет проблем с формой, то можно убрать
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   genderSelectorController.setGender(widget.initialData?.gender);
+    //   nameTextEditingController.text = widget.initialData?.name ?? '';
+    //   aboutTextEditingController.text = widget.initialData?.about ?? '';
+    //   parents = widget.initialData?.parents;
+    //   setState(() {});
+    // });
+
+    genderSelectorController.setGender(widget.initialData?.gender);
+    nameTextEditingController.text = widget.initialData?.name ?? '';
+    aboutTextEditingController.text = widget.initialData?.about ?? '';
+    parents = ParentsModel(
+      mother: widget.initialData?.parents?.mother,
+      father: widget.initialData?.parents?.father,
+    );
 
     if (widget.isNewUser) {
       canSubmit = true;
     }
+    setState(() {});
     super.initState();
   }
 
@@ -137,19 +147,15 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   }
 
   onParentSelected({required String oldParentId, required String newParentId}) {
-    setState(() {
-      if (parents == null) {
-        parents = ParentsModel(father: newParentId);
-      } else {
-        if (parents!.father == oldParentId) {
-          parents!.setFather(newParentId);
-        }
+    if (parents!.father == oldParentId) {
+      parents!.father = newParentId;
+      // parents!.setFather(newParentId);
+    }
 
-        if (parents!.mother == oldParentId) {
-          parents!.setMother(newParentId);
-        }
-      }
-    });
+    if (parents!.mother == oldParentId) {
+      parents!.mother = newParentId;
+    }
+    setState(() {});
   }
 
   @override

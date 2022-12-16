@@ -16,24 +16,19 @@ class Parents extends StatelessWidget {
   final Function(String userId)? onPressed;
   final bool editMode;
 
-  getDecoration() {
-    if (editMode) {
-      return BoxDecoration(
+  get getDecoration => editMode
+      ? BoxDecoration(
           border: Border.all(color: AppColors.greyColor),
+          borderRadius: BorderRadius.circular(10))
+      : BoxDecoration(
+          color: AppColors.secondaryColor.withOpacity(0.2),
           borderRadius: BorderRadius.circular(10));
-    }
-
-    return BoxDecoration(
-        color: AppColors.secondaryColor.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(10));
-  }
 
   @override
   Widget build(BuildContext context) {
-
     return Container(
         width: double.infinity,
-        decoration: getDecoration(),
+        decoration: getDecoration,
         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
         margin: const EdgeInsets.only(bottom: 20),
         child: Column(
@@ -44,6 +39,7 @@ class Parents extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             RelativesLineBlock(
+              key: GlobalKey(),
               elements: elements,
               onPressed: onPressed,
             )

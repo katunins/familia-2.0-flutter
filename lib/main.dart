@@ -16,6 +16,7 @@ final ImagePicker imagePicker = ImagePicker();
 final globalKey = GlobalKey<NavigatorState>();
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const GetMaterialApp(home: Root()));
 }
 

@@ -1,6 +1,7 @@
 import 'package:familia_flutter/components/parents.dart';
 import 'package:familia_flutter/components/relativesListSheet.dart';
 import 'package:familia_flutter/models/parents.model.dart';
+import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/models/treeElement.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
@@ -18,13 +19,14 @@ class UpdateParents extends StatelessWidget {
       onSelected;
 
   get getElements {
+
     List<TreeElementModel> result = [];
     for (var relativeId in parents?.toList() ?? []) {
-      var relative = relativesStore.getRelativeById(relativeId);
-      result.add(TreeElementModel(
-          id: relative!.id,
-          userPic: relative.userData?.userPic,
-          title: relative.userData.name));
+      TreeElementModel? treeElement = relativeId == userStore.user!.id ? userStore.user!.toTreeElement() : relativesStore.getRelativeById(relativeId)?.toTreeElement();
+
+      if (treeElement != null) {
+        result.add(treeElement);
+      }
     }
 
     while (result.length < 2) {
@@ -36,9 +38,16 @@ class UpdateParents extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     onPressed(String oldParentId) {
       showModalBottomSheet(
           context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+                topRight: Radius.circular(16)
+            ),
+          ),
           builder: (_) => RelativesListSheet(
               onSelected: (String newParentId) => onSelected(
                   oldParentId: oldParentId, newParentId: newParentId)));

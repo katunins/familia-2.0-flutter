@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/themes/colors.dart';
@@ -8,28 +10,32 @@ enum BranchElementPositionType { left, middle, right }
 
 enum BranchDirection { up, down }
 
+
 class BranchLinePainter extends StatelessWidget {
 
   const BranchLinePainter(
       {Key? key,
-      required this.containerRenderBox,
-      required this.elementsRenderBoxes,
-      required this.direction})
+        required this.containerRenderBox,
+        required this.elementsRenderBoxes,
+        required this.direction})
       : super(key: key);
 
-  final RenderBox containerRenderBox;
+  final RenderBox? containerRenderBox;
   final Map<String, RenderBox> elementsRenderBoxes;
   final BranchDirection direction;
 
   @override
   Widget build(BuildContext context) {
+    if (containerRenderBox == null) {
+      return Container();
+    }
 
     return CustomPaint(
-      size: Size(containerRenderBox.size.width, Config.branchLineHeight),
-      painter: _BranchLinePainter(
-          elementsRenderBoxes: elementsRenderBoxes,
-          containerRenderBox: containerRenderBox,
-          direction: direction),
+        size: Size(containerRenderBox!.size.width, Config.branchLineHeight),
+        painter: _BranchLinePainter(
+            elementsRenderBoxes: elementsRenderBoxes,
+            containerRenderBox: containerRenderBox!,
+            direction: direction)
     );
   }
 }
@@ -107,7 +113,7 @@ class _BranchLinePainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
     // TODO: implement shouldRepaint
-    return false;
+    return true;
     // throw UnimplementedError();
   }
 }
