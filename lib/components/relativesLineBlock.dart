@@ -1,23 +1,29 @@
-import 'dart:math';
-
 import 'package:familia_flutter/components/branchLinePainter.dart';
+import 'package:familia_flutter/components/emtyRelative.dart';
 import 'package:familia_flutter/components/relativeItemDescription.dart';
 import 'package:familia_flutter/components/verticalBrachLine.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
-import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/models/treeElement.dart';
-import 'package:familia_flutter/themes/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+
+/// Компонент пользователей в одной линии с элементами древа
+/// elements - список элементов
+/// onPressed - callBack, вызывающийся при клике на элемент
+/// emptyTitle - если в списке элементов есть элемент с type == empty,
+/// то в линии рендерится Empty компонент, в котором будет подпись emptyTitle
+
+
 class RelativesLineBlock extends StatefulWidget {
+  RelativesLineBlock(
+      {super.key, required this.elements, this.onPressed, this.emptyTitle});
+
   final List<TreeElementModel> elements;
   final Function(String userId)? onPressed;
-
+  final String? emptyTitle;
+  final Map<String, GlobalKey> parentsElementsKeys = {}; // храниличе GlobalKey элементов списка
   final GlobalKey _containerKey = GlobalKey();
-  late Map<String, GlobalKey> parentsElementsKeys = {};
-
-  RelativesLineBlock({super.key, required this.elements, this.onPressed});
 
   @override
   State<RelativesLineBlock> createState() => _RelativesLineBlockState();
@@ -25,19 +31,17 @@ class RelativesLineBlock extends StatefulWidget {
 
 class _RelativesLineBlockState extends State<RelativesLineBlock> {
 
-  bool buildIsReady = false;
-
+  bool buildIsReady = false; // список элементов выведен, можно рисовать линии
   RenderBox? containerRenderBox;
   Map<String, RenderBox> elementsRenderBoxes = {};
 
-
+  // Записывает создает в объекте elementsRenderBoxes
+  // значения RenderBox для каждого элемента по id GlobalKey
   void getElementsRenderBoxes() {
-
-    for (var element in widget.parentsElementsKeys.entries) {
-      var renderBox = getRenderBox(element.value);
-
+    for (var globalKeys in widget.parentsElementsKeys.entries) {
+      var renderBox = getRenderBox(globalKeys.value);
       if (renderBox != null) {
-        elementsRenderBoxes[element.key] = renderBox;
+        elementsRenderBoxes[globalKeys.key] = renderBox;
       }
     }
   }
@@ -45,14 +49,14 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
   @override
   void initState() {
 
+    // Заполняет parentsElementsKeys ключами GlobalKey
     for (var element in widget.elements) {
       if (widget.parentsElementsKeys[element.id] == null) {
         widget.parentsElementsKeys[element.id] = GlobalKey();
       }
     }
 
-    WidgetsBinding.instance.addPostFrameCallback((_){
-
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getElementsRenderBoxes();
       containerRenderBox = getRenderFromContext(context);
       setState(() {});
@@ -63,7 +67,6 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
 
   @override
   Widget build(BuildContext context) {
-
     return Column(key: widget._containerKey, children: [
       const VerticalBranchLine(),
       if (containerRenderBox != null)
@@ -80,13 +83,21 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: widget.elements
-              .map((item) => RelativeItemWithDescription(
-                    key: widget.parentsElementsKeys[item.id],
-                    title: item.title,
-                    userPick: item.userPic,
-                    userId: item.id,
-                    onPressed: widget.onPressed,
-                  ))
+              .map((item) => item.type == TreeElementTypes.empty
+                  ? EmptyRelative(
+                      key: widget.parentsElementsKeys[item.id],
+                      title: widget.emptyTitle,
+                      onTap: widget.onPressed == null
+                          ? null
+                          : () => widget.onPressed!(''),
+                    )
+                  : RelativeItemWithDescription(
+                      key: widget.parentsElementsKeys[item.id],
+                      title: item.title!,
+                      userPick: item.userPic,
+                      userId: item.id,
+                      onPressed: widget.onPressed,
+                    ))
               .toList()),
     ]);
   }

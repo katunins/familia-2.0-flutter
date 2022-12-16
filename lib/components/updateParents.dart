@@ -1,13 +1,14 @@
 import 'package:familia_flutter/components/parents.dart';
 import 'package:familia_flutter/components/relativesListSheet.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/models/relative.model.dart';
-import 'package:familia_flutter/models/treeElement.dart';
-import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../stores/user.store.dart';
+/// Компонент редактирования родителей
+/// parents - объект родителей
+/// onSelected (oldParentId, newParentId) - callBack выбора пользователя
+/// oldParentId - id пользователя (родителя), который был изменен. Может быть "" - значит пользователя не было
+/// newParentId - выбранный id
 
 class UpdateParents extends StatelessWidget {
   const UpdateParents(
@@ -18,41 +19,25 @@ class UpdateParents extends StatelessWidget {
   final Function({required String oldParentId, required String newParentId})
       onSelected;
 
-  get getElements {
-
-    List<TreeElementModel> result = [];
-    for (var relativeId in parents?.toList() ?? []) {
-      TreeElementModel? treeElement = relativeId == userStore.user!.id ? userStore.user!.toTreeElement() : relativesStore.getRelativeById(relativeId)?.toTreeElement();
-
-      if (treeElement != null) {
-        result.add(treeElement);
-      }
-    }
-
-    while (result.length < 2) {
-      result.add(TreeElementModel.empty());
-    }
-
-    return result;
-  }
-
   @override
   Widget build(BuildContext context) {
-
     onPressed(String oldParentId) {
       showModalBottomSheet(
           context: context,
+          isScrollControlled: true,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(16),
-                topRight: Radius.circular(16)
-            ),
+                topLeft: Radius.circular(16), topRight: Radius.circular(16)),
           ),
           builder: (_) => RelativesListSheet(
+              excluded: parents?.toIdsList(),
               onSelected: (String newParentId) => onSelected(
                   oldParentId: oldParentId, newParentId: newParentId)));
     }
 
-    return Parents(elements: getElements, editMode: true, onPressed: onPressed);
+    return Parents(
+        parents: parents,
+        emptyTitle: 'Нажмите для добавления',
+        onPressed: onPressed);
   }
 }

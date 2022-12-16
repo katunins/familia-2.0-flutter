@@ -13,7 +13,7 @@ class ParentsModel {
     return {'mother': mother, 'father': father};
   }
 
-  List<String> toList() {
+  List<String> toIdsList() {
     List<String> list = [];
     if (mother != '') {
       list.add(mother!);

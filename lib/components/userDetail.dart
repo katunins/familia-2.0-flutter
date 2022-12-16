@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../helpers/util.helper.dart';
+import '../themes/colors.dart';
 
 class UserDetail extends StatelessWidget {
   const UserDetail(
@@ -38,8 +39,14 @@ class UserDetail extends StatelessWidget {
             margin: const EdgeInsets.symmetric(vertical: 32.0),
             child: Text(about!, style: bodyTextStyle),
           ),
-        if (parents != null && parents!.toList().isNotEmpty)
-          Parents(elements: getTreeElements(parents!.toList())),
+        // if (parents != null && parents!.toList().isNotEmpty)
+        Parents(
+          parents: parents,
+          emptyTitle: 'Добавьте родителя',
+          decoration: BoxDecoration(
+              color: AppColors.secondaryColor.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(10)),
+        ),
         AppButton(
             title: 'Редактировать',
             type: IAppButtonTypes.primary,

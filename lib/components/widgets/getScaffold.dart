@@ -65,7 +65,7 @@ class _AppScaffoldState extends State<AppScaffold> {
         : (widget.isHomeButton ? getHomeIcon : null);
 
     var customTitle = widget.setSearch != null
-        ? AppBarSearchInput(
+        ? SearchInput(
             initialValue: '',
             onChange: widget.setSearch!,
           )

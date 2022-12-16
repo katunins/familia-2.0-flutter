@@ -3,8 +3,8 @@ import 'package:familia_flutter/components/widgets/textFieldWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class AppBarSearchInput extends StatefulWidget {
-  const AppBarSearchInput(
+class SearchInput extends StatefulWidget {
+  const SearchInput(
       {Key? key,
       required this.initialValue,
       required this.onChange})
@@ -14,10 +14,10 @@ class AppBarSearchInput extends StatefulWidget {
   final void Function(String) onChange;
 
   @override
-  State<AppBarSearchInput> createState() => _AppBarSearchInputState();
+  State<SearchInput> createState() => _AppBarSearchInputState();
 }
 
-class _AppBarSearchInputState extends State<AppBarSearchInput> {
+class _AppBarSearchInputState extends State<SearchInput> {
   var _text = '';
   final controller = TextEditingController();
 

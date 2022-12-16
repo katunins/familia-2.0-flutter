@@ -3,6 +3,7 @@ import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/genderSwitch.dart';
 import 'package:familia_flutter/components/widgets/getScaffold.dart';
 import 'package:familia_flutter/helpers/get.helper.dart';
+import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
 import 'package:familia_flutter/stores/app.store.dart';
@@ -15,6 +16,15 @@ import '../../components/imageWithUpload.dart';
 import '../../components/widgets/textFieldWidget.dart';
 import '../../stores/genderSelector.controller.dart';
 import '../../themes/sizes.dart';
+
+/// Экран редактировани пользователя или родственника
+/// title - название в header
+/// canSkip - показывать ли кнопку пропустить
+/// dataSaveFunction - callBack для кнопки Сохранить
+/// imageSubmit - callBack для обновления userPic
+/// initialData - изначальные данные
+/// isNewUser - экран создания нового пользователя
+/// isRelativeMode - режим работы с родственником
 
 class SetUserDataScreen extends StatefulWidget {
   const SetUserDataScreen(
@@ -101,9 +111,13 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
     if (uploadImage != null) {
       res = true;
     }
-    setState(() {
-      canSubmit = res;
-    });
+
+    if (!isSameParentsModels(parents, widget.initialData?.parents)){
+      res = true;
+    }
+
+    canSubmit = res;
+    setState(() {});
   }
 
   void _submit() async {
@@ -146,16 +160,25 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
             duration: const Duration(milliseconds: 500), curve: Curves.ease));
   }
 
+
+  /// oldParentId - id предыдущего родителя, которого нужно заменить на newParentId
+  /// если oldParentId == '', то меняем устанавливаем первого не заполненого родителя
   onParentSelected({required String oldParentId, required String newParentId}) {
     if (parents!.father == oldParentId) {
       parents!.father = newParentId;
-      // parents!.setFather(newParentId);
+      updateCanSubmit();
+      if (oldParentId == '') {
+        return;
+      }
     }
 
     if (parents!.mother == oldParentId) {
       parents!.mother = newParentId;
+      updateCanSubmit();
+      if (oldParentId == '') {
+        return;
+      }
     }
-    setState(() {});
   }
 
   @override
