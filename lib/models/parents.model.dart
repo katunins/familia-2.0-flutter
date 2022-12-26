@@ -1,8 +1,13 @@
 class ParentsModel {
-  String? mother;
-  String? father;
+  late String mother;
+  late String father;
 
-  ParentsModel({this.mother, this.father});
+  ParentsModel({required this.mother, required this.father});
+
+  ParentsModel.createEmpty(){
+    mother = '';
+    father = '';
+  }
 
   ParentsModel.fromJson(Map<String, dynamic> json) {
     mother = json['mother'];
@@ -16,10 +21,10 @@ class ParentsModel {
   List<String> toIdsList() {
     List<String> list = [];
     if (mother != '') {
-      list.add(mother!);
+      list.add(mother);
     }
     if (father != '') {
-      list.add(father!);
+      list.add(father);
     }
     return list;
   }

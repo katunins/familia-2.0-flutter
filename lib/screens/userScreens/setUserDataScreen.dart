@@ -1,20 +1,20 @@
 import 'package:familia_flutter/components/updateParents.dart';
 import 'package:familia_flutter/components/widgets/button.dart';
-import 'package:familia_flutter/components/widgets/genderSwitch.dart';
-import 'package:familia_flutter/components/widgets/getScaffold.dart';
-import 'package:familia_flutter/helpers/get.helper.dart';
+import 'package:familia_flutter/components/widgets/genderSelector.dart';
+import 'package:familia_flutter/components/widgets/scaffold.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/stores/app.store.dart';
+import 'package:familia_flutter/themes/colors.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../components/bottomSheet.dart';
 import '../../components/imageWithUpload.dart';
 import '../../components/widgets/textFieldWidget.dart';
-import '../../stores/genderSelector.controller.dart';
+import '../../models/gender.enum.dart';
 import '../../themes/sizes.dart';
 
 /// Экран редактировани пользователя или родственника
@@ -23,8 +23,7 @@ import '../../themes/sizes.dart';
 /// dataSaveFunction - callBack для кнопки Сохранить
 /// imageSubmit - callBack для обновления userPic
 /// initialData - изначальные данные
-/// isNewUser - экран создания нового пользователя
-/// isRelativeMode - режим работы с родственником
+/// aboutLabelText, aboutHintText - поле о себе (подсказка и лейбл)
 
 class SetUserDataScreen extends StatefulWidget {
   const SetUserDataScreen(
@@ -34,9 +33,9 @@ class SetUserDataScreen extends StatefulWidget {
       required this.dataSaveFunction,
       required this.imageSubmit,
       this.afterSubmit,
-      this.isRelativeMode = false,
-      this.isNewUser = false,
-      this.initialData})
+      required this.initialData,
+      required this.aboutLabelText,
+      required this.aboutHintText})
       : super(key: key);
 
   final String? title;
@@ -45,9 +44,9 @@ class SetUserDataScreen extends StatefulWidget {
   final Future<bool> Function({required XFile image, required String id})
       imageSubmit;
   final void Function()? afterSubmit;
-  final BaseUserDataModel? initialData;
-  final bool isRelativeMode;
-  final bool isNewUser;
+  final BaseUserDataModel initialData;
+  final String aboutLabelText;
+  final String aboutHintText;
 
   static const routeName = '/setUserDataScreen';
 
@@ -58,88 +57,85 @@ class SetUserDataScreen extends StatefulWidget {
 class _SetUserDataScreenState extends State<SetUserDataScreen> {
   final scrollController = ScrollController();
   final _formKey = GlobalKey<FormState>();
-  final nameTextEditingController = TextEditingController();
-  final aboutTextEditingController = TextEditingController();
-  final genderSelectorController = GenderSelectorController();
-  var canSubmit = false;
+  final nameController = TextEditingController();
+  final aboutController = TextEditingController();
 
+  Gender gender = Gender.none;
   XFile? uploadImage;
-  ParentsModel? parents;
+  String mother = '';
+  String father = '';
+
+  String? genderErrorText;
+
+  bool isSaveDisabled() {
+    if (nameController.text != widget.initialData.name) {
+      return false;
+    }
+    if (aboutController.text != widget.initialData.about) {
+      return false;
+    }
+
+    if (gender != widget.initialData.gender) {
+      return false;
+    }
+
+    if (uploadImage != null) {
+      return false;
+    }
+
+    bool isParentsChanged = isSameParentsModels(widget.initialData.parents,
+        ParentsModel(mother: mother, father: father));
+    if (isParentsChanged) {
+      return false;
+    }
+
+    return true;
+  }
+
+  bool isRequired() => nameController.text == '' || gender == Gender.none;
 
   @override
   void initState() {
-    //TODO если нет проблем с формой, то можно убрать
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   genderSelectorController.setGender(widget.initialData?.gender);
-    //   nameTextEditingController.text = widget.initialData?.name ?? '';
-    //   aboutTextEditingController.text = widget.initialData?.about ?? '';
-    //   parents = widget.initialData?.parents;
-    //   setState(() {});
-    // });
+    nameController.text = widget.initialData.name;
+    aboutController.text = widget.initialData.about;
 
-    genderSelectorController.setGender(widget.initialData?.gender);
-    nameTextEditingController.text = widget.initialData?.name ?? '';
-    aboutTextEditingController.text = widget.initialData?.about ?? '';
-    parents = ParentsModel(
-      mother: widget.initialData?.parents?.mother,
-      father: widget.initialData?.parents?.father,
-    );
+    mother = widget.initialData.parents.mother;
+    father = widget.initialData.parents.father;
+    gender = widget.initialData.gender;
 
-    if (widget.isNewUser) {
-      canSubmit = true;
-    }
-    setState(() {});
     super.initState();
   }
 
-  void updateCanSubmit() {
-    if (widget.isNewUser) {
-      return;
-    }
-
-    var res = false;
-    if (nameTextEditingController.text.isNotEmpty &&
-        nameTextEditingController.text != widget.initialData?.name) {
-      res = true;
-    }
-    if (aboutTextEditingController.text != widget.initialData?.about) {
-      res = true;
-    }
-    if (genderSelectorController.gender != widget.initialData?.gender) {
-      res = true;
-    }
-    if (uploadImage != null) {
-      res = true;
-    }
-
-    if (!isSameParentsModels(parents, widget.initialData?.parents)){
-      res = true;
-    }
-
-    canSubmit = res;
-    setState(() {});
-  }
-
   void _submit() async {
-    _formKey.currentState!.validate();
-    if (genderSelectorController.validate()) {
+    if (!_formKey.currentState!.validate()) {
       return;
     }
-    var resultId = await widget.dataSaveFunction(
-      BaseUserDataModel(
-          name: nameTextEditingController.text,
-          about: aboutTextEditingController.text != ''
-              ? aboutTextEditingController.text
-              : null,
-          gender: genderSelectorController.gender),
-    );
+
+    if (gender == Gender.none) {
+      genderErrorText = 'Выберете пол';
+      setState(() {});
+      return;
+    }
+
+    if (gender == Gender.none) {
+      genderErrorText = 'Выберете пол';
+      setState(() {});
+      return;
+    }
+
+    var resultId = await widget.dataSaveFunction(BaseUserDataModel(
+        name: nameController.text,
+        about: aboutController.text,
+        gender: gender,
+        parents: ParentsModel(mother: mother, father: father)));
 
     if (resultId != null) {
       if (uploadImage != null) {
         var uploadResult =
             await widget.imageSubmit(image: uploadImage!, id: resultId);
         if (!uploadResult) {
-          showPopup(middleText: 'Ну удалось обновить фотографию.');
+          AppBottomSheet.message(
+              context: context, message: 'Не удалось обновить фотографию');
         }
       }
 
@@ -150,31 +146,41 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   }
 
   onUpload({required XFile image}) {
-    setState(() {
-      uploadImage = image;
-    });
-    updateCanSubmit();
+    uploadImage = image;
+    setState(() {});
 
     Future.delayed(const Duration(milliseconds: 300)).then((value) =>
         scrollController.animateTo(scrollController.position.maxScrollExtent,
             duration: const Duration(milliseconds: 500), curve: Curves.ease));
   }
 
-
   /// oldParentId - id предыдущего родителя, которого нужно заменить на newParentId
   /// если oldParentId == '', то меняем устанавливаем первого не заполненого родителя
   onParentSelected({required String oldParentId, required String newParentId}) {
-    if (parents!.father == oldParentId) {
-      parents!.father = newParentId;
-      updateCanSubmit();
+    if (oldParentId == '') {
+      if (father == '') {
+        father = newParentId;
+        setState(() {});
+        return;
+      }
+      if (mother == '') {
+        mother = newParentId;
+        setState(() {});
+        return;
+      }
+    }
+
+    if (father == oldParentId) {
+      father = newParentId;
+      setState(() {});
       if (oldParentId == '') {
         return;
       }
     }
 
-    if (parents!.mother == oldParentId) {
-      parents!.mother = newParentId;
-      updateCanSubmit();
+    if (mother == oldParentId) {
+      mother = newParentId;
+      setState(() {});
       if (oldParentId == '') {
         return;
       }
@@ -183,7 +189,7 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var userPic = widget.initialData?.userPic;
+    var userPic = widget.initialData.userPic;
 
     return AppScaffold(
         title: widget.title,
@@ -217,49 +223,67 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                   bottom: AppSizes.inputVerticalMargin,
                                 ),
                                 child: TextFieldWidget(
-                                    controller: nameTextEditingController,
-                                    onChanged: (_) => updateCanSubmit(),
-                                    validator: (val) => val == ''
-                                        ? 'Заполните обязательные поля'
-                                        : null,
+                                    controller: nameController,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return 'Заполните Имя';
+                                      }
+                                      return null;
+                                    },
                                     labelText: 'Фамилия Имя'),
                               ),
                               Container(
                                 margin: EdgeInsets.only(
                                     bottom: AppSizes.inputVerticalMargin),
-                                child: GenderSelector(
-                                  controller: genderSelectorController,
-                                  onChanged: (_) => updateCanSubmit(),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    GenderSelector(
+                                      value: gender,
+                                      error: genderErrorText,
+                                      onChanged: (val) {
+                                        gender = val ?? Gender.none;
+                                        setState(() {});
+                                      },
+                                    ),
+                                    if (genderErrorText != null)
+                                      Container(
+                                        padding: const EdgeInsets.only(top: 10, left: 20),
+                                        child: const Text(
+                                          'Выберете пол',
+                                          style: TextStyle(
+                                              color: Colors.red,
+                                            fontSize: 13
+                                          ),
+                                        ),
+                                      )
+                                  ],
                                 ),
                               ),
                               Container(
-                                margin: EdgeInsets.only(
-                                    bottom: AppSizes.inputVerticalMargin),
-                                child: TextFieldWidget(
-                                    controller: aboutTextEditingController,
+                                  margin: EdgeInsets.only(
+                                      bottom: AppSizes.inputVerticalMargin),
+                                  child: TextFieldWidget(
+                                    controller: aboutController,
                                     minLines: 3,
                                     maxLines: 15,
-                                    onChanged: (_) => updateCanSubmit(),
-                                    labelText: widget.isRelativeMode
-                                        ? 'Расскажите о родственнике'
-                                        : 'Расскажите о себе',
-                                    hintText: widget.isRelativeMode
-                                        ? 'Кратко опишите ключевые события из жизни человека, его профессию, особенности'
-                                        : 'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни'),
-                              ),
+                                    labelText: widget.aboutLabelText,
+                                    hintText: widget.aboutHintText,
+                                  )),
                               //TODO не работает обновление родителя при его смене
                               Container(
                                   margin: EdgeInsets.only(
                                       bottom: AppSizes.inputVerticalMargin),
                                   child: UpdateParents(
-                                    parents: parents,
+                                    parents: ParentsModel(
+                                        mother: mother, father: father),
                                     onSelected: onParentSelected,
                                   )),
                               AppButton(
                                 title: 'Сохранить',
                                 type: IAppButtonTypes.primary,
                                 onPressed: _submit,
-                                disabled: !canSubmit,
+                                disabled: isSaveDisabled(),
                               ),
                               // TODO разобраться с возможностью пропускать заполнение основного профиля
                               widget.canSkip

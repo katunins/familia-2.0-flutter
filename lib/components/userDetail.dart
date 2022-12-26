@@ -4,8 +4,6 @@ import 'package:familia_flutter/models/parents.model.dart';
 import 'package:familia_flutter/themes/text.theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../helpers/util.helper.dart';
 import '../themes/colors.dart';
 
 class UserDetail extends StatelessWidget {
@@ -37,9 +35,8 @@ class UserDetail extends StatelessWidget {
         else
           Container(
             margin: const EdgeInsets.symmetric(vertical: 32.0),
-            child: Text(about!, style: bodyTextStyle),
+            child: Text(about ?? '', style: bodyTextStyle),
           ),
-        // if (parents != null && parents!.toList().isNotEmpty)
         Parents(
           parents: parents,
           emptyTitle: 'Добавьте родителя',

@@ -13,7 +13,7 @@ class AppButton extends StatelessWidget {
   const AppButton(
       {Key? key,
       required this.title,
-      this.onPressed,
+      required this.onPressed,
       required this.type,
       this.disabled = false})
       : super(key: key);

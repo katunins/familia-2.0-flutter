@@ -16,6 +16,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
+
   var canSubmit = false;
 
   var emailTextEditingController = TextEditingController();
@@ -24,8 +25,19 @@ class _SignInFormState extends State<SignInForm> {
   @override
   void initState() {
     emailTextEditingController.text = localStorage.read('email') ?? '';
+
+    emailTextEditingController.addListener(updateCanSubmit);
+    passwordTextEditingController.addListener(updateCanSubmit);
+
     updateCanSubmit();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    emailTextEditingController.clear();
+    passwordTextEditingController.clear();
+    super.dispose();
   }
 
   void updateCanSubmit() {
@@ -62,7 +74,6 @@ class _SignInFormState extends State<SignInForm> {
                 children: [
                   TextFieldWidget(
                       controller: emailTextEditingController,
-                      onChanged: (_) => updateCanSubmit(),
                     hintText: 'email',
                     labelText: 'email',
                   ),
@@ -71,7 +82,6 @@ class _SignInFormState extends State<SignInForm> {
                   ),
                   TextFieldWidget(
                     controller: passwordTextEditingController,
-                    onChanged: (_) => updateCanSubmit(),
                     hintText: 'Пароль',
                     labelText: 'Пароль',
                   ),

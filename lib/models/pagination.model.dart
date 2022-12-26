@@ -1,15 +1,18 @@
 import 'dart:developer';
 
-class PaginationModel {
-  late int page;
-  late int total;
-  late int pageSize;
+import 'package:familia_flutter/config.dart';
 
-  PaginationModel({required this.page, required this.total, required this.pageSize});
+class PaginationModel {
+  int page = 0;
+  int total = 0;
+  int pageSize = Config.pageSize;
+
+  PaginationModel();
 
   PaginationModel.fromJson(Map<String, dynamic> json) {
     page = int.parse(json['page'].toString());
     total = int.parse(json['total'].toString());
     pageSize = int.parse(json['pageSize'].toString());
   }
+
 }

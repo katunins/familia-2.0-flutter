@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 
-getRemoveSuffix(
-    {required VoidCallback onPressed}) {
+getRemoveSuffix({required TextEditingController controller}) {
   return IconButton(
-    onPressed: onPressed,
+    onPressed: () {
+      controller.text = '';
+    },
     icon: const Icon(
       Icons.clear,
       size: 18.0,

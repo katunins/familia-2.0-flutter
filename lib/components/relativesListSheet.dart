@@ -24,7 +24,7 @@ class _RelativesListSheetState extends State<RelativesListSheet> {
 
   @override
   void initState() {
-    elements = getAllTreeElements(widget.excluded ?? []);
+    elements = getAllUsers(widget.excluded ?? []);
     setState(() {});
     super.initState();
   }

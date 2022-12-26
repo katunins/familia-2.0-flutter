@@ -25,7 +25,8 @@ class RelativeModel {
     return TreeElementModel(
         id: id,
         userPic: userData.userPic,
-        title: userData.name
+        title: userData.name,
+        parents: userData.parents
     );
   }
 }

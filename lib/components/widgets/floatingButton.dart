@@ -1,11 +1,11 @@
-import 'package:familia_flutter/main.dart';
+import 'package:familia_flutter/models/baseUserData.model.dart';
+import 'package:familia_flutter/models/parents.model.dart';
 import 'package:familia_flutter/navigation/tabRoutes.dart';
 import 'package:familia_flutter/stores/navigation.store.dart';
 import 'package:flutter/material.dart';
-
+import '../../models/gender.enum.dart';
 import '../../screens/userScreens/setUserDataScreen.dart';
 import '../../stores/relatives.store.dart';
-import '../../stores/user.store.dart';
 import '../../themes/colors.dart';
 
 getFloatingButton() {
@@ -18,8 +18,15 @@ getFloatingButton() {
         Navigator.of(context).push(MaterialPageRoute(
             builder: (_) => SetUserDataScreen(
                   title: 'Новый родственник',
-                  isNewUser: true,
-                  isRelativeMode: true,
+                  initialData: BaseUserDataModel(
+                    name: '',
+                    about: '',
+                    gender: Gender.none,
+                    parents: ParentsModel.createEmpty(),
+                  ),
+                  aboutHintText: 'Расскажите о вашем родственнике',
+                  aboutLabelText:
+                      'Кратко опишите ключевые события из жизни человека, его профессию, особенности',
                   imageSubmit: relativesStore.updateUserPic,
                   dataSaveFunction: relativesStore.newUser,
                   afterSubmit: Navigator.of(context).pop,

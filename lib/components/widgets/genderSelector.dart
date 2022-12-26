@@ -1,33 +1,33 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../models/gender.enum.dart';
-import '../../stores/genderSelector.controller.dart';
+
+/// Компонент выбора пола
 
 class GenderSelector extends StatelessWidget {
-  const GenderSelector({Key? key, required this.controller, required this.onChanged}) : super(key: key);
-  final GenderSelectorController controller;
+  const GenderSelector({Key? key, required this.value, required this.onChanged, this.error}) : super(key: key);
+  final Gender value;
   final Function(Gender?) onChanged;
+  final String? error;
 
   @override
   Widget build(BuildContext context) {
-    return Observer(builder: (_) => Container(
+    return Container(
         padding:
         const EdgeInsets.only(top: 20.0, bottom: 20.0, left: 20.0, right: 12),
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(5),
-            border: Border.all(color: controller.isError ? Colors.red : Colors.grey, width: 1)),
+            border: Border.all(color: error != null ? Colors.red : Colors.grey, width: 1)),
         child: DropdownButton<Gender>(
             isDense: true,
             isExpanded: true,
             underline: Container(),
             borderRadius: BorderRadius.circular(5),
             alignment: Alignment.bottomCenter,
-            value: controller.gender,
+            value: value,
             items: const [
               DropdownMenuItem(
-                value: null,
+                value: Gender.none,
                 child: Text('Укажите пол'),
               ),
               DropdownMenuItem(
@@ -39,12 +39,9 @@ class GenderSelector extends StatelessWidget {
                 child: Text('Женский'),
               )
             ],
-            onChanged: (value) {
-              controller.setGender(value);
-              onChanged(value);
-            }
+            onChanged: onChanged
           // style: Theme.of(context).textTheme.title,
         ),
-      ));
+      );
   }
 }

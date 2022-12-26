@@ -18,22 +18,24 @@ class SearchInput extends StatefulWidget {
 }
 
 class _AppBarSearchInputState extends State<SearchInput> {
-  var _text = '';
   final controller = TextEditingController();
 
   @override
   void initState() {
     controller.text = widget.initialValue;
+    controller.addListener(() {
+      widget.onChange(controller.text);
+    });
     super.initState();
   }
 
   @override
   void dispose() {
+    controller.clear();
     super.dispose();
   }
 
   setValue(String value) {
-    setState(() => _text = value);
     widget.onChange(value);
   }
 
@@ -41,9 +43,8 @@ class _AppBarSearchInputState extends State<SearchInput> {
   Widget build(BuildContext context) {
     return TextFieldWidget(
       maxLines: 1,
-      controller: controller,
       isMini: true,
-      onChanged: setValue,
+      controller: controller,
       hintText: 'Поиск',
     );
   }

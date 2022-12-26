@@ -39,7 +39,7 @@ class _AppScaffoldState extends State<AppScaffold> {
   var hideLeading = false;
   late StreamSubscription<bool> keyboardSubscription;
 
-  setHideLeading(bool val){
+  setHideLeading(bool val) {
     setState(() {
       hideLeading = val;
     });
@@ -48,7 +48,8 @@ class _AppScaffoldState extends State<AppScaffold> {
   @override
   void initState() {
     var keyboardVisibilityController = KeyboardVisibilityController();
-    keyboardSubscription = keyboardVisibilityController.onChange.listen(setHideLeading);
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen(setHideLeading);
     super.initState();
   }
 
@@ -73,13 +74,14 @@ class _AppScaffoldState extends State<AppScaffold> {
 
     return Observer(builder: (_) {
       return Scaffold(
+          extendBody: true,
           resizeToAvoidBottomInset: false,
-          bottomNavigationBar: !widget.hideNavigationBar && appStore.isAuth
-              ? getBottomNavigationBar()
-              : null,
-          floatingActionButton: !widget.hideNavigationBar && appStore.isAuth
-              ? getFloatingButton()
-              : null,
+          bottomNavigationBar: widget.hideNavigationBar && appStore.isAuth
+              ? null
+              : getBottomNavigationBar(),
+          floatingActionButton: widget.hideNavigationBar && appStore.isAuth
+              ? null
+              : getFloatingButton(),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           appBar: appStore.isAuth

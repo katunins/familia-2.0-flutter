@@ -1,10 +1,9 @@
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/models/searchData.model.dart';
 import 'package:familia_flutter/models/treeElement.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../main.dart';
 import '../models/gender.enum.dart';
 import '../stores/relatives.store.dart';
@@ -19,7 +18,7 @@ isEmailFormat(String? email) {
       .hasMatch(email);
 }
 
-getImageUrl(String? imageUrl) {
+String? getImageUrl(String? imageUrl) {
   if (imageUrl == null) return null;
   return Config.baseApiOptions.baseUrl + imageUrl;
 }
@@ -33,15 +32,7 @@ getBearerToken() {
   return 'Bearer ${localStorage.read('access-token')}';
 }
 
-getPaginationQueryParams(
-        {required int page, required SearchDataModel searchData}) =>
-    {
-      'page': page.toString(),
-      'pageSize': Config.pageSize.toString(),
-      'searchData': searchData.toMap()
-    };
-
-getGenderFromJson(String? value) {
+Gender getGenderFromJson(String? value) {
   switch (value) {
     case 'male':
       return Gender.male;
@@ -50,7 +41,7 @@ getGenderFromJson(String? value) {
       return Gender.female;
 
     default:
-      return null;
+      return Gender.none;
   }
 }
 
@@ -68,24 +59,25 @@ RenderBox? getRenderFromContext(BuildContext context) {
 
 List<TreeElementModel> getTreeElements(List<String> userIds) {
   return userIds.map<TreeElementModel>((id) {
-    if (userStore.user != null && userStore.user!.id == id) {
-      return userStore.user!.toTreeElement();
+    var treeElement = getFromAllFamily(id);
+    if (treeElement == null) {
+      Exception(['02 -Не найден пользователь $id']);
     }
-    return relativesStore.getRelativeById(id)!.toTreeElement();
+    return treeElement!;
   }).toList();
 }
 
 /// Возвращает список treeElements для двух родителей
 /// Если родителей меньше двух, то добавляет treeElement.empty
-getParentElements(ParentsModel? parents, {parentsCount = 2}) {
+List<TreeElementModel> getParentElements(ParentsModel? parents, {parentsCount = 2}) {
   List<TreeElementModel> result = [];
-  for (var relativeId in parents?.toIdsList() ?? []) {
-    TreeElementModel? treeElement = relativeId == userStore.user!.id
-        ? userStore.user!.toTreeElement()
-        : relativesStore.getRelativeById(relativeId)?.toTreeElement();
-
-    if (treeElement != null) {
-      result.add(treeElement);
+  if (parents != null) {
+    for (var id in parents!.toIdsList()) {
+      var treeElement = getFromAllFamily(id);
+      if (treeElement == null){
+        Exception (['04 - Не найден пользователь $id']);
+      }
+      result.add(treeElement!);
     }
   }
   while (result.length < parentsCount) {
@@ -96,20 +88,19 @@ getParentElements(ParentsModel? parents, {parentsCount = 2}) {
 
 /// сравнивает id двух родителей
 /// если они одинаковые, то возвращает true
-bool isSameParentsModels(ParentsModel? parent1, ParentsModel? parent2) {
-  var res = true;
-  if (parent1?.father != parent2?.father) {
-    res = false;
+bool isSameParentsModels(ParentsModel parent1, ParentsModel parent2) {
+  if (parent1.father != parent2.father) {
+    return false;
   }
-  if (parent1?.mother != parent2?.mother) {
-    res = false;
+  if (parent1.mother != parent2.mother) {
+    return false;
   }
-  return res;
+  return true;
 }
 
 /// Возвращает список TreeElements пользователя и родственников в системе,
 /// excluded - список id, которые нужно исключить из списка
-List<TreeElementModel> getAllTreeElements(List<String> excluded) {
+List<TreeElementModel> getAllUsers(List<String> excluded) {
   List<TreeElementModel> res = [];
   if (excluded.firstWhereOrNull((id) => userStore.user!.id == id) == null) {
     res.add(userStore.user!.toTreeElement());
@@ -117,5 +108,22 @@ List<TreeElementModel> getAllTreeElements(List<String> excluded) {
   var filterRelatives = relativesStore.relatives.where((element) =>
       excluded.firstWhereOrNull((id) => element.data.id == id) == null);
   res.addAll(filterRelatives.map((item) => item.data.toTreeElement()));
+  return res;
+}
+
+TreeElementModel? getFromAllFamily(String id) {
+  return getAllUsers([]).firstWhereOrNull((element) => element.id == id);
+}
+
+/// Принимает список ID пользователей
+/// Возвращает список userPic, которые не null
+List<String> getUserPicksList(List<String> userIds) {
+  List<String> res = [];
+  for (var id in userIds) {
+    var user = getFromAllFamily(id);
+    if (user?.userPic != null) {
+      res.add(user!.userPic!);
+    }
+  }
   return res;
 }

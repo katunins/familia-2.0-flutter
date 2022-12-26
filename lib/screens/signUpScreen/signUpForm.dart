@@ -55,7 +55,7 @@ class _SignUpFormState extends State<SignUpForm> {
                 children: [
                   TextFieldWidget(
                     controller: emailTextEditingController,
-                    onChanged: (_) => updateCanSubmit(),
+                    // onChanged: (_) => updateCanSubmit(),
                     labelText: 'email',
                     hintText: 'email',
                     validator: (value) =>
@@ -66,7 +66,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   TextFieldWidget(
                     controller: passwordTextEditingController,
-                    onChanged: (_) => updateCanSubmit(),
+                    // onChanged: (_) => updateCanSubmit(),
                     labelText: 'Пароль',
                     hintText: 'Пароль',
                     validator: (value) => (value != null && value.length < 8)
@@ -78,7 +78,7 @@ class _SignUpFormState extends State<SignUpForm> {
                   ),
                   TextFieldWidget(
                     controller: passwordDoubleTextEditingController,
-                    onChanged: (_) => updateCanSubmit(),
+                    // onChanged: (_) => updateCanSubmit(),
                     hintText: 'Пароль',
                     labelText: 'Повторите пароль',
                     validator: (value) =>

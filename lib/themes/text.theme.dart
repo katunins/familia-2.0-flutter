@@ -12,5 +12,6 @@ getTextTheme() {
       bodyText1: bodyTextStyle,
       bodyText2: miniTextStyle,
       button: bodyTextBoldStyle,
+      headline6: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
       subtitle1: bodyTextStyle);
 }

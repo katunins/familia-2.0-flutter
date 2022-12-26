@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/imageWithButton.dart';
 import 'package:familia_flutter/components/widgets/imageWidget.dart';
 import 'package:familia_flutter/helpers/getImagePicker.dart';
 import 'package:flutter/material.dart';
@@ -49,27 +50,13 @@ class ImageWithUpload extends StatelessWidget {
     if (onUpload == null) {
       return getImageWidget(path: path!);
     }
-    return Stack(
-      children: [
-        getImageWidget(path: path!),
-        Positioned(
-            right: 20,
-            bottom: 20,
-            child: GestureDetector(
-              onTap: _onUploadPress,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColors.whiteColor,
-                ),
-                padding: const EdgeInsets.all(7),
-                child: const Icon(
-                  Icons.photo_camera,
-                  size: 25,
-                ),
-              ),
-            ))
-      ],
+    return ImageWithButton(
+        path: path!,
+        onTap: _onUploadPress,
+        icon: const Icon(
+          Icons.photo_camera,
+          size: 25,
+        )
     );
   }
 }

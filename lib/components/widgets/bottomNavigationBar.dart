@@ -5,7 +5,6 @@ import '../../stores/navigation.store.dart';
 import '../../themes/colors.dart';
 
 getBottomNavigationBar() => BottomAppBar(
-      //bottom navigation bar on scaffold
       color: AppColors.greyColor,
       shape: const CircularNotchedRectangle(), //shape of notch
       notchMargin: 6,
@@ -17,7 +16,7 @@ getBottomNavigationBar() => BottomAppBar(
               Icons.photo_library_sharp,
               color: AppColors.whiteColor,
             ),
-            onPressed: () {},
+            onPressed: () => navigationStore.setCurrentTab(TabRoutes.notes),
           ),
           const SizedBox(
             width: 170,

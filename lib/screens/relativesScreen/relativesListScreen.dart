@@ -1,11 +1,10 @@
-import 'package:familia_flutter/components/widgets/getScaffold.dart';
+import 'package:familia_flutter/components/widgets/scaffold.dart';
 import 'package:familia_flutter/screens/relativesScreen/relativesListItem.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
 import '../../themes/margins.theme.dart';
 
 class RelativesListScreen extends StatefulWidget {
@@ -19,7 +18,6 @@ class RelativesListScreen extends StatefulWidget {
 
 class _RelativesListScreenState extends State<RelativesListScreen> {
   var search = '';
-  var hideLeading = false;
 
   setSearch(String val) {
     setState(() {
@@ -32,8 +30,7 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
       if (search == '') {
         return true;
       }
-      return (element.data.userData.name ?? '').contains(search) ||
-          (element.data.userData.about ?? '').contains(search);
+      return element.data.userData.name.contains(search) || element.data.userData.about.contains(search);
     }).toList();
   }
 

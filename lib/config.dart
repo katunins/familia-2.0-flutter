@@ -10,6 +10,7 @@ class Config {
   static const defaultRelativeName = 'Мой родственник';
   static const maxImageWidth = 600.0;
   static const branchLineHeight = 10.0;
+  static const requestDelay = Duration(milliseconds: 500);
   static BaseOptions baseApiOptions = BaseOptions(
     baseUrl: 'https://familia.ikatunin.ru/',
     receiveTimeout: 15000,

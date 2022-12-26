@@ -1,13 +1,10 @@
 import 'package:familia_flutter/components/widgets/userPick.dart';
 import 'package:familia_flutter/screens/relativesScreen/relativeDetailScreen.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
-import 'package:familia_flutter/themes/colors.dart';
 import 'package:familia_flutter/themes/sizes.dart';
 import 'package:familia_flutter/themes/text.theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-
-import '../../components/widgets/imageWidget.dart';
 import '../../stores/familyTires.store.dart';
 
 class RelativeListItem extends StatelessWidget {
@@ -18,7 +15,7 @@ class RelativeListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var tireType = familyTires.getType(relative.data);
-    var userPic = relative.data.userData?.userPic;
+    var userPic = relative.data.userData.userPic;
     return Container(
       margin: EdgeInsets.only(bottom: AppSizes.insideMargin),
       child: Observer(
@@ -36,7 +33,7 @@ class RelativeListItem extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    relative.data.userData!.name!,
+                    relative.data.userData.name,
                     style: bodyTextBoldStyle,
                   ),
                   const SizedBox(height: 5),

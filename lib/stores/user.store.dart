@@ -22,7 +22,7 @@ abstract class UserStoreBase with Store {
 
   Future<bool> updateUserPic({required XFile image, required String id}) async {
     List<String> filesToDelete =
-        user?.userData?.userPic != null ? [user!.userData!.userPic!] : [];
+        user?.userData.userPic != null ? [user!.userData.userPic!] : [];
     var imageUrl = await StorageApi().uploadImage(image: image, filesToDelete: filesToDelete);
     if (imageUrl == null) {
       return false;
@@ -37,11 +37,8 @@ abstract class UserStoreBase with Store {
   }
 
   Future<String?> updateUserData(BaseUserDataModel userData) async {
-    Map<String, dynamic> dataObj = {};
-    if (userData.name != null) dataObj['name'] = userData.name;
-    if (userData.about != null) dataObj['about'] = userData.about;
-    if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
-    var newUser = await UserService().updateUser(dataObj);
+
+    var newUser = await UserService().updateUser(userData.toMap());
 
     if (newUser != null) {
       setUser(newUser);
@@ -53,7 +50,7 @@ abstract class UserStoreBase with Store {
   UserModel? user;
 
   @computed
-  get hasRequiredUserData => user?.userData?.name != null;
+  get hasRequiredUserData => user?.userData.name != null;
 
   @action
   setUser(UserModel userModel) {

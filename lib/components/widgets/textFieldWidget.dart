@@ -5,34 +5,34 @@ class TextFieldWidget extends StatelessWidget {
   TextFieldWidget({
     Key? key,
     required this.controller,
-    required this.onChanged,
     this.labelText,
     this.maxLines,
     this.minLines,
     this.hintText,
-    this.isMini = false,
+    this.errorText,
     this.validator,
+    this.isMini = false,
   }) : super(key: key);
 
   TextEditingController controller;
-  Function(String) onChanged;
   String? labelText;
   int? maxLines;
   int? minLines;
   String? hintText;
   bool isMini;
+  String? errorText;
   String? Function(String?)? validator;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+        validator: validator,
         controller: controller,
         maxLines: maxLines,
         minLines: minLines,
-        onChanged: onChanged,
-        validator: validator,
         decoration: InputDecoration(
             isDense: isMini ? true : null,
+            errorText: errorText,
             contentPadding: isMini
                 ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16)
                 : null,
@@ -42,10 +42,7 @@ class TextFieldWidget extends StatelessWidget {
             labelText: labelText,
             alignLabelWithHint: true,
             suffixIcon: controller.text.isNotEmpty
-                ? getRemoveSuffix(onPressed: () {
-                    controller.clear();
-                    onChanged('');
-                  })
+                ? getRemoveSuffix(controller: controller)
                 : null));
   }
 }

@@ -22,20 +22,24 @@ class UserModel {
     id = json['_id'];
     email = json['email'];
     userData = BaseUserDataModel(
+      name: json['name'],
+      about: json['about'],
+      parents: ParentsModel.fromJson(json['parents']),
       gender: getGenderFromJson(json['gender']),
       userPic: getImageUrl(json['userPic']),
-      about: json['about'],
-      name: json['name'],
-      parents: ParentsModel.fromJson(json['parents']),
+
     );
   }
 
   toMap() {
-    var dataObj = {'email': email, 'parents': userData.parents};
-    if (userData.name != null) dataObj['userPic'] = userData.name;
-    if (userData.userPic != null) dataObj['userPic'] = userData.userPic;
-    if (userData.about != null) dataObj['about'] = userData.about;
-    if (userData.gender != null) dataObj['gender'] = userData.gender!.name;
+    var dataObj = {
+      'name':userData.name,
+      'about':userData.about,
+      'parents': userData.parents.toMap(),
+      'gender': userData.gender.name,
+      'email': email,
+    };
+    if (userData.userPic != null) dataObj['userPic'] = userData.userPic!;
     return dataObj;
   }
 
@@ -43,7 +47,8 @@ class UserModel {
     return TreeElementModel(
         id: id,
         userPic: userData.userPic,
-        title: userData.name
+        title: userData.name,
+        parents: userData.parents
     );
   }
 }

@@ -1,3 +1,4 @@
+import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/gender.enum.dart';
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/models/user.model.dart';
@@ -12,8 +13,7 @@ var familyTires = FamilyTiresStore();
 class FamilyTiresStore = FamilyTiresBase with _$FamilyTiresStore;
 
 abstract class FamilyTiresBase with Store {
-
-  init(UserModel user){
+  init(UserModel user) {
     rootUser = user;
     _getChildren();
     _getGrandsons();
@@ -21,6 +21,7 @@ abstract class FamilyTiresBase with Store {
     _getGrandParents();
     _getGreatGrandParents();
     _getGreatGreatGrandParents();
+    _getSpouses();
   }
 
   UserModel? rootUser;
@@ -42,6 +43,9 @@ abstract class FamilyTiresBase with Store {
 
   @observable
   List<String> greatGreatGrandParents = [];
+
+  @observable
+  List<String> spouses = [];
 
   String? getType(RelativeModel relative) {
     if (children.contains(relative.id)) {
@@ -104,22 +108,25 @@ abstract class FamilyTiresBase with Store {
           return 'Прарабабушки и прапрадедушки';
       }
     }
-    var parents = rootUser?.userData?.parents;
+    var parents = rootUser?.userData.parents;
     if (parents?.father == relative.id) {
       return 'Отец';
     }
     if (parents?.mother == relative.id) {
       return 'Мать';
     }
+    if (spouses.contains(relative.id)) {
+      return relative.userData.gender == Gender.male ? 'Супруг' : 'Супруга';
+    }
     return null;
   }
 
   @action
   _getChildren() {
-    relativesStore.relatives.map((element) {
-      var parents = element.data.userData.parents;
-      if (parents?.mother == rootUser?.id || parents?.father == rootUser?.id) {
-        children.add(element.data.id);
+    getAllUsers([]).map((element) {
+      var parents = element.parents;
+      if (parents.mother == rootUser?.id || parents.father == rootUser?.id) {
+        children.add(element.id);
       }
     }).toList();
   }
@@ -127,10 +134,10 @@ abstract class FamilyTiresBase with Store {
   @action
   _getGrandsons() {
     children.map((item) {
-      relativesStore.relatives.map((element) {
-        var parents = element.data.userData.parents;
-        if (parents?.mother == item || parents?.father == item) {
-          children.add(element.data.id);
+      getAllUsers([]).map((element) {
+        var parents = element.parents;
+        if (parents.mother == item || parents.father == item) {
+          children.add(element.id);
         }
       });
     }).toList();
@@ -138,66 +145,82 @@ abstract class FamilyTiresBase with Store {
 
   @action
   _getSisterBrothers() {
-    relativesStore.relatives.map((element) {
-      var parents = element.data.userData.parents;
-      if ((parents?.father != null &&
-              parents!.father == rootUser?.userData.parents?.father) ||
-          (parents?.mother != null &&
-              parents!.mother == rootUser?.userData.parents?.mother)) {
-        sisterBrothers.add(element.data.id);
+    getAllUsers([]).map((element) {
+      var parents = element.parents;
+      if (parents.father == rootUser?.userData.parents.father ||
+          parents.mother == rootUser?.userData.parents.mother) {
+        sisterBrothers.add(element.id);
       }
     }).toList();
   }
 
   @action
   _getGrandParents() {
-    var parents = rootUser?.userData.parents;
-    [parents?.father, parents?.mother].map((element) {
-      if (element == null) {
-        return;
-      }
-      var parent = relativesStore.getRelativeById(element);
+    if (rootUser == null) {
+      return;
+    }
+    var parents = rootUser!.userData.parents;
+    parents.toIdsList().where((id) => id.isNotEmpty).map((id) {
+      var parent = getFromAllFamily(id);
       if (parent == null) {
-        return;
+        Exception(['01 - Не найден пользователь $id']);
       }
-      if (parent?.userData.parents?.mother != null) {
-        grandParents.add(parent!.userData.parents!.mother!);
+      if (parent!.parents.mother != '') {
+        grandParents.add(parent.parents.mother);
       }
-      if (parent?.userData.parents?.father != null) {
-        grandParents.add(parent!.userData.parents!.father!);
+      if (parent!.parents.father != '') {
+        grandParents.add(parent.parents.father);
       }
     }).toList();
   }
 
   @action
   _getGreatGrandParents() {
-    grandParents.map((element) {
-      var parent = relativesStore.getRelativeById(element);
+    grandParents.map((id) {
+      var parent = getFromAllFamily(id);
       if (parent == null) {
         return;
       }
-      if (parent?.userData.parents?.mother != null) {
-        greatGrandParents.add(parent!.userData.parents!.mother!);
+      if (parent!.parents.mother != '') {
+        greatGrandParents.add(parent.parents.mother);
       }
-      if (parent?.userData.parents?.father != null) {
-        greatGrandParents.add(parent!.userData.parents!.father!);
+      if (parent!.parents.father != '') {
+        greatGrandParents.add(parent.parents.father);
       }
     }).toList();
   }
 
   @action
   _getGreatGreatGrandParents() {
-    greatGrandParents.map((element) {
-      var parent = relativesStore.getRelativeById(element);
+    greatGrandParents.map((id) {
+      var parent = getFromAllFamily(id);
       if (parent == null) {
         return;
       }
-      if (parent?.userData.parents?.mother != null) {
-        greatGreatGrandParents.add(parent!.userData.parents!.mother!);
+      if (parent!.parents.mother != '') {
+        greatGreatGrandParents.add(parent.parents.mother);
       }
-      if (parent?.userData.parents?.father != null) {
-        greatGreatGrandParents.add(parent!.userData.parents!.father!);
+      if (parent!.parents.father != '') {
+        greatGreatGrandParents.add(parent.parents.father);
       }
     }).toList();
+  }
+
+  @action
+  _getSpouses() {
+    if (rootUser == null){
+      return;
+    }
+    for (var id in children) {
+      var child = getFromAllFamily(id);
+      if (child == null){
+        return;
+      }
+      for (var parentId in child.parents.toIdsList()){
+        if (parentId != rootUser!.id)  {
+          spouses.add(parentId);
+        }
+      }
+    }
   }
 }

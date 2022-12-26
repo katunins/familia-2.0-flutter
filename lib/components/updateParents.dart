@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/bottomSheet.dart';
 import 'package:familia_flutter/components/parents.dart';
 import 'package:familia_flutter/components/relativesListSheet.dart';
 import 'package:familia_flutter/models/parents.model.dart';
@@ -22,14 +23,10 @@ class UpdateParents extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     onPressed(String oldParentId) {
-      showModalBottomSheet(
+      AppBottomSheet.show(
           context: context,
           isScrollControlled: true,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16), topRight: Radius.circular(16)),
-          ),
-          builder: (_) => RelativesListSheet(
+          widget: RelativesListSheet(
               excluded: parents?.toIdsList(),
               onSelected: (String newParentId) => onSelected(
                   oldParentId: oldParentId, newParentId: newParentId)));

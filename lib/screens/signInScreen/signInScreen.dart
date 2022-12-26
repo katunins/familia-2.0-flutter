@@ -1,5 +1,5 @@
 import 'package:familia_flutter/components/widgets/button.dart';
-import 'package:familia_flutter/components/widgets/getScaffold.dart';
+import 'package:familia_flutter/components/widgets/scaffold.dart';
 import 'package:familia_flutter/screens/signInScreen/signInForm.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
 import 'package:flutter/cupertino.dart';

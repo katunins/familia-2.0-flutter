@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../components/parents.dart';
-import '../../components/widgets/getScaffold.dart';
+import '../../components/widgets/scaffold.dart';
 import '../../helpers/util.helper.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -20,11 +20,14 @@ class ProfileScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     editOnPressed() {
       Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => SetUserDataScreen(
                 title: 'Редактирование профиля',
-                initialData: userStore.user?.userData,
+                initialData: userStore.user!.userData,
+                aboutLabelText: 'Расскажите о себе',
+                aboutHintText: 'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни',
                 imageSubmit: userStore.updateUserPic,
                 dataSaveFunction: userStore.updateUserData,
                 afterSubmit: Navigator.of(context).pop,

@@ -33,7 +33,7 @@ getAppBar(
                   builder: (_) => GestureDetector(
                     onTap: () =>
                         navigationStore.setCurrentTab(TabRoutes.profile),
-                    child: userStore.user?.userData?.userPic != null
+                    child: userStore.user?.userData.userPic != null
                         ? CircleAvatar(
                             radius: 18,
                             backgroundImage: getImageWidget(
