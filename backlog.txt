@@ -13,3 +13,6 @@ Bug !!!
 
 backlog
 + определение супруга
+
+Technical
+- to implement AutoRouter https://pub.dev/packages/auto_route
