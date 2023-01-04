@@ -10,24 +10,33 @@ import 'package:flutter/material.dart';
 /// onSelected (oldParentId, newParentId) - callBack выбора пользователя
 /// oldParentId - id пользователя (родителя), который был изменен. Может быть "" - значит пользователя не было
 /// newParentId - выбранный id
+/// childId - id пользователя у которого редактируются родители
 
 class UpdateParents extends StatelessWidget {
   const UpdateParents(
-      {Key? key, required this.parents, required this.onSelected})
+      {Key? key, required this.parents, required this.onSelected, this.childId})
       : super(key: key);
 
   final ParentsModel? parents;
+  final String? childId;
   final Function({required String oldParentId, required String newParentId})
       onSelected;
 
   @override
   Widget build(BuildContext context) {
+
     onPressed(String oldParentId) {
+
+      List<String> excluded = childId == null ? [] : [childId!];
+      if (parents != null){
+        excluded.addAll(parents!.toIdsList());
+      }
+
       AppBottomSheet.show(
           context: context,
           isScrollControlled: true,
           widget: RelativesListSheet(
-              excluded: parents?.toIdsList(),
+              excluded: excluded,
               onSelected: (String newParentId) => onSelected(
                   oldParentId: oldParentId, newParentId: newParentId)));
     }

@@ -1,8 +1,9 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/models/note.model.dart';
+import 'package:familia_flutter/routers/appRouter.gr.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../screens/notesScreen/noteDetail.dart';
-import '../../screens/notesScreen/noteDetailScreen.dart';
 import '../notesSeparator.dart';
 
 /// Комопнент списка публикаций
@@ -21,15 +22,14 @@ class NotesList extends StatelessWidget {
       primary: !isNested,
       shrinkWrap: isNested,
       itemCount: notes.length,
-      padding: const EdgeInsets.only(bottom: 60),
+      padding: const EdgeInsets.only(bottom: 50),
       separatorBuilder: (context, index) => const Separator(),
       itemBuilder: (context, index) {
         return NoteDetail(
-            note: notes[index],
-            onExpand: () => Navigator.of(context).push(MaterialPageRoute(
-                builder: (_) => NoteDetailScreen(
-                      note: notes[index],
-                    ))));
+          note: notes[index],
+          onExpand: () =>
+              context.pushRoute(NoteDetailRouter(note: notes[index])),
+        );
       },
     );
   }

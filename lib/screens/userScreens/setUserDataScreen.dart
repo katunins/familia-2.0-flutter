@@ -1,13 +1,11 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/components/updateParents.dart';
 import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/genderSelector.dart';
-import 'package:familia_flutter/components/widgets/scaffold.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/baseUserData.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/themes/colors.dart';
 import 'package:familia_flutter/themes/margins.theme.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -24,11 +22,12 @@ import '../../themes/sizes.dart';
 /// imageSubmit - callBack для обновления userPic
 /// initialData - изначальные данные
 /// aboutLabelText, aboutHintText - поле о себе (подсказка и лейбл)
+/// id - пользователя, которого редактируем
 
 class SetUserDataScreen extends StatefulWidget {
   const SetUserDataScreen(
       {Key? key,
-      this.title,
+        this.id,
       this.canSkip = false,
       required this.dataSaveFunction,
       required this.imageSubmit,
@@ -38,7 +37,6 @@ class SetUserDataScreen extends StatefulWidget {
       required this.aboutHintText})
       : super(key: key);
 
-  final String? title;
   final bool canSkip;
   final Future<String?> Function(BaseUserDataModel) dataSaveFunction;
   final Future<bool> Function({required XFile image, required String id})
@@ -47,8 +45,7 @@ class SetUserDataScreen extends StatefulWidget {
   final BaseUserDataModel initialData;
   final String aboutLabelText;
   final String aboutHintText;
-
-  static const routeName = '/setUserDataScreen';
+  final String? id;
 
   @override
   State<SetUserDataScreen> createState() => _SetUserDataScreenState();
@@ -83,9 +80,9 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
       return false;
     }
 
-    bool isParentsChanged = isSameParentsModels(widget.initialData.parents,
+    bool isSameParents = isSameParentsModels(widget.initialData.parents,
         ParentsModel(mother: mother, father: father));
-    if (isParentsChanged) {
+    if (!isSameParents) {
       return false;
     }
 
@@ -98,6 +95,13 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   void initState() {
     nameController.text = widget.initialData.name;
     aboutController.text = widget.initialData.about;
+
+    nameController.addListener((){
+      setState(() {});
+    });
+    aboutController.addListener((){
+      setState(() {});
+    });
 
     mother = widget.initialData.parents.mother;
     father = widget.initialData.parents.father;
@@ -191,10 +195,7 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
   Widget build(BuildContext context) {
     var userPic = widget.initialData.userPic;
 
-    return AppScaffold(
-        title: widget.title,
-        hideNavigationBar: true,
-        body: SingleChildScrollView(
+    return SingleChildScrollView(
           controller: scrollController,
           child: Container(
             padding: const EdgeInsets.only(bottom: 50),
@@ -270,11 +271,11 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                     labelText: widget.aboutLabelText,
                                     hintText: widget.aboutHintText,
                                   )),
-                              //TODO не работает обновление родителя при его смене
                               Container(
                                   margin: EdgeInsets.only(
                                       bottom: AppSizes.inputVerticalMargin),
                                   child: UpdateParents(
+                                    childId: widget.id,
                                     parents: ParentsModel(
                                         mother: mother, father: father),
                                     onSelected: onParentSelected,
@@ -294,7 +295,7 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
                                   : AppButton(
                                       title: 'Отменить',
                                       type: IAppButtonTypes.secondary,
-                                      onPressed: Navigator.of(context).pop),
+                                      onPressed: context.router.pop),
                             ],
                           ),
                         ),
@@ -303,6 +304,6 @@ class _SetUserDataScreenState extends State<SetUserDataScreen> {
               ],
             ),
           ),
-        ));
+        );
   }
 }

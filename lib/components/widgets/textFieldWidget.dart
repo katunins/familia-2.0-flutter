@@ -34,7 +34,7 @@ class TextFieldWidget extends StatelessWidget {
             isDense: isMini ? true : null,
             errorText: errorText,
             contentPadding: isMini
-                ? const EdgeInsets.symmetric(vertical: 10, horizontal: 16)
+                ? const EdgeInsets.symmetric(vertical: 8, horizontal: 16)
                 : null,
             filled: isMini ? true : null,
             border: isMini ? InputBorder.none : null,

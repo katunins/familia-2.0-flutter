@@ -23,18 +23,18 @@ class UserDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 16),
         Text(
           name,
-          textAlign: TextAlign.center,
           style: Theme.of(context).textTheme.headline4,
         ),
         if (about == '')
           const SizedBox(height: 32)
         else
           Container(
-            margin: const EdgeInsets.symmetric(vertical: 32.0),
+            margin: const EdgeInsets.only(top: 12, bottom: 36.0),
             child: Text(about ?? '', style: bodyTextStyle),
           ),
         Parents(

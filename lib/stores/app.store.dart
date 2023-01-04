@@ -1,14 +1,13 @@
-import 'package:familia_flutter/config.dart';
+import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/models/tokens.model.dart';
 import 'package:familia_flutter/services/auth.service.dart';
-import 'package:familia_flutter/stores/navigation.store.dart';
 import 'package:familia_flutter/stores/notes.store.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
+import 'package:get_it/get_it.dart';
 import 'package:mobx/mobx.dart';
 import 'package:platform_device_id/platform_device_id.dart';
-
-import '../main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'app.store.g.dart';
 
@@ -17,11 +16,9 @@ var appStore = AppStore();
 class AppStore = AppStoreBase with _$AppStore;
 
 abstract class AppStoreBase with Store {
-  @observable
-  var isLoading = false;
 
   @observable
-  var appReady = true;
+  var isLoading = false;
 
   @observable
   var tokens = TokensModel();
@@ -32,25 +29,17 @@ abstract class AppStoreBase with Store {
   bool get isAuth => userStore.user != null;
 
   Future? initApp() async {
-    setAppReady(false);
-    await localStorage.initStorage;
-    await initDeviceId();
     initTokensFromStorage();
+    await initDeviceId();
     if (tokens.accessToken != null) {
       await initAuthApp();
     }
-    setAppReady(true);
   }
 
   initAuthApp() async {
     await userStore.init();
     await relativesStore.init();
     await notesStore.init();
-  }
-
-  @action
-  setAppReady(bool val){
-    appReady = val;
   }
 
   @action
@@ -62,10 +51,11 @@ abstract class AppStoreBase with Store {
   }
 
   @action
-  initTokensFromStorage() async {
+  initTokensFromStorage() {
+    var prefs = GetIt.I<SharedPreferences>();
     tokens = TokensModel(
-        accessToken: localStorage.read('access-token'),
-        refreshToken: localStorage.read('refresh-token'));
+        accessToken: prefs.getString('access-token'),
+        refreshToken: prefs.getString('refresh-token'));
   }
 
   Future<bool> refreshToken() async {
@@ -83,16 +73,34 @@ abstract class AppStoreBase with Store {
   @action
   setTokens(TokensModel tokensModel) async {
     tokens = tokensModel;
-    await localStorage.write('access-token', tokensModel.accessToken);
-    await localStorage.write('refresh-token', tokensModel.refreshToken);
+    var prefs = GetIt.I<SharedPreferences>();
+    if (tokensModel.accessToken != null) {
+      await prefs.setString('access-token', tokensModel.accessToken!);
+    }
+    if (tokensModel.refreshToken != null) {
+      await prefs.setString('refresh-token', tokensModel.refreshToken!);
+    }
+  }
+
+  @action
+  signIn({required String email, required String password}) async {
+    var prefs = GetIt.I<SharedPreferences>();
+    await prefs.setString('email', email);
+
+    var tokens = await AuthService().signIn(email: email, password: password);
+    if (tokens == null) {
+      return;
+    }
+    await setTokens(tokens);
+    await initAuthApp();
   }
 
   @action
   logOut() async {
     userStore.resetUser();
-    navigationStore.clear();
-    await localStorage.remove('access-token');
-    await localStorage.remove('refresh-token');
+    var prefs = GetIt.I<SharedPreferences>();
+    await prefs.remove('access-token');
+    await prefs.remove('refresh-token');
   }
 
   @action

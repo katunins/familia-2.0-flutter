@@ -1,23 +1,30 @@
-import 'package:familia_flutter/screens/loadingScreen.dart';
+import 'package:familia_flutter/helpers/util.helper.dart';
+import 'package:familia_flutter/routers/appRouter.gr.dart';
+import 'package:familia_flutter/routers/guestRouter.gr.dart';
+import 'package:familia_flutter/screens/splashScreen.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 import 'package:familia_flutter/themes/main.theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'config.dart';
-import 'navigation/navBody.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-final localStorage = GetStorage(Config.appStorageKey);
-var dateFormat = DateFormat("dd-MM-yyyy");
+final dateFormat = DateFormat("dd-MM-yyyy");
 final ImagePicker imagePicker = ImagePicker();
-final globalKey = GlobalKey<NavigatorState>();
+final globalKey = GlobalKey<ScaffoldMessengerState>();
+final guestRouter = GuestRouter();
+final appRouter = AppRouter();
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const GetMaterialApp(home: Root()));
+
+  final prefs = await SharedPreferences.getInstance();
+  GetIt.I.registerSingleton<SharedPreferences>(prefs);
+  GetIt.I.registerSingleton<AppRouter>(appRouter);
+  GetIt.I.registerSingleton<GlobalKey<ScaffoldMessengerState>>(globalKey);
+
+  runApp(const Root());
 }
 
 class Root extends StatefulWidget {
@@ -28,23 +35,39 @@ class Root extends StatefulWidget {
 }
 
 class _RootState extends State<Root> {
+  bool showSplash = true;
+
+  afterInit(_) {
+    showSplash = false;
+    setState(() {});
+  }
 
   @override
   void initState() {
-    appStore.initApp();
+    appStore.initApp()?.then(afterInit).onError((error, _) {
+      showSnackBar(error.toString());
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      navigatorKey: globalKey,
-      debugShowCheckedModeBanner: false,
-      theme: getThemeData(context),
-      home: Observer(
-        builder: (_) =>
-            appStore.appReady ? const NavBody() : const LoadingPage(),
-      ),
-    );
+        scaffoldMessengerKey: globalKey,
+        debugShowCheckedModeBanner: false,
+        theme: getThemeData(context),
+        home: showSplash
+            ? const SplashScreen()
+            : appStore.isAuth
+                ? Router(
+                    routerDelegate: appRouter.delegate(),
+                    routeInformationParser: appRouter.defaultRouteParser(),
+                    routeInformationProvider: appRouter.routeInfoProvider(),
+                  )
+                : Router(
+                    routerDelegate: guestRouter.delegate(),
+                    routeInformationParser: guestRouter.defaultRouteParser(),
+                    routeInformationProvider: guestRouter.routeInfoProvider(),
+                  ));
   }
 }

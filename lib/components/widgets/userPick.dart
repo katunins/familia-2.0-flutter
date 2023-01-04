@@ -16,7 +16,8 @@ class UserPick extends StatelessWidget {
           width: AppSizes.userPickWidth,
           height: AppSizes.userPickWidth,
           fit: BoxFit.cover,
-          path: userPic),
+          path: userPic,
+      ),
     );
   }
 }

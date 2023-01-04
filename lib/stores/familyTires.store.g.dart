@@ -106,6 +106,22 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
     });
   }
 
+  late final _$spousesAtom =
+      Atom(name: 'FamilyTiresBase.spouses', context: context);
+
+  @override
+  List<String> get spouses {
+    _$spousesAtom.reportRead();
+    return super.spouses;
+  }
+
+  @override
+  set spouses(List<String> value) {
+    _$spousesAtom.reportWrite(value, super.spouses, () {
+      super.spouses = value;
+    });
+  }
+
   late final _$FamilyTiresBaseActionController =
       ActionController(name: 'FamilyTiresBase', context: context);
 
@@ -176,6 +192,17 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   @override
+  dynamic _getSpouses() {
+    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
+        name: 'FamilyTiresBase._getSpouses');
+    try {
+      return super._getSpouses();
+    } finally {
+      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 children: ${children},
@@ -183,7 +210,8 @@ grandsons: ${grandsons},
 sisterBrothers: ${sisterBrothers},
 grandParents: ${grandParents},
 greatGrandParents: ${greatGrandParents},
-greatGreatGrandParents: ${greatGreatGrandParents}
+greatGreatGrandParents: ${greatGreatGrandParents},
+spouses: ${spouses}
     ''';
   }
 }

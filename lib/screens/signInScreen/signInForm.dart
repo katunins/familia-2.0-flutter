@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/bottomSheet.dart';
 import 'package:familia_flutter/components/widgets/button.dart';
 import 'package:familia_flutter/components/widgets/textFieldWidget.dart';
 
@@ -6,6 +7,8 @@ import 'package:familia_flutter/services/auth.service.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
@@ -16,6 +19,7 @@ class SignInForm extends StatefulWidget {
 
 class _SignInFormState extends State<SignInForm> {
   final _formKey = GlobalKey<FormState>();
+  final _prefs = GetIt.I<SharedPreferences>();
 
   var canSubmit = false;
 
@@ -24,20 +28,13 @@ class _SignInFormState extends State<SignInForm> {
 
   @override
   void initState() {
-    emailTextEditingController.text = localStorage.read('email') ?? '';
+    emailTextEditingController.text = _prefs.getString('email') ?? '';
 
     emailTextEditingController.addListener(updateCanSubmit);
     passwordTextEditingController.addListener(updateCanSubmit);
 
     updateCanSubmit();
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    emailTextEditingController.clear();
-    passwordTextEditingController.clear();
-    super.dispose();
   }
 
   void updateCanSubmit() {
@@ -49,15 +46,9 @@ class _SignInFormState extends State<SignInForm> {
 
   void _submit() async {
     if (_formKey.currentState!.validate()) {
-      var tokens = await AuthService().signIn(
+      await appStore.signIn(
           email: emailTextEditingController.text,
           password: passwordTextEditingController.text);
-      if (tokens == null) {
-        return;
-      }
-      appStore.setTokens(tokens);
-      localStorage.write('email', emailTextEditingController.text);
-      await appStore.initAuthApp();
     }
   }
 
@@ -73,7 +64,7 @@ class _SignInFormState extends State<SignInForm> {
               child: Column(
                 children: [
                   TextFieldWidget(
-                      controller: emailTextEditingController,
+                    controller: emailTextEditingController,
                     hintText: 'email',
                     labelText: 'email',
                   ),

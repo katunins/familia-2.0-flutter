@@ -5,7 +5,6 @@ class Config {
   String? deviceId;
 
   static const pageSize = 10;
-  static const appStorageKey = 'familia_app';
   static const defaultUserName = 'Мой профиль';
   static const defaultRelativeName = 'Мой родственник';
   static const maxImageWidth = 600.0;

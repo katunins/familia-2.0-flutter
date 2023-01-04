@@ -29,16 +29,19 @@ class _SignUpFormState extends State<SignUpForm> {
     });
   }
 
+  @override
+  void initState() {
+    emailTextEditingController.addListener(updateCanSubmit);
+    passwordTextEditingController.addListener(updateCanSubmit);
+    passwordDoubleTextEditingController.addListener(updateCanSubmit);
+    super.initState();
+  }
+
   void _submit() async {
     if (_formKey.currentState!.validate()) {
-      var tokens = await AuthService().signUp(
+      appStore.signIn(
           email: emailTextEditingController.text,
           password: passwordTextEditingController.text);
-      if (tokens == null) {
-        return;
-      }
-      appStore.setTokens(tokens);
-      await appStore.initAuthApp();
     }
   }
 

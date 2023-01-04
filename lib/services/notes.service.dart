@@ -31,9 +31,10 @@ class NotesService {
     );
   }
 
-  Future<ApiResponseModel<NoteModel>?> getRelativesNotes({required int page, required String relativeId}) async {
+  Future<ApiResponseModel<NoteModel>?> getRelativeNotes({required int page, required String relativeId, required String search}) async {
     var queryParameters = {
       'relativeId': relativeId,
+      'search': search,
       'pagination': {
         'page': page,
         'pageSize': Config.pageSize
@@ -52,5 +53,20 @@ class NotesService {
             NoteModel.fromJson(json)).toList(),
         pagination: PaginationModel.fromJson(response.data['pagination'])
     );
+  }
+
+  Future<int?> getRelativeNotesCount(String relativeId) async {
+    var queryParameters = {
+      'relativeId': relativeId,
+    };
+
+    var response = await Api().dio.get(
+        '$apiUrl/user-count', queryParameters: queryParameters);
+
+    if (response.statusCode != 200) {
+      return null;
+    }
+
+    return int.parse(response.data);
   }
 }

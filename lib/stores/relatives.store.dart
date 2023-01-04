@@ -2,7 +2,6 @@ import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
 import 'package:familia_flutter/stores/relativeItem.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
-import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
@@ -108,6 +107,6 @@ abstract class RelativesStoreBase with Store {
   }
 
   RelativeModel? getRelativeById(relativeId) => relatives
-      .firstWhereOrNull((element) => element.data.id == relativeId)
+      .firstWhere((element) => element.data.id == relativeId)
       ?.data;
 }

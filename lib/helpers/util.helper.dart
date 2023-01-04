@@ -3,7 +3,8 @@ import 'package:familia_flutter/models/parents.model.dart';
 import 'package:familia_flutter/models/treeElement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../main.dart';
 import '../models/gender.enum.dart';
 import '../stores/relatives.store.dart';
@@ -29,7 +30,8 @@ getOriginalImageUrl(String? imageUrl) {
 }
 
 getBearerToken() {
-  return 'Bearer ${localStorage.read('access-token')}';
+  var accessToken = GetIt.I<SharedPreferences>().getString('access-token');
+  return 'Bearer $accessToken';
 }
 
 Gender getGenderFromJson(String? value) {
@@ -69,13 +71,14 @@ List<TreeElementModel> getTreeElements(List<String> userIds) {
 
 /// Возвращает список treeElements для двух родителей
 /// Если родителей меньше двух, то добавляет treeElement.empty
-List<TreeElementModel> getParentElements(ParentsModel? parents, {parentsCount = 2}) {
+List<TreeElementModel> getParentElements(ParentsModel? parents,
+    {parentsCount = 2}) {
   List<TreeElementModel> result = [];
   if (parents != null) {
     for (var id in parents!.toIdsList()) {
       var treeElement = getFromAllFamily(id);
-      if (treeElement == null){
-        Exception (['04 - Не найден пользователь $id']);
+      if (treeElement == null) {
+        Exception(['04 - Не найден пользователь $id']);
       }
       result.add(treeElement!);
     }
@@ -100,19 +103,24 @@ bool isSameParentsModels(ParentsModel parent1, ParentsModel parent2) {
 
 /// Возвращает список TreeElements пользователя и родственников в системе,
 /// excluded - список id, которые нужно исключить из списка
-List<TreeElementModel> getAllUsers(List<String> excluded) {
+List<TreeElementModel> getAllUsers({List<String>? excluded}) {
+  excluded ??= [];
+
   List<TreeElementModel> res = [];
-  if (excluded.firstWhereOrNull((id) => userStore.user!.id == id) == null) {
+
+  if (excluded.firstWhere((id) => userStore.user?.id == id, orElse: () => '') ==
+      '') {
     res.add(userStore.user!.toTreeElement());
   }
   var filterRelatives = relativesStore.relatives.where((element) =>
-      excluded.firstWhereOrNull((id) => element.data.id == id) == null);
+      excluded!.firstWhere((id) => element.data.id == id, orElse: () => '') ==
+      '');
   res.addAll(filterRelatives.map((item) => item.data.toTreeElement()));
   return res;
 }
 
 TreeElementModel? getFromAllFamily(String id) {
-  return getAllUsers([]).firstWhereOrNull((element) => element.id == id);
+  return getAllUsers().firstWhere((element) => element.id == id);
 }
 
 /// Принимает список ID пользователей
@@ -126,4 +134,9 @@ List<String> getUserPicksList(List<String> userIds) {
     }
   }
   return res;
+}
+
+void showSnackBar(String message) {
+  var currentState = GetIt.I<GlobalKey<ScaffoldMessengerState>>().currentState;
+  currentState?.showSnackBar(SnackBar(content: Text(message)));
 }

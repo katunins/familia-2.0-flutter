@@ -1,4 +1,4 @@
-import 'package:familia_flutter/components/widgets/scaffold.dart';
+import 'package:familia_flutter/components/widgets/scaffoldWrapper.dart';
 import 'package:familia_flutter/models/note.model.dart';
 import 'package:familia_flutter/screens/notesScreen/noteDetail.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,12 +11,12 @@ class NoteDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppScaffold(
-      title: note.title,
+    return ScaffoldWrapper(
+        title: note.title,
         isUserPick: true,
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 60),
-      child: NoteDetail(note: note, isExpand: true),
-    ));
+          child: NoteDetail(note: note, isExpand: true),
+        ));
   }
 }

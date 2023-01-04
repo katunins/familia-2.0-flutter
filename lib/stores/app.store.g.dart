@@ -32,22 +32,6 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
-  late final _$appReadyAtom =
-      Atom(name: 'AppStoreBase.appReady', context: context);
-
-  @override
-  bool get appReady {
-    _$appReadyAtom.reportRead();
-    return super.appReady;
-  }
-
-  @override
-  set appReady(bool value) {
-    _$appReadyAtom.reportWrite(value, super.appReady, () {
-      super.appReady = value;
-    });
-  }
-
   late final _$tokensAtom = Atom(name: 'AppStoreBase.tokens', context: context);
 
   @override
@@ -71,21 +55,21 @@ mixin _$AppStore on AppStoreBase, Store {
     return _$initDeviceIdAsyncAction.run(() => super.initDeviceId());
   }
 
-  late final _$initTokensFromStorageAsyncAction =
-      AsyncAction('AppStoreBase.initTokensFromStorage', context: context);
-
-  @override
-  Future initTokensFromStorage() {
-    return _$initTokensFromStorageAsyncAction
-        .run(() => super.initTokensFromStorage());
-  }
-
   late final _$setTokensAsyncAction =
       AsyncAction('AppStoreBase.setTokens', context: context);
 
   @override
   Future setTokens(TokensModel tokensModel) {
     return _$setTokensAsyncAction.run(() => super.setTokens(tokensModel));
+  }
+
+  late final _$signInAsyncAction =
+      AsyncAction('AppStoreBase.signIn', context: context);
+
+  @override
+  Future signIn({required String email, required String password}) {
+    return _$signInAsyncAction
+        .run(() => super.signIn(email: email, password: password));
   }
 
   late final _$logOutAsyncAction =
@@ -100,11 +84,11 @@ mixin _$AppStore on AppStoreBase, Store {
       ActionController(name: 'AppStoreBase', context: context);
 
   @override
-  dynamic setAppReady(bool val) {
+  dynamic initTokensFromStorage() {
     final _$actionInfo = _$AppStoreBaseActionController.startAction(
-        name: 'AppStoreBase.setAppReady');
+        name: 'AppStoreBase.initTokensFromStorage');
     try {
-      return super.setAppReady(val);
+      return super.initTokensFromStorage();
     } finally {
       _$AppStoreBaseActionController.endAction(_$actionInfo);
     }
@@ -125,7 +109,6 @@ mixin _$AppStore on AppStoreBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
-appReady: ${appReady},
 tokens: ${tokens},
 isAuth: ${isAuth}
     ''';

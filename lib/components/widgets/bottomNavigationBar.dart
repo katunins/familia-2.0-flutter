@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-
-import '../../navigation/tabRoutes.dart';
-import '../../stores/navigation.store.dart';
 import '../../themes/colors.dart';
 
 getBottomNavigationBar() => BottomAppBar(
@@ -16,7 +13,7 @@ getBottomNavigationBar() => BottomAppBar(
               Icons.photo_library_sharp,
               color: AppColors.whiteColor,
             ),
-            onPressed: () => navigationStore.setCurrentTab(TabRoutes.notes),
+            onPressed: () {},
           ),
           const SizedBox(
             width: 170,
@@ -24,7 +21,7 @@ getBottomNavigationBar() => BottomAppBar(
           IconButton(
             icon: Icon(Icons.supervised_user_circle_sharp,
                 color: AppColors.whiteColor),
-            onPressed: () => navigationStore.setCurrentTab(TabRoutes.relatives),
+            onPressed: () {},
           ),
         ],
       ),

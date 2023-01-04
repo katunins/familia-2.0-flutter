@@ -1,18 +1,31 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
 import 'package:familia_flutter/components/bottomSheet.dart';
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/main.dart';
 import 'package:familia_flutter/stores/app.store.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+
+/// сервис API
+/// needToRefresh - заправшивать ли новый токен, если он закончился
+/// isMultipartData - добавляет в хедер multipart/form-data
 
 class Api {
-  late bool needToRefresh;
+  final bool needToRefresh;
   final bool isMultipartData;
+  final bool returnErrorResponse;
+
   final dio = Dio(Config.baseApiOptions);
 
-  Api({this.needToRefresh = true, this.isMultipartData = false}) {
-    dio.interceptors
-        .add(QueuedInterceptorsWrapper(onRequest: onRequest, onResponse: onResponse, onError: onError));
+  Api(
+      {this.needToRefresh = true,
+      this.isMultipartData = false,
+      this.returnErrorResponse = false}) {
+    dio.interceptors.add(QueuedInterceptorsWrapper(
+        onRequest: onRequest, onResponse: onResponse, onError: onError));
   }
 
   onRequest(
@@ -26,24 +39,45 @@ class Api {
     return handler.next(requestOptions);
   }
 
-  onResponse(Response response, ResponseInterceptorHandler handler,){
+  onResponse(
+    Response response,
+    ResponseInterceptorHandler handler,
+  ) {
     appStore.setIsLoading(false);
     return handler.next(response);
   }
 
   onError(DioError error, ErrorInterceptorHandler handler) async {
+
     var response = error.response;
-    if (response != null && response.statusCode == 403 && needToRefresh) {
-      await refreshTokenAndRepeatRequest(response: response, handler: handler);
-      return;
+    if (response == null) {
+      showSnackBar('Ошибка ответа сервера');
+    }
+
+    switch (response!.statusCode) {
+      case 403:
+        if (needToRefresh) {
+          await refreshTokenAndRepeatRequest(
+              response: response, handler: handler);
+          appStore.setIsLoading(false);
+          return;
+        }
+        break;
+
+      case 401:
+        appStore.setIsLoading(false);
+        appStore.logOut();
+        break;
+
+      default:
+        appStore.setIsLoading(false);
     }
 
     var errorMessage = error.response?.data['message'];
-    appStore.logOut();
-    appStore.setIsLoading(false);
     if (errorMessage != null && errorMessage != '') {
-      AppBottomSheet.message(context: globalKey.currentContext!, message: errorMessage);
+      showSnackBar(error.response?.data['message']);
     }
+
   }
 
   refreshTokenAndRepeatRequest(

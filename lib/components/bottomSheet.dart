@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class AppBottomSheet {
-
   static void show(
       {required BuildContext context,
       bool isScrollControlled = false,

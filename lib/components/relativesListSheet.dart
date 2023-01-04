@@ -1,7 +1,8 @@
+import 'package:familia_flutter/models/searchStoreBar.model.dart';
 import 'package:flutter/material.dart';
 import '../helpers/util.helper.dart';
 import '../models/treeElement.dart';
-import 'appBarSearch.dart';
+import 'appBarInput.dart';
 
 /// BottomSheet со списком пользователея и родственников, которые можно выбрать
 /// excluded - список id, которые нужно исключить из списка
@@ -24,12 +25,12 @@ class _RelativesListSheetState extends State<RelativesListSheet> {
 
   @override
   void initState() {
-    elements = getAllUsers(widget.excluded ?? []);
+    elements = getAllUsers(excluded: widget.excluded);
     setState(() {});
     super.initState();
   }
 
-  onSearchChange(String val) {
+  setSearch(String val) {
     search = val;
     setState(() {});
   }
@@ -54,9 +55,10 @@ class _RelativesListSheetState extends State<RelativesListSheet> {
                 Container(
                   margin: const EdgeInsets.only(
                       left: 12.0, right: 12.0, bottom: 12.0),
-                  child: SearchInput(
-                    initialValue: '',
-                    onChange: onSearchChange,
+                  child: AppBarInput(
+                    searchBarStore: SearchBarStoreModel(
+                    search: search,
+                    setSearch: setSearch),
                   ),
                 ),
                 Expanded(

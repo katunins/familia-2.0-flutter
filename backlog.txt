@@ -16,3 +16,5 @@ backlog
 
 Technical
 - to implement AutoRouter https://pub.dev/packages/auto_route
+- дизайн аппбар
+-
