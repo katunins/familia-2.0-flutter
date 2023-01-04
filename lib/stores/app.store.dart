@@ -1,4 +1,3 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/models/tokens.model.dart';
 import 'package:familia_flutter/services/auth.service.dart';
 import 'package:familia_flutter/stores/notes.store.dart';
@@ -21,6 +20,9 @@ abstract class AppStoreBase with Store {
   var isLoading = false;
 
   @observable
+  var isShowSplash = true;
+
+  @observable
   var tokens = TokensModel();
 
   String? deviceId;
@@ -34,6 +36,7 @@ abstract class AppStoreBase with Store {
     if (tokens.accessToken != null) {
       await initAuthApp();
     }
+    stopSplash();
   }
 
   initAuthApp() async {
@@ -48,6 +51,11 @@ abstract class AppStoreBase with Store {
     if (result != null) {
       deviceId = result;
     }
+  }
+
+  @action
+  stopSplash(){
+    isShowSplash = false;
   }
 
   @action
@@ -96,11 +104,25 @@ abstract class AppStoreBase with Store {
   }
 
   @action
+  signUp({required String email, required String password}) async {
+
+    var tokens = await AuthService().signUp(email: email, password: password);
+    if (tokens == null) {
+      return;
+    }
+    await setTokens(tokens);
+    await initAuthApp();
+  }
+
+  @action
   logOut() async {
     userStore.resetUser();
     var prefs = GetIt.I<SharedPreferences>();
     await prefs.remove('access-token');
     await prefs.remove('refresh-token');
+    if (isShowSplash) {
+      stopSplash();
+    }
   }
 
   @action

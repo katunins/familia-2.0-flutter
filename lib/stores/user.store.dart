@@ -1,4 +1,4 @@
-import 'package:familia_flutter/models/baseUserData.model.dart';
+import 'package:familia_flutter/models/base_user_data.model.dart';
 import 'package:familia_flutter/models/user.model.dart';
 import 'package:familia_flutter/services/storage.service.dart';
 import 'package:familia_flutter/services/user.service.dart';

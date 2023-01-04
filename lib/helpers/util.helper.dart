@@ -1,11 +1,9 @@
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/models/treeElement.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:familia_flutter/models/tree_element.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../main.dart';
 import '../models/gender.enum.dart';
 import '../stores/relatives.store.dart';
 import '../stores/user.store.dart';
@@ -75,7 +73,7 @@ List<TreeElementModel> getParentElements(ParentsModel? parents,
     {parentsCount = 2}) {
   List<TreeElementModel> result = [];
   if (parents != null) {
-    for (var id in parents!.toIdsList()) {
+    for (var id in parents.toIdsList()) {
       var treeElement = getFromAllFamily(id);
       if (treeElement == null) {
         Exception(['04 - Не найден пользователь $id']);

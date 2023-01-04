@@ -1,4 +1,3 @@
-import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/models/relative.model.dart';
 
 import 'api.dart';

@@ -1,6 +1,6 @@
-import 'package:familia_flutter/models/baseUserData.model.dart';
+import 'package:familia_flutter/models/base_user_data.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/models/treeElement.dart';
+import 'package:familia_flutter/models/tree_element.dart';
 
 import '../helpers/util.helper.dart';
 

@@ -1,6 +1,6 @@
-import 'package:familia_flutter/models/apiResponse.model.dart';
+import 'package:familia_flutter/models/api_response.model.dart';
 import 'package:familia_flutter/models/pagination.model.dart';
-import 'package:familia_flutter/stores/noteItem.store.dart';
+import 'package:familia_flutter/stores/note_item.store.dart';
 import 'package:mobx/mobx.dart';
 
 import '../config.dart';

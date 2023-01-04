@@ -32,6 +32,22 @@ mixin _$AppStore on AppStoreBase, Store {
     });
   }
 
+  late final _$isShowSplashAtom =
+      Atom(name: 'AppStoreBase.isShowSplash', context: context);
+
+  @override
+  bool get isShowSplash {
+    _$isShowSplashAtom.reportRead();
+    return super.isShowSplash;
+  }
+
+  @override
+  set isShowSplash(bool value) {
+    _$isShowSplashAtom.reportWrite(value, super.isShowSplash, () {
+      super.isShowSplash = value;
+    });
+  }
+
   late final _$tokensAtom = Atom(name: 'AppStoreBase.tokens', context: context);
 
   @override
@@ -72,6 +88,15 @@ mixin _$AppStore on AppStoreBase, Store {
         .run(() => super.signIn(email: email, password: password));
   }
 
+  late final _$signUpAsyncAction =
+      AsyncAction('AppStoreBase.signUp', context: context);
+
+  @override
+  Future signUp({required String email, required String password}) {
+    return _$signUpAsyncAction
+        .run(() => super.signUp(email: email, password: password));
+  }
+
   late final _$logOutAsyncAction =
       AsyncAction('AppStoreBase.logOut', context: context);
 
@@ -82,6 +107,17 @@ mixin _$AppStore on AppStoreBase, Store {
 
   late final _$AppStoreBaseActionController =
       ActionController(name: 'AppStoreBase', context: context);
+
+  @override
+  dynamic stopSplash() {
+    final _$actionInfo = _$AppStoreBaseActionController.startAction(
+        name: 'AppStoreBase.stopSplash');
+    try {
+      return super.stopSplash();
+    } finally {
+      _$AppStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic initTokensFromStorage() {
@@ -109,6 +145,7 @@ mixin _$AppStore on AppStoreBase, Store {
   String toString() {
     return '''
 isLoading: ${isLoading},
+isShowSplash: ${isShowSplash},
 tokens: ${tokens},
 isAuth: ${isAuth}
     ''';

@@ -12,9 +12,11 @@ Bug !!!
 -
 
 backlog
++ создание quiz для заполнения данных нового пользователя
 + определение супруга
 
 Technical
-- to implement AutoRouter https://pub.dev/packages/auto_route
-- дизайн аппбар
--
++ to implement AutoRouter https://pub.dev/packages/auto_route
++ дизайн аппбар
++ проверить авторизацию / выйти из аккаунте
++ проверить регистрацию / создание нового пользователя

@@ -1,4 +1,4 @@
-import 'package:familia_flutter/models/apiResponse.model.dart';
+import 'package:familia_flutter/models/api_response.model.dart';
 import 'package:familia_flutter/models/note.model.dart';
 import 'package:familia_flutter/models/pagination.model.dart';
 import 'package:familia_flutter/stores/notes.store.dart';

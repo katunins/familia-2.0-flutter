@@ -1,12 +1,12 @@
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
-import 'package:familia_flutter/stores/relativeItem.store.dart';
+import 'package:familia_flutter/stores/relative_item.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
-import '../models/baseUserData.model.dart';
-import 'familyTires.store.dart';
+import '../models/base_user_data.model.dart';
+import 'family_tires.store.dart';
 import '../services/storage.service.dart';
 
 part 'relatives.store.g.dart';
@@ -32,7 +32,7 @@ abstract class RelativesStoreBase with Store {
       return false;
     }
     List<String> filesToDelete =
-        relative.userData?.userPic != null ? [relative.userData!.userPic!] : [];
+        relative.userData.userPic != null ? [relative.userData.userPic!] : [];
     var imageUrl = await StorageApi().uploadImage(
         image: image, pathType: 'relatives', filesToDelete: filesToDelete);
     if (imageUrl == null) {
@@ -107,6 +107,5 @@ abstract class RelativesStoreBase with Store {
   }
 
   RelativeModel? getRelativeById(relativeId) => relatives
-      .firstWhere((element) => element.data.id == relativeId)
-      ?.data;
+      .firstWhere((element) => element.data.id == relativeId).data;
 }

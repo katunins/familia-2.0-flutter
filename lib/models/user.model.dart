@@ -1,11 +1,8 @@
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/models/treeElement.dart';
+import 'package:familia_flutter/models/tree_element.dart';
 
-import 'baseUserData.model.dart';
-import 'gender.enum.dart';
-
-
+import 'base_user_data.model.dart';
 
 class UserModel {
   late String id;
@@ -22,9 +19,9 @@ class UserModel {
     id = json['_id'];
     email = json['email'];
     userData = BaseUserDataModel(
-      name: json['name'],
-      about: json['about'],
-      parents: ParentsModel.fromJson(json['parents']),
+      name: json['name'] ?? '',
+      about: json['about'] ?? '',
+      parents: json['parents'] == null ? ParentsModel.createEmpty() : ParentsModel.fromJson(json['parents']),
       gender: getGenderFromJson(json['gender']),
       userPic: getImageUrl(json['userPic']),
 

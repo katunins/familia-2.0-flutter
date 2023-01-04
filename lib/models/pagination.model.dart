@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:familia_flutter/config.dart';
 
 class PaginationModel {

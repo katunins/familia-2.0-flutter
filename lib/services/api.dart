@@ -1,13 +1,7 @@
-import 'package:auto_route/auto_route.dart';
 import 'package:dio/dio.dart';
-import 'package:familia_flutter/components/bottomSheet.dart';
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
-import 'package:familia_flutter/main.dart';
 import 'package:familia_flutter/stores/app.store.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:get_it/get_it.dart';
 
 /// сервис API
 /// needToRefresh - заправшивать ли новый токен, если он закончился
@@ -78,6 +72,7 @@ class Api {
       showSnackBar(error.response?.data['message']);
     }
 
+    handler.next(error);
   }
 
   refreshTokenAndRepeatRequest(

@@ -33,7 +33,9 @@ class AuthService {
   Future<TokensModel?> signUp(
       {required String email, required String password}) async {
     var data = {'email': email, 'password': password};
-    var response = await Api(needToRefresh: false).dio.post(apiUrl, data: data);
+    var response = await Api(needToRefresh: false)
+        .dio
+        .post(apiUrl, data: data);
     if (response.statusCode != 201) {
       return null;
     }
