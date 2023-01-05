@@ -221,7 +221,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
                             child: ImageWithUpload(
                               onUpload: onUpload,
                               isSquare: true,
-                              path: uploadImage?.path ?? widget.initialData?.userPic,
+                              path: uploadImage?.path ?? widget.initialData.userPic,
                             )),
                         Container(
                           margin: EdgeInsets.symmetric(

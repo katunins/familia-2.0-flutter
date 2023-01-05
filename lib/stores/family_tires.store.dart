@@ -162,14 +162,15 @@ abstract class FamilyTiresBase with Store {
     var parents = rootUser!.userData.parents;
     parents.toIdsList().where((id) => id.isNotEmpty).map((id) {
       var parent = getFromAllFamily(id);
-      if (parent == null) {
+      if (parent != null) {
+        if (parent.parents.mother != '') {
+          grandParents.add(parent.parents.mother);
+        }
+        if (parent.parents.father != '') {
+          grandParents.add(parent.parents.father);
+        }
+      } else {
         Exception(['01 - Не найден пользователь $id']);
-      }
-      if (parent!.parents.mother != '') {
-        grandParents.add(parent.parents.mother);
-      }
-      if (parent!.parents.father != '') {
-        grandParents.add(parent.parents.father);
       }
     }).toList();
   }
@@ -181,10 +182,10 @@ abstract class FamilyTiresBase with Store {
       if (parent == null) {
         return;
       }
-      if (parent!.parents.mother != '') {
+      if (parent.parents.mother != '') {
         greatGrandParents.add(parent.parents.mother);
       }
-      if (parent!.parents.father != '') {
+      if (parent.parents.father != '') {
         greatGrandParents.add(parent.parents.father);
       }
     }).toList();
@@ -197,10 +198,10 @@ abstract class FamilyTiresBase with Store {
       if (parent == null) {
         return;
       }
-      if (parent!.parents.mother != '') {
+      if (parent.parents.mother != '') {
         greatGreatGrandParents.add(parent.parents.mother);
       }
-      if (parent!.parents.father != '') {
+      if (parent.parents.father != '') {
         greatGreatGrandParents.add(parent.parents.father);
       }
     }).toList();
