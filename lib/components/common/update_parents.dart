@@ -13,37 +13,41 @@ import 'package:flutter/material.dart';
 /// childId - id пользователя у которого редактируются родители
 
 class UpdateParents extends StatelessWidget {
-  const UpdateParents(
-      {Key? key, required this.parents, required this.onSelected, this.childId})
-      : super(key: key);
+  const UpdateParents({
+    Key? key,
+    required this.parents,
+    required this.onSelected,
+    this.childId,
+    required this.hideBottomSheetAddRelativeButton,
+  }) : super(key: key);
 
   final ParentsModel? parents;
   final String? childId;
+  final bool hideBottomSheetAddRelativeButton;
   final Function({required String oldParentId, required String newParentId})
       onSelected;
 
+  onPressed(BuildContext context, String oldParentId) {
+    List<String> excluded = childId == null ? [] : [childId!];
+    if (parents != null) {
+      excluded.addAll(parents!.toIdsList());
+    }
+    BottomSheetHelper.show(
+        context: context,
+        isScrollControlled: true,
+        widget: RelativesListSheet(
+          excluded: excluded,
+          hideAddRelativeButton: hideBottomSheetAddRelativeButton,
+          onSelected: (String newParentId) =>
+              onSelected(oldParentId: oldParentId, newParentId: newParentId),
+        ));
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    onPressed(String oldParentId) {
-
-      List<String> excluded = childId == null ? [] : [childId!];
-      if (parents != null){
-        excluded.addAll(parents!.toIdsList());
-      }
-
-      BottomSheetHelper.show(
-          context: context,
-          isScrollControlled: true,
-          widget: RelativesListSheet(
-              excluded: excluded,
-              onSelected: (String newParentId) => onSelected(
-                  oldParentId: oldParentId, newParentId: newParentId)));
-    }
-
     return Parents(
         parents: parents,
         emptyTitle: 'Нажмите для добавления',
-        onPressed: onPressed);
+        onPressed: (String oldParentId) => onPressed(context, oldParentId));
   }
 }

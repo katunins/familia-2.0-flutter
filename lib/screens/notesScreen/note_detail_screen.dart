@@ -13,7 +13,7 @@ class NoteDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
         title: note.title,
-        isUserPick: true,
+        isUserPic: true,
         body: SingleChildScrollView(
           padding: const EdgeInsets.only(bottom: 60),
           child: NoteDetail(note: note, isExpand: true),

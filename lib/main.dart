@@ -1,4 +1,3 @@
-import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/routers/app_router.gr.dart';
 import 'package:familia_flutter/routers/guest_router.gr.dart';
 import 'package:familia_flutter/screens/splash_screen.dart';
@@ -22,7 +21,7 @@ void main() async {
 
   final prefs = await SharedPreferences.getInstance();
   GetIt.I.registerSingleton<SharedPreferences>(prefs);
-  // GetIt.I.registerSingleton<AppRouter>(appRouter);
+  GetIt.I.registerSingleton<AppRouter>(appRouter);
   GetIt.I.registerSingleton<GlobalKey<ScaffoldMessengerState>>(globalKey);
 
   runApp(const Root());

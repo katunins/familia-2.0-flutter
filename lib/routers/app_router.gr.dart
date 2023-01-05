@@ -21,10 +21,10 @@ import '../screens/notesScreen/note_detail_screen.dart' as _i5;
 import '../screens/notesScreen/note_list_screen.dart' as _i4;
 import '../screens/profileScreen/edit_profile_screen.dart' as _i12;
 import '../screens/profileScreen/profile_screen.dart' as _i11;
-import '../screens/relativesScreen/create_relative_screen.dart' as _i8;
-import '../screens/relativesScreen/edit_relative_screen.dart' as _i9;
+import '../screens/relativesScreen/create_relative_screen.dart' as _i10;
+import '../screens/relativesScreen/edit_relative_screen.dart' as _i8;
 import '../screens/relativesScreen/relative_detail_screen.dart' as _i7;
-import '../screens/relativesScreen/relative_notes_list.dart' as _i10;
+import '../screens/relativesScreen/relative_notes_list.dart' as _i9;
 import '../screens/relativesScreen/relatives_list_screen.dart' as _i6;
 import '../screens/treeScreen/tree_screen.dart' as _i3;
 import '../stores/relative_item.store.dart' as _i16;
@@ -98,19 +98,11 @@ class AppRouter extends _i13.RootStackRouter {
         ),
       );
     },
-    CreateNewRelativeRouter.name: (routeData) {
-      final args = routeData.argsAs<CreateNewRelativeRouterArgs>(
-          orElse: () => const CreateNewRelativeRouterArgs());
-      return _i13.MaterialPageX<dynamic>(
-        routeData: routeData,
-        child: _i8.CreateRelativeScreen(key: args.key),
-      );
-    },
     EditRelativeRouter.name: (routeData) {
       final args = routeData.argsAs<EditRelativeRouterArgs>();
       return _i13.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i9.EditRelativeScreen(
+        child: _i8.EditRelativeScreen(
           key: args.key,
           relative: args.relative,
         ),
@@ -120,9 +112,22 @@ class AppRouter extends _i13.RootStackRouter {
       final args = routeData.argsAs<RelativeNotesRouterArgs>();
       return _i13.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i10.RelativeNotesListScreen(
+        child: _i9.RelativeNotesListScreen(
           key: args.key,
           relativeId: args.relativeId,
+        ),
+      );
+    },
+    CreateNewRelativeRouter.name: (routeData) {
+      final args = routeData.argsAs<CreateNewRelativeRouterArgs>(
+          orElse: () => const CreateNewRelativeRouterArgs());
+      return _i13.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: _i10.CreateRelativeScreen(
+          key: args.key,
+          finishCallback: args.finishCallback,
+          hideBottomSheetAddRelativeButton:
+              args.hideBottomSheetAddRelativeButton,
         ),
       );
     },
@@ -184,22 +189,17 @@ class AppRouter extends _i13.RootStackRouter {
                   '#redirect',
                   path: '',
                   parent: RelativesRouter.name,
-                  redirectTo: 'relativeList',
+                  redirectTo: 'relativesList',
                   fullMatch: true,
                 ),
                 _i13.RouteConfig(
                   RelativesListRouter.name,
-                  path: 'relativeList',
+                  path: 'relativesList',
                   parent: RelativesRouter.name,
                 ),
                 _i13.RouteConfig(
                   RelativeDetailRouter.name,
                   path: 'relativeDetail',
-                  parent: RelativesRouter.name,
-                ),
-                _i13.RouteConfig(
-                  CreateNewRelativeRouter.name,
-                  path: 'createRelative',
                   parent: RelativesRouter.name,
                 ),
                 _i13.RouteConfig(
@@ -210,6 +210,11 @@ class AppRouter extends _i13.RootStackRouter {
                 _i13.RouteConfig(
                   RelativeNotesRouter.name,
                   path: 'relativeNotesList',
+                  parent: RelativesRouter.name,
+                ),
+                _i13.RouteConfig(
+                  CreateNewRelativeRouter.name,
+                  path: 'createRelative',
                   parent: RelativesRouter.name,
                 ),
               ],
@@ -234,6 +239,11 @@ class AppRouter extends _i13.RootStackRouter {
                 _i13.RouteConfig(
                   EditProfileRouter.name,
                   path: 'editProfile',
+                  parent: ProfileRouter.name,
+                ),
+                _i13.RouteConfig(
+                  CreateNewRelativeRouter.name,
+                  path: 'createRelative',
                   parent: ProfileRouter.name,
                 ),
               ],
@@ -359,7 +369,7 @@ class RelativesListRouter extends _i13.PageRouteInfo<void> {
   const RelativesListRouter()
       : super(
           RelativesListRouter.name,
-          path: 'relativeList',
+          path: 'relativesList',
         );
 
   static const String name = 'RelativesListRouter';
@@ -401,32 +411,7 @@ class RelativeDetailRouterArgs {
 }
 
 /// generated route for
-/// [_i8.CreateRelativeScreen]
-class CreateNewRelativeRouter
-    extends _i13.PageRouteInfo<CreateNewRelativeRouterArgs> {
-  CreateNewRelativeRouter({_i14.Key? key})
-      : super(
-          CreateNewRelativeRouter.name,
-          path: 'createRelative',
-          args: CreateNewRelativeRouterArgs(key: key),
-        );
-
-  static const String name = 'CreateNewRelativeRouter';
-}
-
-class CreateNewRelativeRouterArgs {
-  const CreateNewRelativeRouterArgs({this.key});
-
-  final _i14.Key? key;
-
-  @override
-  String toString() {
-    return 'CreateNewRelativeRouterArgs{key: $key}';
-  }
-}
-
-/// generated route for
-/// [_i9.EditRelativeScreen]
+/// [_i8.EditRelativeScreen]
 class EditRelativeRouter extends _i13.PageRouteInfo<EditRelativeRouterArgs> {
   EditRelativeRouter({
     _i14.Key? key,
@@ -460,7 +445,7 @@ class EditRelativeRouterArgs {
 }
 
 /// generated route for
-/// [_i10.RelativeNotesListScreen]
+/// [_i9.RelativeNotesListScreen]
 class RelativeNotesRouter extends _i13.PageRouteInfo<RelativeNotesRouterArgs> {
   RelativeNotesRouter({
     _i14.Key? key,
@@ -490,6 +475,46 @@ class RelativeNotesRouterArgs {
   @override
   String toString() {
     return 'RelativeNotesRouterArgs{key: $key, relativeId: $relativeId}';
+  }
+}
+
+/// generated route for
+/// [_i10.CreateRelativeScreen]
+class CreateNewRelativeRouter
+    extends _i13.PageRouteInfo<CreateNewRelativeRouterArgs> {
+  CreateNewRelativeRouter({
+    _i14.Key? key,
+    dynamic Function(String?)? finishCallback,
+    bool hideBottomSheetAddRelativeButton = false,
+  }) : super(
+          CreateNewRelativeRouter.name,
+          path: 'createRelative',
+          args: CreateNewRelativeRouterArgs(
+            key: key,
+            finishCallback: finishCallback,
+            hideBottomSheetAddRelativeButton: hideBottomSheetAddRelativeButton,
+          ),
+        );
+
+  static const String name = 'CreateNewRelativeRouter';
+}
+
+class CreateNewRelativeRouterArgs {
+  const CreateNewRelativeRouterArgs({
+    this.key,
+    this.finishCallback,
+    this.hideBottomSheetAddRelativeButton = false,
+  });
+
+  final _i14.Key? key;
+
+  final dynamic Function(String?)? finishCallback;
+
+  final bool hideBottomSheetAddRelativeButton;
+
+  @override
+  String toString() {
+    return 'CreateNewRelativeRouterArgs{key: $key, finishCallback: $finishCallback, hideBottomSheetAddRelativeButton: $hideBottomSheetAddRelativeButton}';
   }
 }
 

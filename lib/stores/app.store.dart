@@ -94,7 +94,6 @@ abstract class AppStoreBase with Store {
   signIn({required String email, required String password}) async {
     var prefs = GetIt.I<SharedPreferences>();
     await prefs.setString('email', email);
-
     var tokens = await AuthService().signIn(email: email, password: password);
     if (tokens == null) {
       return;

@@ -18,9 +18,11 @@ class CustomAppBar extends StatelessWidget {
 
   Widget get titleWidget {
     if (searchBarStore != null) {
-      return Flexible(child: MiniSearchInput(
-        searchBarStore: searchBarStore!,
-      ),);
+      return Flexible(
+        child: MiniSearchInput(
+          searchBarStore: searchBarStore!,
+        ),
+      );
     }
     if (title != null) {
       return Expanded(
@@ -35,7 +37,6 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final tabsRouter = AutoTabsRouter.of(context);
     double opacity = tabsRouter.activeIndex == 3 ? 1.0 : 0.7;
 
@@ -45,7 +46,16 @@ class CustomAppBar extends StatelessWidget {
         margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [const AutoLeadingButton(), titleWidget, Opacity(opacity: opacity, child: const ProfileUserPic(),)],
+          children: [
+            const AutoLeadingButton(),
+            titleWidget,
+            Opacity(
+              opacity: opacity,
+              child: Container(
+                  margin: EdgeInsets.only(left: marginHorizontal),
+                  child: const ProfileUserPic()),
+            )
+          ],
         ),
       ),
     );

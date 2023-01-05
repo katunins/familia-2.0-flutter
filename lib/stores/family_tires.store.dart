@@ -145,8 +145,10 @@ abstract class FamilyTiresBase with Store {
   _getSisterBrothers() {
     getAllUsers().map((element) {
       var parents = element.parents;
-      if (parents.father == rootUser?.userData.parents.father ||
-          parents.mother == rootUser?.userData.parents.mother) {
+      if ((parents.father != '' &&
+              parents.father == rootUser?.userData.parents.father) ||
+          (parents.mother != '' &&
+              parents.mother == rootUser?.userData.parents.mother)) {
         sisterBrothers.add(element.id);
       }
     }).toList();
@@ -206,16 +208,16 @@ abstract class FamilyTiresBase with Store {
 
   @action
   _getSpouses() {
-    if (rootUser == null){
+    if (rootUser == null) {
       return;
     }
     for (var id in children) {
       var child = getFromAllFamily(id);
-      if (child == null){
+      if (child == null) {
         return;
       }
-      for (var parentId in child.parents.toIdsList()){
-        if (parentId != rootUser!.id)  {
+      for (var parentId in child.parents.toIdsList()) {
+        if (parentId != rootUser!.id) {
           spouses.add(parentId);
         }
       }

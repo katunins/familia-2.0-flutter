@@ -5,7 +5,7 @@ import 'package:familia_flutter/themes/sizes.dart';
 import 'package:familia_flutter/themes/text.theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../components/common/user_pick.dart';
+import '../../components/common/user_pic.dart';
 import '../../stores/family_tires.store.dart';
 
 class RelativeListItem extends StatelessWidget {
@@ -29,7 +29,7 @@ class RelativeListItem extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               direction: Axis.horizontal,
               children: [
-                UserPick(userPic: userPic),
+                UserPic(userPic: userPic),
                 SizedBox(width: AppSizes.insideMargin),
                 Expanded(
                     child: Column(

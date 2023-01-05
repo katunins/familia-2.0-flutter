@@ -92,7 +92,7 @@ class _SignUpFormState extends State<SignUpForm> {
               ),
             ),
             AppButton(
-              title: 'Зарегистрироваться',
+              title: 'Создать',
               type: IAppButtonTypes.primary,
               onPressed: _submit,
               disabled: !canSubmit,

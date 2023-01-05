@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:familia_flutter/components/common/empty_data.dart';
 import 'package:familia_flutter/components/root/scaffold_wrapper.dart';
 import 'package:familia_flutter/models/search_store_bar.model.dart';
 import 'package:familia_flutter/screens/relativesScreen/create_relative_screen.dart';
@@ -12,6 +13,8 @@ import '../../themes/margins.theme.dart';
 
 class RelativesListScreen extends StatefulWidget {
   const RelativesListScreen({Key? key}) : super(key: key);
+
+  static const pathName = 'relativesList';
 
   @override
   State<RelativesListScreen> createState() => _RelativesListScreenState();
@@ -44,14 +47,19 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
         floatingOnPressed: floatingOnPressed,
         searchBarStore:
             SearchBarStoreModel(search: search, setSearch: setSearch),
-        body: Container(
-          margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
-          child: ListView(
-            padding: const EdgeInsets.only(top: 4, bottom: 50),
-            children:
-                data.map((item) => RelativeListItem(relative: item)).toList(),
-          ),
-        ),
+        body: relativesStore.relatives.isEmpty
+            ? const Center(
+                child: EmptyData(),
+              )
+            : Container(
+                margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
+                child: ListView(
+                  padding: const EdgeInsets.only(top: 4, bottom: 50),
+                  children: data
+                      .map((item) => RelativeListItem(relative: item))
+                      .toList(),
+                ),
+              ),
       );
     });
   }

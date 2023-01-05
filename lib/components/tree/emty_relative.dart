@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import '../../../themes/sizes.dart';
 import '../../../themes/text.theme.dart';
-import '../common/user_pick.dart';
+import '../common/user_pic.dart';
 
 
 /// Компонент пустого пользователя для древа
@@ -25,7 +25,7 @@ class EmptyRelative extends StatelessWidget {
         onTap: onTap,
         child: Column(
           children: [
-            const UserPick(userPic: null),
+            const UserPic(userPic: null),
             const SizedBox(height: 4),
             if (title != null)
               Text(

@@ -1,8 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/components/common/button.dart';
-import 'package:familia_flutter/components/root/app_bar.dart';
 import 'package:familia_flutter/screens/signUpScreen/sign_up_form.dart';
-import 'package:familia_flutter/themes/colors.dart';
 import 'package:flutter/material.dart';
 import '../../themes/margins.theme.dart';
 
@@ -22,12 +20,12 @@ class SignUpScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Регистрация',
+                      'Создание аккаунта',
                       style: Theme.of(context).textTheme.headline5,
                     ),
                     const SignUpForm(),
                     AppButton(
-                        title: 'Вернуться назад',
+                        title: 'Вернуться к входу',
                         type: IAppButtonTypes.secondary,
                         onPressed: context.router.pop)
                   ]))),

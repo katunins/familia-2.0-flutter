@@ -3,7 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../../themes/sizes.dart';
-import '../common/user_pick.dart';
+import '../common/user_pic.dart';
 
 class RelativeItemWithDescription extends StatelessWidget {
   const RelativeItemWithDescription(
@@ -28,7 +28,7 @@ class RelativeItemWithDescription extends StatelessWidget {
         onTap: onPressed == null ? null : () => onPressed!(userId),
         child: Column(
           children: [
-            UserPick(userPic: userPick),
+            UserPic(userPic: userPick),
             const SizedBox(height: 4),
             Text(
               title,

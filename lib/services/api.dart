@@ -72,6 +72,7 @@ class Api {
       showSnackBar(error.response?.data['message']);
     }
 
+    handler.reject(error);
     handler.next(error);
   }
 

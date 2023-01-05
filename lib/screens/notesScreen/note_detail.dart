@@ -25,7 +25,7 @@ class NoteDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var userPics = getUserPicksList(note.relatives);
+    var userPics = getUserPicsList(note.relatives);
 
     return Column(
       children: [

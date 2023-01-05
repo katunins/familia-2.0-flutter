@@ -26,7 +26,7 @@ class SignInScreen extends StatelessWidget {
               ),
               const SignInForm(),
               AppButton(
-                  title: 'Зарегистрироваться',
+                  title: 'Создать новый аккаунт',
                   type: IAppButtonTypes.secondary,
                   onPressed: () =>
                       context.router.pushNamed(SignUpScreen.pathName))

@@ -123,7 +123,7 @@ TreeElementModel? getFromAllFamily(String id) {
 
 /// Принимает список ID пользователей
 /// Возвращает список userPic, которые не null
-List<String> getUserPicksList(List<String> userIds) {
+List<String> getUserPicsList(List<String> userIds) {
   List<String> res = [];
   for (var id in userIds) {
     var user = getFromAllFamily(id);

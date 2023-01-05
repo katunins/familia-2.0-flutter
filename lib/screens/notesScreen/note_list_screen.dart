@@ -1,3 +1,4 @@
+import 'package:familia_flutter/components/common/empty_data.dart';
 import 'package:familia_flutter/components/notes/notes_list.dart';
 import 'package:familia_flutter/components/root/scaffold_wrapper.dart';
 import 'package:familia_flutter/models/search_store_bar.model.dart';
@@ -19,13 +20,18 @@ class NotesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
-      searchBarStore: SearchBarStoreModel(search: notesStore.search, setSearch: notesStore.setSearch),
+        searchBarStore: SearchBarStoreModel(
+            search: notesStore.search, setSearch: notesStore.setSearch),
         body: NotificationListener<ScrollEndNotification>(
             onNotification: onNotification,
             child: Observer(
-                builder: (_) => NotesList(
-                    notes: notesStore.notes
-                        .map((element) => element.data)
-                        .toList()))));
+                builder: (_) => notesStore.pagination.totalAll == 0
+                    ? const Center(
+                        child: EmptyData(),
+                      )
+                    : NotesList(
+                        notes: notesStore.notes
+                            .map((element) => element.data)
+                            .toList()))));
   }
 }

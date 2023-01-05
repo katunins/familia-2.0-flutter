@@ -1,4 +1,5 @@
 import 'package:familia_flutter/models/base_user_data.model.dart';
+import 'package:familia_flutter/models/gender.enum.dart';
 import 'package:familia_flutter/models/user.model.dart';
 import 'package:familia_flutter/services/storage.service.dart';
 import 'package:familia_flutter/services/user.service.dart';
@@ -23,7 +24,8 @@ abstract class UserStoreBase with Store {
   Future<bool> updateUserPic({required XFile image, required String id}) async {
     List<String> filesToDelete =
         user?.userData.userPic != null ? [user!.userData.userPic!] : [];
-    var imageUrl = await StorageApi().uploadImage(image: image, filesToDelete: filesToDelete);
+    var imageUrl = await StorageApi()
+        .uploadImage(image: image, filesToDelete: filesToDelete);
     if (imageUrl == null) {
       return false;
     }
@@ -37,7 +39,6 @@ abstract class UserStoreBase with Store {
   }
 
   Future<String?> updateUserData(BaseUserDataModel userData) async {
-
     var newUser = await UserService().updateUser(userData.toMap());
 
     if (newUser != null) {
@@ -49,8 +50,17 @@ abstract class UserStoreBase with Store {
   @observable
   UserModel? user;
 
+  // @computed
+  // get hasRequiredUserData => user?.userData.name != null;
+
   @computed
-  get hasRequiredUserData => user?.userData.name != null;
+  bool get isRequiredFilled =>
+      user != null &&
+      (user!.userData.name != '' && user!.userData.gender != Gender.none);
+
+  @computed
+  bool get isParentsNotEmpty =>
+      user != null && !user!.userData.parents.isEmpty;
 
   @action
   setUser(UserModel userModel) {

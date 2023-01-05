@@ -15,15 +15,19 @@ class EditProfileScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
         builder: (_) => ScaffoldWrapper(
-            title: 'Редактирование',
+            title: 'Редактирование профиля',
             body: SetUserDataComponent(
+              id: userStore.user!.id,
+              hideBottomSheetAddRelativeButton: false,
               initialData: userStore.user!.userData,
               aboutLabelText: 'Расскажите о себе',
               aboutHintText:
                   'Укажите когда и где вы родились, а также опишите какие то важные события вашей жизни',
               imageSubmit: userStore.updateUserPic,
               dataSaveFunction: userStore.updateUserData,
-              afterSubmit: context.router.pop,
+              afterSubmit: ({String? resultId}){
+                context.router.pop();
+              },
             )));
   }
 }

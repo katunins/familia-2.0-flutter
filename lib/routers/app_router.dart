@@ -14,6 +14,13 @@ import '../screens/relativesScreen/create_relative_screen.dart';
 import '../screens/relativesScreen/edit_relative_screen.dart';
 import 'empty_router.dart';
 
+const commonRoutes = <AutoRoute>[
+  AutoRoute(
+      name: 'CreateNewRelativeRouter',
+      path: CreateRelativeScreen.pathName,
+      page: CreateRelativeScreen)
+];
+
 @MaterialAutoRouter(routes: [
   AutoRoute(path: '/', page: MainRootScreen, initial: true, children: [
     AutoRoute(
@@ -40,16 +47,12 @@ import 'empty_router.dart';
           AutoRoute(
               initial: true,
               name: 'RelativesListRouter',
-              path: 'relativeList',
+              path: RelativesListScreen.pathName,
               page: RelativesListScreen),
           AutoRoute(
               name: 'RelativeDetailRouter',
               path: 'relativeDetail',
               page: RelativeDetailScreen),
-          AutoRoute(
-              name: 'CreateNewRelativeRouter',
-              path: CreateRelativeScreen.pathName,
-              page: CreateRelativeScreen),
           AutoRoute(
               name: 'EditRelativeRouter',
               path: EditRelativeScreen.pathName,
@@ -57,7 +60,8 @@ import 'empty_router.dart';
           AutoRoute(
               name: 'RelativeNotesRouter',
               path: RelativeNotesListScreen.pathName,
-              page: RelativeNotesListScreen)
+              page: RelativeNotesListScreen),
+          ...commonRoutes,
         ]),
     AutoRoute(
         name: 'ProfileRouter',
@@ -73,6 +77,7 @@ import 'empty_router.dart';
               name: 'EditProfileRouter',
               path: EditProfileScreen.pathName,
               page: EditProfileScreen),
+          ...commonRoutes
         ]),
   ])
 ])

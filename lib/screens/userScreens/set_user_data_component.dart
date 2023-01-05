@@ -23,6 +23,7 @@ import '../../themes/sizes.dart';
 /// initialData - изначальные данные
 /// aboutLabelText, aboutHintText - поле о себе (подсказка и лейбл)
 /// id - пользователя, которого редактируем
+/// hideBottomSheetAddRelativeButton - скрывает кнопку добавить родтсвенника в bottomSheet при выборе родителя
 
 class SetUserDataComponent extends StatefulWidget {
   const SetUserDataComponent(
@@ -34,18 +35,19 @@ class SetUserDataComponent extends StatefulWidget {
       this.afterSubmit,
       required this.initialData,
       required this.aboutLabelText,
-      required this.aboutHintText})
+      required this.aboutHintText, required this.hideBottomSheetAddRelativeButton})
       : super(key: key);
 
   final bool canSkip;
   final Future<String?> Function(BaseUserDataModel) dataSaveFunction;
   final Future<bool> Function({required XFile image, required String id})
       imageSubmit;
-  final void Function()? afterSubmit;
+  final void Function({String? resultId})? afterSubmit;
   final BaseUserDataModel initialData;
   final String aboutLabelText;
   final String aboutHintText;
   final String? id;
+  final bool hideBottomSheetAddRelativeButton;
 
   @override
   State<SetUserDataComponent> createState() => _SetUserDataComponentState();
@@ -110,20 +112,28 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
     super.initState();
   }
 
-  void _submit() async {
+  bool validateForm(){
     if (!_formKey.currentState!.validate()) {
-      return;
+      return false;
     }
 
     if (gender == Gender.none) {
       genderErrorText = 'Выберете пол';
       setState(() {});
-      return;
+      return false;
     }
 
     if (gender == Gender.none) {
       genderErrorText = 'Выберете пол';
       setState(() {});
+      return false;
+    }
+    return true;
+  }
+
+  void _submit() async {
+
+    if (!validateForm()){
       return;
     }
 
@@ -144,7 +154,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
       }
 
       if (widget.afterSubmit != null) {
-        widget.afterSubmit!();
+        widget.afterSubmit!(resultId: resultId);
       }
     }
   }
@@ -193,7 +203,6 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
 
   @override
   Widget build(BuildContext context) {
-    var userPic = widget.initialData.userPic;
 
     return SingleChildScrollView(
           controller: scrollController,
@@ -212,7 +221,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
                             child: ImageWithUpload(
                               onUpload: onUpload,
                               isSquare: true,
-                              path: uploadImage?.path ?? userPic,
+                              path: uploadImage?.path ?? widget.initialData?.userPic,
                             )),
                         Container(
                           margin: EdgeInsets.symmetric(
@@ -275,6 +284,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
                                   margin: EdgeInsets.only(
                                       bottom: AppSizes.inputVerticalMargin),
                                   child: UpdateParents(
+                                    hideBottomSheetAddRelativeButton:widget.hideBottomSheetAddRelativeButton,
                                     childId: widget.id,
                                     parents: ParentsModel(
                                         mother: mother, father: father),

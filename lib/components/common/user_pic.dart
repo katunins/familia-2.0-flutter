@@ -5,18 +5,19 @@ import 'image_widget.dart';
 
 /// комопнент аватарки родственника в списке
 
-class UserPick extends StatelessWidget {
-  const UserPick({Key? key, required this.userPic}) : super(key: key);
+class UserPic extends StatelessWidget {
+  const UserPic({Key? key, required this.userPic, this.size}) : super(key: key);
 
   final String? userPic;
+  final double? size;
 
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: getImageWidget(
-          width: AppSizes.userPickWidth,
-          height: AppSizes.userPickWidth,
+          width: size ?? AppSizes.userPickWidth,
+          height: size ?? AppSizes.userPickWidth,
           fit: BoxFit.cover,
           path: userPic,
       ),

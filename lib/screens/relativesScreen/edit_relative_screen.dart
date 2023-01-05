@@ -20,6 +20,7 @@ class EditRelativeScreen extends StatelessWidget {
         title: 'Редактирование',
         body: SetUserDataComponent(
           id: relative.id,
+          hideBottomSheetAddRelativeButton: false,
           aboutLabelText: 'Расскажите о вашем родственнике',
           aboutHintText:
               'Кратко опишите ключевые события из жизни человека, его профессию, особенности',
@@ -27,7 +28,9 @@ class EditRelativeScreen extends StatelessWidget {
           imageSubmit: relativesStore.updateUserPic,
           dataSaveFunction: (userData) => relativesStore.updateUserData(
               userData: userData, relativeId: relative.id),
-          afterSubmit: context.router.pop,
+          afterSubmit: ({String? resultId}) {
+            context.router.pop();
+          },
         ));
   }
 }

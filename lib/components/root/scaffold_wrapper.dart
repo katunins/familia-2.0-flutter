@@ -10,12 +10,12 @@ class ScaffoldWrapper extends StatelessWidget {
       {Key? key,
       required this.body,
       this.floatingOnPressed,
-      this.isUserPick = false,
+      this.isUserPic = false,
       this.searchBarStore,
       this.title = ''})
       : super(key: key);
 
-  final bool isUserPick;
+  final bool isUserPic;
   final Widget body;
   final Function()? floatingOnPressed;
   final SearchBarStoreModel? searchBarStore;

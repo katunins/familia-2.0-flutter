@@ -9,6 +9,8 @@ class ParentsModel {
     father = '';
   }
 
+  bool get isEmpty => mother == '' && father == '';
+
   ParentsModel.fromJson(Map<String, dynamic> json) {
     mother = json['mother'];
     father = json['father'];
