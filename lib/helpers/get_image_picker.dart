@@ -35,8 +35,8 @@ Future<XFile?> getImagePicker({
     }
     var uploadImage = XFile(croppedFile.path, name: value.name);
     return uploadImage;
-  } on Exception catch (error) {
-    print(error);
+  } on Exception {
+    // print(error);
   }
   return null;
 }
