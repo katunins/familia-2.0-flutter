@@ -24,12 +24,12 @@ abstract class UserStoreBase with Store {
   Future<bool> updateUserPic({required XFile image, required String id}) async {
     List<String> filesToDelete =
         user?.userData.userPic != null ? [user!.userData.userPic!] : [];
-    var imageUrl = await StorageApi()
-        .uploadImage(image: image, filesToDelete: filesToDelete);
-    if (imageUrl == null) {
+    List? imageUrls = await StorageApi()
+        .uploadImages(images: [image], filesToDelete: filesToDelete);
+    if (imageUrls == null) {
       return false;
     }
-    var newUser = await UserService().updateUser({'userPic': imageUrl});
+    var newUser = await UserService().updateUser({'userPic': imageUrls[0]});
 
     if (newUser == null) {
       return false;

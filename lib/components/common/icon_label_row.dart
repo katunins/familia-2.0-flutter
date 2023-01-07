@@ -1,7 +1,7 @@
-import 'package:familia_flutter/themes/colors.dart';
 import 'package:flutter/material.dart';
 
-import '../../themes/margins.theme.dart';
+import '../../themes/sizes.dart';
+import '../widgets/checkbox.dart';
 
 class IconLabelRow extends StatelessWidget {
   const IconLabelRow(
@@ -29,19 +29,11 @@ class IconLabelRow extends StatelessWidget {
             children: [
               icon,
               Container(
-                margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
+                margin: EdgeInsets.symmetric(horizontal: AppSizes.marginHorizontal),
                 width: 220,
                 child: Text(label),
               ),
-              isChecked
-                  ? Icon(
-                      Icons.check_circle,
-                      color: AppColors.primaryColor,
-                    )
-                  : Icon(
-                      Icons.circle_outlined,
-                      color: AppColors.primaryColor,
-                    )
+              CheckBoxIcon(isChecked: isChecked)
             ],
           ),
         ));

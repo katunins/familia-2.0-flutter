@@ -44,13 +44,13 @@ mixin _$NotesStore on NotesStoreBase, Store {
   late final _$notesAtom = Atom(name: 'NotesStoreBase.notes', context: context);
 
   @override
-  ObservableList<NoteItemStore> get notes {
+  ObservableList<NoteModel> get notes {
     _$notesAtom.reportRead();
     return super.notes;
   }
 
   @override
-  set notes(ObservableList<NoteItemStore> value) {
+  set notes(ObservableList<NoteModel> value) {
     _$notesAtom.reportWrite(value, super.notes, () {
       super.notes = value;
     });
@@ -86,6 +86,35 @@ mixin _$NotesStore on NotesStoreBase, Store {
   @override
   Future load({int page = 0}) {
     return _$loadAsyncAction.run(() => super.load(page: page));
+  }
+
+  late final _$createAsyncAction =
+      AsyncAction('NotesStoreBase.create', context: context);
+
+  @override
+  Future<bool> create({required NewNoteModel newNoteData}) {
+    return _$createAsyncAction
+        .run(() => super.create(newNoteData: newNoteData));
+  }
+
+  late final _$updateAsyncAction =
+      AsyncAction('NotesStoreBase.update', context: context);
+
+  @override
+  Future<bool> update(
+      {required NewNoteModel newNoteData,
+      required String id,
+      required List<String> pathToDelete}) {
+    return _$updateAsyncAction.run(() => super
+        .update(newNoteData: newNoteData, id: id, pathToDelete: pathToDelete));
+  }
+
+  late final _$deleteAsyncAction =
+      AsyncAction('NotesStoreBase.delete', context: context);
+
+  @override
+  Future<bool> delete(NoteModel note) {
+    return _$deleteAsyncAction.run(() => super.delete(note));
   }
 
   late final _$NotesStoreBaseActionController =

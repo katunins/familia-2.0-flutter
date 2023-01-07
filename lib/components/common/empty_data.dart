@@ -6,10 +6,9 @@ import 'package:familia_flutter/routers/app_router.gr.dart';
 import 'package:familia_flutter/stores/notes.store.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:familia_flutter/stores/user.store.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../icons/relatives.dart';
-import '../widgets/profile_user_pic.dart';
 
 class EmptyData extends StatelessWidget {
   const EmptyData({Key? key}) : super(key: key);
@@ -22,7 +21,10 @@ class EmptyData extends StatelessWidget {
               children: [
                 IconLabelRow(
                     label: 'Заполните данные в своем профиле',
-                    icon: const ProfileUserPic(),
+                    icon: const Icon(
+                      Icons.account_circle_rounded,
+                      size: 24.0,
+                    ),
                     isChecked: userStore.isRequiredFilled,
                     onTap: userStore.isRequiredFilled
                         ? null
@@ -39,9 +41,8 @@ class EmptyData extends StatelessWidget {
                     onTap: relativesStore.relatives.isNotEmpty
                         ? null
                         : () {
-                            context.router.navigate(RelativesRouter(children: [
-                              CreateNewRelativeRouter()
-                            ]));
+                            context.router.navigate(RelativesRouter(
+                                children: [CreateNewRelativeRouter()]));
                           }),
                 IconLabelRow(
                   label: 'Отметьте родителей у себя и у других родственников',

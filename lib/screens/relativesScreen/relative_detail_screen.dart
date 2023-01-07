@@ -10,7 +10,7 @@ import '../../components/common/image_widget.dart';
 import '../../services/notes.service.dart';
 import '../../stores/relative_item.store.dart';
 import '../../stores/relatives.store.dart';
-import '../../themes/margins.theme.dart';
+import '../../themes/sizes.dart';
 
 class RelativeDetailScreen extends StatefulWidget {
   const RelativeDetailScreen({Key? key, required this.relative})
@@ -78,7 +78,7 @@ class _RelativeDetailScreenState extends State<RelativeDetailScreen> {
                   if (userData.userPic != null)
                     getImageWidget(path: userData.userPic),
                   Container(
-                    margin: EdgeInsets.all(marginHorizontal),
+                    margin: EdgeInsets.all(AppSizes.marginHorizontal),
                     child: Column(
                       children: [
                         UserDetail(

@@ -1,4 +1,6 @@
 import 'package:familia_flutter/components/common/image_widget.dart';
+import 'package:familia_flutter/components/icons/app_icon_button.dart';
+import 'package:familia_flutter/themes/sizes.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../themes/colors.dart';
@@ -10,12 +12,12 @@ import '../../../themes/colors.dart';
 
 class ImageWithButton extends StatelessWidget {
   const ImageWithButton(
-      {Key? key, required this.path, this.onTap, required this.icon})
+      {Key? key, required this.path, required this.onTap, required this.icon})
       : super(key: key);
 
   final String path;
-  final Function()? onTap;
-  final Widget icon;
+  final Function() onTap;
+  final IconData icon;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +25,12 @@ class ImageWithButton extends StatelessWidget {
       children: [
         getImageWidget(path: path),
         Positioned(
-            right: 20,
+            right: AppSizes.marginHorizontal,
             bottom: 20,
-            child: GestureDetector(
+            child: AppIconButton(
+              icon: icon,
+              backgroundColor: AppColors.whiteColor,
               onTap: onTap,
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: AppColors.whiteColor,
-                ),
-                padding: const EdgeInsets.all(7),
-                child: icon,
-              ),
             ))
       ],
     );

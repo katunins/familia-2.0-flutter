@@ -19,7 +19,7 @@ class ProfileUserPic extends StatelessWidget {
               },
               child: userStore.user?.userData.userPic != null
                   ? CircleAvatar(
-                      radius: 18,
+                      radius: 16,
                       backgroundImage: NetworkImage(
                           userStore.user!.userData.userPic!,
                           headers: {'authorization': getBearerToken()}))

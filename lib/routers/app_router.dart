@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/screens/mainRootScreen/main_root_screen.dart';
+import 'package:familia_flutter/screens/notesScreen/create_note_screen.dart';
 import 'package:familia_flutter/screens/notesScreen/note_detail_screen.dart';
 import 'package:familia_flutter/screens/notesScreen/note_list_screen.dart';
 import 'package:familia_flutter/screens/profileScreen/edit_profile_screen.dart';
@@ -10,6 +11,7 @@ import 'package:familia_flutter/screens/relativesScreen/relatives_list_screen.da
 import 'package:familia_flutter/screens/relativesScreen/relative_notes_list.dart';
 import 'package:familia_flutter/screens/treeScreen/tree_screen.dart';
 
+import '../screens/notesScreen/edit_note_screen.dart';
 import '../screens/relativesScreen/create_relative_screen.dart';
 import '../screens/relativesScreen/edit_relative_screen.dart';
 import 'empty_router.dart';
@@ -31,12 +33,20 @@ const commonRoutes = <AutoRoute>[
           AutoRoute(
               initial: true,
               name: 'NotesListRouter',
-              path: 'notesList',
+              path: NotesListScreen.pathName,
               page: NotesListScreen),
           AutoRoute(
               name: 'NoteDetailRouter',
               path: 'noteDetail',
-              page: NoteDetailScreen)
+              page: NoteDetailScreen),
+          AutoRoute(
+              name: 'CreateNoteRouter',
+              path: CreateNoteScreen.pathName,
+              page: CreateNoteScreen),
+          AutoRoute(
+              name: 'EditNoteRouter',
+              path: EditNoteScreen.pathName,
+              page: EditNoteScreen),
         ]),
     AutoRoute(name: 'TreeRouter', path: 'tree', page: TreeScreen),
     AutoRoute(

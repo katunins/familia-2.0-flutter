@@ -15,4 +15,9 @@ class PaginationModel {
     pageSize = int.parse(json['pageSize'].toString());
   }
 
+  addTotal(){
+    total ++;
+    totalAll ++;
+  }
+
 }

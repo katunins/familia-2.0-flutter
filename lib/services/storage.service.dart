@@ -7,22 +7,34 @@ import 'api.dart';
 class StorageApi {
   final apiUrl = 'storage';
 
-  Future<String?> uploadImage(
-      {required XFile image, String? pathType,List<String> filesToDelete = const []}) async {
+  Future<List<String>?> uploadImages(
+      {required List<XFile> images,
+      String? pathType,
+      List<String> filesToDelete = const []}) async {
     var formData = FormData.fromMap({
-      'files': [MultipartFile.fromFileSync(image.path, filename: image.name)],
+      'files': images
+          .map((image) =>
+              MultipartFile.fromFileSync(image.path, filename: image.name))
+          .toList(),
       'pathType': pathType,
-      'filesToDelete[]': filesToDelete.map((item) => getOriginalImageUrl(item)).toList()
+      'filesToDelete[]':
+          filesToDelete.map((item) => getOriginalImageUrl(item)).toList()
     });
-    var response =
-    await Api(isMultipartData: true).dio.post(apiUrl, data: formData);
+
+    Response<List<dynamic>> response =
+        await Api(isMultipartData: true).dio.post(apiUrl, data: formData);
+
     if (response.statusCode != 201) {
       return null;
     }
-    List<dynamic> imageUrls = response.data ?? [];
-    if (imageUrls.isEmpty) {
-      return null;
-    }
-    return imageUrls[0];
+    return response.data!.map((item) => item.toString()).toList();
+  }
+
+  Future delete({required List<String> filesToDelete}) async {
+    var objData = {
+      'filesToDelete': filesToDelete.map((item) => getOriginalImageUrl(item)).toList()
+    };
+
+    await Api().dio.delete(apiUrl, data: objData);
   }
 }

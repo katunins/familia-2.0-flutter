@@ -1,6 +1,6 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/components/root/scaffold_wrapper.dart';
-import 'package:familia_flutter/screens/userScreens/set_user_data_component.dart';
+import 'package:familia_flutter/components/common/set_user_data_component.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 

@@ -2,7 +2,8 @@ import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/components/common/button.dart';
 import 'package:familia_flutter/screens/signUpScreen/sign_up_form.dart';
 import 'package:flutter/material.dart';
-import '../../themes/margins.theme.dart';
+
+import '../../themes/sizes.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -14,8 +15,8 @@ class SignUpScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
           child: Container(
-              constraints: maxWidthConstraints,
-              margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
+              constraints: AppSizes.maxWidthConstraints,
+              margin: EdgeInsets.symmetric(horizontal: AppSizes.marginHorizontal),
               child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

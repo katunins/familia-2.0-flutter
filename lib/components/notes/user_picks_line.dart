@@ -12,6 +12,7 @@ class UserPicsLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Wrap(
       spacing: 10,
+      runSpacing: 10,
       children: userPics
           .map((userPic) => ClipRRect(
         borderRadius: BorderRadius.circular(8.0),

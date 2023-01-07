@@ -20,7 +20,6 @@ class RelativeNotesListScreen extends StatefulWidget {
 }
 
 class _RelativeNotesListScreenState extends State<RelativeNotesListScreen> {
-
   int totalNotes = 0;
   int page = 0;
   List<NoteModel> notes = [];
@@ -34,10 +33,8 @@ class _RelativeNotesListScreenState extends State<RelativeNotesListScreen> {
     loadNotes();
   }
 
-
   loadNotes() async {
-    var result = await NotesService()
-        .getRelativeNotes(
+    var result = await NotesService().getRelativeNotes(
         page: page, relativeId: widget.relativeId, search: search);
     if (result?.data != null) {
       notes.addAll(result!.data);
@@ -64,12 +61,12 @@ class _RelativeNotesListScreenState extends State<RelativeNotesListScreen> {
   @override
   Widget build(BuildContext context) {
     return ScaffoldWrapper(
-        searchBarStore: SearchBarStoreModel(
-            search: search, setSearch: setSearch),
+        searchBarStore:
+            SearchBarStoreModel(search: search, setSearch: setSearch),
         body: NotificationListener<ScrollEndNotification>(
             onNotification: onNotification,
-            child:
-                    NotesList(
-                        notes: notes)));
+            child: NotesList(
+                readOnly: true,
+                idList: notes.map((element) => element.id).toList())));
   }
 }

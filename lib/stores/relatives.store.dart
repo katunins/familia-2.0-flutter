@@ -33,13 +33,13 @@ abstract class RelativesStoreBase with Store {
     }
     List<String> filesToDelete =
         relative.userData.userPic != null ? [relative.userData.userPic!] : [];
-    var imageUrl = await StorageApi().uploadImage(
-        image: image, pathType: 'relatives', filesToDelete: filesToDelete);
-    if (imageUrl == null) {
+    List? imageUrls = await StorageApi().uploadImages(
+        images: [image], pathType: 'relatives', filesToDelete: filesToDelete);
+    if (imageUrls == null) {
       return false;
     }
     var newRelative = await RelativesService()
-        .updateRelative(relativeId: id, dataObj: {'userPic': imageUrl});
+        .updateRelative(relativeId: id, dataObj: {'userPic': imageUrls[0]});
 
     if (newRelative == null) {
       return false;

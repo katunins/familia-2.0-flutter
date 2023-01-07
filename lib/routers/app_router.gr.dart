@@ -11,88 +11,106 @@
 // ignore_for_file: type=lint
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:auto_route/auto_route.dart' as _i13;
-import 'package:flutter/material.dart' as _i14;
+import 'package:auto_route/auto_route.dart' as _i15;
+import 'package:flutter/material.dart' as _i16;
 
-import '../models/note.model.dart' as _i15;
-import '../models/relative.model.dart' as _i17;
+import '../models/note.model.dart' as _i17;
+import '../models/relative.model.dart' as _i19;
 import '../screens/mainRootScreen/main_root_screen.dart' as _i1;
+import '../screens/notesScreen/create_note_screen.dart' as _i6;
+import '../screens/notesScreen/edit_note_screen.dart' as _i7;
 import '../screens/notesScreen/note_detail_screen.dart' as _i5;
 import '../screens/notesScreen/note_list_screen.dart' as _i4;
-import '../screens/profileScreen/edit_profile_screen.dart' as _i12;
-import '../screens/profileScreen/profile_screen.dart' as _i11;
-import '../screens/relativesScreen/create_relative_screen.dart' as _i10;
-import '../screens/relativesScreen/edit_relative_screen.dart' as _i8;
-import '../screens/relativesScreen/relative_detail_screen.dart' as _i7;
-import '../screens/relativesScreen/relative_notes_list.dart' as _i9;
-import '../screens/relativesScreen/relatives_list_screen.dart' as _i6;
+import '../screens/profileScreen/edit_profile_screen.dart' as _i14;
+import '../screens/profileScreen/profile_screen.dart' as _i13;
+import '../screens/relativesScreen/create_relative_screen.dart' as _i12;
+import '../screens/relativesScreen/edit_relative_screen.dart' as _i10;
+import '../screens/relativesScreen/relative_detail_screen.dart' as _i9;
+import '../screens/relativesScreen/relative_notes_list.dart' as _i11;
+import '../screens/relativesScreen/relatives_list_screen.dart' as _i8;
 import '../screens/treeScreen/tree_screen.dart' as _i3;
-import '../stores/relative_item.store.dart' as _i16;
+import '../stores/relative_item.store.dart' as _i18;
 import 'empty_router.dart' as _i2;
 
-class AppRouter extends _i13.RootStackRouter {
-  AppRouter([_i14.GlobalKey<_i14.NavigatorState>? navigatorKey])
+class AppRouter extends _i15.RootStackRouter {
+  AppRouter([_i16.GlobalKey<_i16.NavigatorState>? navigatorKey])
       : super(navigatorKey);
 
   @override
-  final Map<String, _i13.PageFactory> pagesMap = {
+  final Map<String, _i15.PageFactory> pagesMap = {
     MainRootScreenRoute.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i1.MainRootScreen(),
       );
     },
     NotesRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     TreeRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i3.TreeScreen(),
       );
     },
     RelativesRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     ProfileRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i2.EmptyRouterPage(),
       );
     },
     NotesListRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: const _i4.NotesListScreen(),
       );
     },
     NoteDetailRouter.name: (routeData) {
       final args = routeData.argsAs<NoteDetailRouterArgs>();
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i5.NoteDetailScreen(
+          key: args.key,
+          id: args.id,
+        ),
+      );
+    },
+    CreateNoteRouter.name: (routeData) {
+      return _i15.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: const _i6.CreateNoteScreen(),
+      );
+    },
+    EditNoteRouter.name: (routeData) {
+      final args = routeData.argsAs<EditNoteRouterArgs>();
+      return _i15.MaterialPageX<dynamic>(
+        routeData: routeData,
+        child: _i7.EditNoteScreen(
           key: args.key,
           note: args.note,
         ),
       );
     },
     RelativesListRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i6.RelativesListScreen(),
+        child: const _i8.RelativesListScreen(),
       );
     },
     RelativeDetailRouter.name: (routeData) {
       final args = routeData.argsAs<RelativeDetailRouterArgs>();
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i7.RelativeDetailScreen(
+        child: _i9.RelativeDetailScreen(
           key: args.key,
           relative: args.relative,
         ),
@@ -100,9 +118,9 @@ class AppRouter extends _i13.RootStackRouter {
     },
     EditRelativeRouter.name: (routeData) {
       final args = routeData.argsAs<EditRelativeRouterArgs>();
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i8.EditRelativeScreen(
+        child: _i10.EditRelativeScreen(
           key: args.key,
           relative: args.relative,
         ),
@@ -110,9 +128,9 @@ class AppRouter extends _i13.RootStackRouter {
     },
     RelativeNotesRouter.name: (routeData) {
       final args = routeData.argsAs<RelativeNotesRouterArgs>();
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i9.RelativeNotesListScreen(
+        child: _i11.RelativeNotesListScreen(
           key: args.key,
           relativeId: args.relativeId,
         ),
@@ -121,9 +139,9 @@ class AppRouter extends _i13.RootStackRouter {
     CreateNewRelativeRouter.name: (routeData) {
       final args = routeData.argsAs<CreateNewRelativeRouterArgs>(
           orElse: () => const CreateNewRelativeRouterArgs());
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i10.CreateRelativeScreen(
+        child: _i12.CreateRelativeScreen(
           key: args.key,
           finishCallback: args.finishCallback,
           hideBottomSheetAddRelativeButton:
@@ -132,116 +150,126 @@ class AppRouter extends _i13.RootStackRouter {
       );
     },
     ProfileScreenRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i11.ProfileScreen(),
+        child: const _i13.ProfileScreen(),
       );
     },
     EditProfileRouter.name: (routeData) {
-      return _i13.MaterialPageX<dynamic>(
+      return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i12.EditProfileScreen(),
+        child: const _i14.EditProfileScreen(),
       );
     },
   };
 
   @override
-  List<_i13.RouteConfig> get routes => [
-        _i13.RouteConfig(
+  List<_i15.RouteConfig> get routes => [
+        _i15.RouteConfig(
           MainRootScreenRoute.name,
           path: '/',
           children: [
-            _i13.RouteConfig(
+            _i15.RouteConfig(
               NotesRouter.name,
               path: 'notes',
               parent: MainRootScreenRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: NotesRouter.name,
                   redirectTo: 'notesList',
                   fullMatch: true,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   NotesListRouter.name,
                   path: 'notesList',
                   parent: NotesRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   NoteDetailRouter.name,
                   path: 'noteDetail',
                   parent: NotesRouter.name,
                 ),
+                _i15.RouteConfig(
+                  CreateNoteRouter.name,
+                  path: 'createNote',
+                  parent: NotesRouter.name,
+                ),
+                _i15.RouteConfig(
+                  EditNoteRouter.name,
+                  path: 'editNote',
+                  parent: NotesRouter.name,
+                ),
               ],
             ),
-            _i13.RouteConfig(
+            _i15.RouteConfig(
               TreeRouter.name,
               path: 'tree',
               parent: MainRootScreenRoute.name,
             ),
-            _i13.RouteConfig(
+            _i15.RouteConfig(
               RelativesRouter.name,
               path: 'relatives',
               parent: MainRootScreenRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: RelativesRouter.name,
                   redirectTo: 'relativesList',
                   fullMatch: true,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   RelativesListRouter.name,
                   path: 'relativesList',
                   parent: RelativesRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   RelativeDetailRouter.name,
                   path: 'relativeDetail',
                   parent: RelativesRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   EditRelativeRouter.name,
                   path: 'editRelative',
                   parent: RelativesRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   RelativeNotesRouter.name,
                   path: 'relativeNotesList',
                   parent: RelativesRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   CreateNewRelativeRouter.name,
                   path: 'createRelative',
                   parent: RelativesRouter.name,
                 ),
               ],
             ),
-            _i13.RouteConfig(
+            _i15.RouteConfig(
               ProfileRouter.name,
               path: 'profile',
               parent: MainRootScreenRoute.name,
               children: [
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   '#redirect',
                   path: '',
                   parent: ProfileRouter.name,
                   redirectTo: 'profileScreen',
                   fullMatch: true,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   ProfileScreenRouter.name,
                   path: 'profileScreen',
                   parent: ProfileRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   EditProfileRouter.name,
                   path: 'editProfile',
                   parent: ProfileRouter.name,
                 ),
-                _i13.RouteConfig(
+                _i15.RouteConfig(
                   CreateNewRelativeRouter.name,
                   path: 'createRelative',
                   parent: ProfileRouter.name,
@@ -255,8 +283,8 @@ class AppRouter extends _i13.RootStackRouter {
 
 /// generated route for
 /// [_i1.MainRootScreen]
-class MainRootScreenRoute extends _i13.PageRouteInfo<void> {
-  const MainRootScreenRoute({List<_i13.PageRouteInfo>? children})
+class MainRootScreenRoute extends _i15.PageRouteInfo<void> {
+  const MainRootScreenRoute({List<_i15.PageRouteInfo>? children})
       : super(
           MainRootScreenRoute.name,
           path: '/',
@@ -268,8 +296,8 @@ class MainRootScreenRoute extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class NotesRouter extends _i13.PageRouteInfo<void> {
-  const NotesRouter({List<_i13.PageRouteInfo>? children})
+class NotesRouter extends _i15.PageRouteInfo<void> {
+  const NotesRouter({List<_i15.PageRouteInfo>? children})
       : super(
           NotesRouter.name,
           path: 'notes',
@@ -281,7 +309,7 @@ class NotesRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.TreeScreen]
-class TreeRouter extends _i13.PageRouteInfo<void> {
+class TreeRouter extends _i15.PageRouteInfo<void> {
   const TreeRouter()
       : super(
           TreeRouter.name,
@@ -293,8 +321,8 @@ class TreeRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class RelativesRouter extends _i13.PageRouteInfo<void> {
-  const RelativesRouter({List<_i13.PageRouteInfo>? children})
+class RelativesRouter extends _i15.PageRouteInfo<void> {
+  const RelativesRouter({List<_i15.PageRouteInfo>? children})
       : super(
           RelativesRouter.name,
           path: 'relatives',
@@ -306,8 +334,8 @@ class RelativesRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i2.EmptyRouterPage]
-class ProfileRouter extends _i13.PageRouteInfo<void> {
-  const ProfileRouter({List<_i13.PageRouteInfo>? children})
+class ProfileRouter extends _i15.PageRouteInfo<void> {
+  const ProfileRouter({List<_i15.PageRouteInfo>? children})
       : super(
           ProfileRouter.name,
           path: 'profile',
@@ -319,7 +347,7 @@ class ProfileRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.NotesListScreen]
-class NotesListRouter extends _i13.PageRouteInfo<void> {
+class NotesListRouter extends _i15.PageRouteInfo<void> {
   const NotesListRouter()
       : super(
           NotesListRouter.name,
@@ -331,16 +359,16 @@ class NotesListRouter extends _i13.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i5.NoteDetailScreen]
-class NoteDetailRouter extends _i13.PageRouteInfo<NoteDetailRouterArgs> {
+class NoteDetailRouter extends _i15.PageRouteInfo<NoteDetailRouterArgs> {
   NoteDetailRouter({
-    _i14.Key? key,
-    required _i15.NoteModel note,
+    _i16.Key? key,
+    required String id,
   }) : super(
           NoteDetailRouter.name,
           path: 'noteDetail',
           args: NoteDetailRouterArgs(
             key: key,
-            note: note,
+            id: id,
           ),
         );
 
@@ -350,22 +378,68 @@ class NoteDetailRouter extends _i13.PageRouteInfo<NoteDetailRouterArgs> {
 class NoteDetailRouterArgs {
   const NoteDetailRouterArgs({
     this.key,
-    required this.note,
+    required this.id,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
-  final _i15.NoteModel note;
+  final String id;
 
   @override
   String toString() {
-    return 'NoteDetailRouterArgs{key: $key, note: $note}';
+    return 'NoteDetailRouterArgs{key: $key, id: $id}';
   }
 }
 
 /// generated route for
-/// [_i6.RelativesListScreen]
-class RelativesListRouter extends _i13.PageRouteInfo<void> {
+/// [_i6.CreateNoteScreen]
+class CreateNoteRouter extends _i15.PageRouteInfo<void> {
+  const CreateNoteRouter()
+      : super(
+          CreateNoteRouter.name,
+          path: 'createNote',
+        );
+
+  static const String name = 'CreateNoteRouter';
+}
+
+/// generated route for
+/// [_i7.EditNoteScreen]
+class EditNoteRouter extends _i15.PageRouteInfo<EditNoteRouterArgs> {
+  EditNoteRouter({
+    _i16.Key? key,
+    required _i17.NoteModel note,
+  }) : super(
+          EditNoteRouter.name,
+          path: 'editNote',
+          args: EditNoteRouterArgs(
+            key: key,
+            note: note,
+          ),
+        );
+
+  static const String name = 'EditNoteRouter';
+}
+
+class EditNoteRouterArgs {
+  const EditNoteRouterArgs({
+    this.key,
+    required this.note,
+  });
+
+  final _i16.Key? key;
+
+  final _i17.NoteModel note;
+
+  @override
+  String toString() {
+    return 'EditNoteRouterArgs{key: $key, note: $note}';
+  }
+}
+
+/// generated route for
+/// [_i8.RelativesListScreen]
+class RelativesListRouter extends _i15.PageRouteInfo<void> {
   const RelativesListRouter()
       : super(
           RelativesListRouter.name,
@@ -376,12 +450,12 @@ class RelativesListRouter extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i7.RelativeDetailScreen]
+/// [_i9.RelativeDetailScreen]
 class RelativeDetailRouter
-    extends _i13.PageRouteInfo<RelativeDetailRouterArgs> {
+    extends _i15.PageRouteInfo<RelativeDetailRouterArgs> {
   RelativeDetailRouter({
-    _i14.Key? key,
-    required _i16.RelativeItemStore relative,
+    _i16.Key? key,
+    required _i18.RelativeItemStore relative,
   }) : super(
           RelativeDetailRouter.name,
           path: 'relativeDetail',
@@ -400,9 +474,9 @@ class RelativeDetailRouterArgs {
     required this.relative,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
-  final _i16.RelativeItemStore relative;
+  final _i18.RelativeItemStore relative;
 
   @override
   String toString() {
@@ -411,11 +485,11 @@ class RelativeDetailRouterArgs {
 }
 
 /// generated route for
-/// [_i8.EditRelativeScreen]
-class EditRelativeRouter extends _i13.PageRouteInfo<EditRelativeRouterArgs> {
+/// [_i10.EditRelativeScreen]
+class EditRelativeRouter extends _i15.PageRouteInfo<EditRelativeRouterArgs> {
   EditRelativeRouter({
-    _i14.Key? key,
-    required _i17.RelativeModel relative,
+    _i16.Key? key,
+    required _i19.RelativeModel relative,
   }) : super(
           EditRelativeRouter.name,
           path: 'editRelative',
@@ -434,9 +508,9 @@ class EditRelativeRouterArgs {
     required this.relative,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
-  final _i17.RelativeModel relative;
+  final _i19.RelativeModel relative;
 
   @override
   String toString() {
@@ -445,10 +519,10 @@ class EditRelativeRouterArgs {
 }
 
 /// generated route for
-/// [_i9.RelativeNotesListScreen]
-class RelativeNotesRouter extends _i13.PageRouteInfo<RelativeNotesRouterArgs> {
+/// [_i11.RelativeNotesListScreen]
+class RelativeNotesRouter extends _i15.PageRouteInfo<RelativeNotesRouterArgs> {
   RelativeNotesRouter({
-    _i14.Key? key,
+    _i16.Key? key,
     required String relativeId,
   }) : super(
           RelativeNotesRouter.name,
@@ -468,7 +542,7 @@ class RelativeNotesRouterArgs {
     required this.relativeId,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
   final String relativeId;
 
@@ -479,11 +553,11 @@ class RelativeNotesRouterArgs {
 }
 
 /// generated route for
-/// [_i10.CreateRelativeScreen]
+/// [_i12.CreateRelativeScreen]
 class CreateNewRelativeRouter
-    extends _i13.PageRouteInfo<CreateNewRelativeRouterArgs> {
+    extends _i15.PageRouteInfo<CreateNewRelativeRouterArgs> {
   CreateNewRelativeRouter({
-    _i14.Key? key,
+    _i16.Key? key,
     dynamic Function(String?)? finishCallback,
     bool hideBottomSheetAddRelativeButton = false,
   }) : super(
@@ -506,7 +580,7 @@ class CreateNewRelativeRouterArgs {
     this.hideBottomSheetAddRelativeButton = false,
   });
 
-  final _i14.Key? key;
+  final _i16.Key? key;
 
   final dynamic Function(String?)? finishCallback;
 
@@ -519,8 +593,8 @@ class CreateNewRelativeRouterArgs {
 }
 
 /// generated route for
-/// [_i11.ProfileScreen]
-class ProfileScreenRouter extends _i13.PageRouteInfo<void> {
+/// [_i13.ProfileScreen]
+class ProfileScreenRouter extends _i15.PageRouteInfo<void> {
   const ProfileScreenRouter()
       : super(
           ProfileScreenRouter.name,
@@ -531,8 +605,8 @@ class ProfileScreenRouter extends _i13.PageRouteInfo<void> {
 }
 
 /// generated route for
-/// [_i12.EditProfileScreen]
-class EditProfileRouter extends _i13.PageRouteInfo<void> {
+/// [_i14.EditProfileScreen]
+class EditProfileRouter extends _i15.PageRouteInfo<void> {
   const EditProfileRouter()
       : super(
           EditProfileRouter.name,

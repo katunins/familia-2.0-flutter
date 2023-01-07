@@ -16,9 +16,9 @@ class _SignUpFormState extends State<SignUpForm> {
   final _formKey = GlobalKey<FormState>();
   var canSubmit = false;
 
-  var emailTextEditingController = TextEditingController(text: '222@rr.ru');
-  var passwordTextEditingController = TextEditingController(text: '12345678');
-  var passwordDoubleTextEditingController = TextEditingController(text: '12345678');
+  var emailTextEditingController = TextEditingController();
+  var passwordTextEditingController = TextEditingController();
+  var passwordDoubleTextEditingController = TextEditingController();
 
   void updateCanSubmit() {
     setState(() {

@@ -1,9 +1,10 @@
 import 'package:familia_flutter/components/common/button.dart';
-import 'package:familia_flutter/themes/margins.theme.dart';
+
 import 'package:flutter/material.dart';
 
-class BottomSheetHelper {
+import '../themes/sizes.dart';
 
+class BottomSheetHelper {
   static void show(
       {required BuildContext context,
       bool isScrollControlled = false,
@@ -20,7 +21,7 @@ class BottomSheetHelper {
 
   static void message(
       {required BuildContext context,
-      required String message,
+      String? message,
       List<AppButton> actions = const []}) {
     showModalBottomSheet(
       context: context,
@@ -29,16 +30,17 @@ class BottomSheetHelper {
             topLeft: Radius.circular(16), topRight: Radius.circular(16)),
       ),
       builder: (_) => Container(
-          padding: EdgeInsets.all(marginHorizontal),
+          padding: EdgeInsets.all(AppSizes.marginHorizontal),
           child: Wrap(
             children: [
-              Container(
-                width: double.infinity,
-                margin: const EdgeInsets.only(bottom: 20, top: 10),
-                child: Text(message,
-                    style: Theme.of(context).textTheme.headline6,
-                    textAlign: TextAlign.center),
-              ),
+              if (message != null)
+                Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.only(bottom: 20, top: 10),
+                  child: Text(message,
+                      style: Theme.of(context).textTheme.headline6,
+                      textAlign: TextAlign.center),
+                ),
               ...actions,
               if (actions.isEmpty)
                 AppButton(

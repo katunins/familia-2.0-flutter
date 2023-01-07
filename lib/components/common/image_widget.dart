@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/themes/images.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,7 +10,8 @@ import '../../../helpers/util.helper.dart';
 /// сам определяет откуда используется ссылка (файл или сеть)
 /// также умеет кешировать изображение по-умолчанию
 
-getImageWidget({String? path,
+getImageWidget({
+  String? path,
   double? width,
   double? height,
   BoxFit? fit,
@@ -33,6 +33,6 @@ getImageWidget({String? path,
       height: height,
       fit: fit);
   } else {
-    return Image.file(File(path), width: width, fit: fit);
+    return Image.asset(path);
   }
 }

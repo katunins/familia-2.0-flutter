@@ -31,7 +31,7 @@ abstract class AppStoreBase with Store {
   bool get isAuth => userStore.user != null;
 
   Future? initApp() async {
-    initTokensFromStorage();
+    await initTokensFromStorage();
     await initDeviceId();
     if (tokens.accessToken != null) {
       await initAuthApp();

@@ -42,13 +42,13 @@ class Api {
   }
 
   onError(DioError error, ErrorInterceptorHandler handler) async {
-
     var response = error.response;
     if (response == null) {
       showSnackBar('Ошибка ответа сервера');
+      return;
     }
 
-    switch (response!.statusCode) {
+    switch (response.statusCode) {
       case 403:
         if (needToRefresh) {
           await refreshTokenAndRepeatRequest(

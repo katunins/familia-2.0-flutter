@@ -4,7 +4,7 @@ import 'package:familia_flutter/models/relative.model.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../stores/relatives.store.dart';
-import '../userScreens/set_user_data_component.dart';
+import '../../components/common/set_user_data_component.dart';
 
 class EditRelativeScreen extends StatelessWidget {
   const EditRelativeScreen({Key? key, required this.relative})

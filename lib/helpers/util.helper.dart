@@ -22,6 +22,10 @@ String? getImageUrl(String? imageUrl) {
   return Config.baseApiOptions.baseUrl + imageUrl;
 }
 
+String removeBaseUrl(String imageUrl) {
+  return imageUrl.replaceAll(Config.baseApiOptions.baseUrl, '');
+}
+
 getOriginalImageUrl(String? imageUrl) {
   if (imageUrl == null) return null;
   return imageUrl.substring(Config.baseApiOptions.baseUrl.length);

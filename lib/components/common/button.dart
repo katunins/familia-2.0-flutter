@@ -1,5 +1,7 @@
+import 'package:familia_flutter/components/widgets/progeres_indicator.dart';
 import 'package:flutter/material.dart';
 import '../../../themes/colors.dart';
+import '../../themes/sizes.dart';
 
 enum IAppButtonTypes {
   primary,
@@ -13,13 +15,17 @@ class AppButton extends StatelessWidget {
       required this.title,
       required this.onPressed,
       required this.type,
-      this.disabled = false})
+      this.isLoading = false,
+      this.disabled = false,
+      this.icon})
       : super(key: key);
 
   final String title;
   final VoidCallback? onPressed;
   final IAppButtonTypes type;
   final bool disabled;
+  final Widget? icon;
+  final bool isLoading;
 
   getAppButtonStyle() {
     var foregroundColor = MaterialStatePropertyAll(AppColors.whiteColor);
@@ -46,7 +52,7 @@ class AppButton extends StatelessWidget {
         break;
     }
 
-    if (disabled) {
+    if (disabled || isLoading) {
       foregroundColor = MaterialStatePropertyAll(AppColors.whiteColor);
       backgroundColor = MaterialStatePropertyAll(AppColors.lightGreyColor);
       borderColor = AppColors.lightGreyColor;
@@ -63,13 +69,22 @@ class AppButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: ElevatedButton(
         style: getAppButtonStyle(),
-        onPressed: disabled ? null : onPressed,
-        child: Text(title),
+        onPressed: disabled  || isLoading ? null : onPressed,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (icon != null && !isLoading)
+              Container(
+                margin: EdgeInsets.only(right: AppSizes.marginHorizontal),
+                child: icon!,
+              ),
+            isLoading ? AppProgressIndicator(color: AppColors.whiteColor) : Text(title)
+          ],
+        ),
       ),
     );
   }

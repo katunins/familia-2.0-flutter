@@ -38,7 +38,7 @@ class UpdateParents extends StatelessWidget {
         widget: RelativesListSheet(
           excluded: excluded,
           hideAddRelativeButton: hideBottomSheetAddRelativeButton,
-          onSelected: (String newParentId) =>
+          onSelected: (newParentId) =>
               onSelected(oldParentId: oldParentId, newParentId: newParentId),
         ));
   }

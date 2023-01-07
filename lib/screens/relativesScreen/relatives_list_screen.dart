@@ -9,7 +9,8 @@ import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import '../../themes/margins.theme.dart';
+
+import '../../themes/sizes.dart';
 
 class RelativesListScreen extends StatefulWidget {
   const RelativesListScreen({Key? key}) : super(key: key);
@@ -52,7 +53,7 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
                 child: EmptyData(),
               )
             : Container(
-                margin: EdgeInsets.symmetric(horizontal: marginHorizontal),
+                margin: EdgeInsets.symmetric(horizontal: AppSizes.marginHorizontal),
                 child: ListView(
                   padding: const EdgeInsets.only(top: 4, bottom: 50),
                   children: data

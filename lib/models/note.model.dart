@@ -7,6 +7,14 @@ class NoteModel {
   late List<String> images = [];
   late List<String> relatives;
 
+  NoteModel.createEmpty(){
+    id='';
+    title = '';
+    description = '';
+    images = [];
+    relatives = [];
+  }
+
   NoteModel.fromJson(Map<String, dynamic> json) {
     id = json['_id'];
     title = json['title'];

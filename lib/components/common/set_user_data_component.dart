@@ -5,13 +5,13 @@ import 'package:familia_flutter/components/common/gender_selector.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/base_user_data.model.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/themes/margins.theme.dart';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../helpers/bottom_sheet.dart';
-import '../../components/common/image_with_upload.dart';
-import '../../components/common/text_field_widget.dart';
+import 'image_with_upload.dart';
+import 'text_field_widget.dart';
 import '../../models/gender.enum.dart';
 import '../../themes/sizes.dart';
 
@@ -145,7 +145,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
 
     if (resultId != null) {
       if (uploadImage != null) {
-        var uploadResult =
+        bool uploadResult =
             await widget.imageSubmit(image: uploadImage!, id: resultId);
         if (!uploadResult) {
           BottomSheetHelper.message(
@@ -159,7 +159,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
     }
   }
 
-  onUpload({required XFile image}) {
+  onImageSelected({required XFile image}) {
     uploadImage = image;
     setState(() {});
 
@@ -208,7 +208,7 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
           controller: scrollController,
           child: Container(
             padding: const EdgeInsets.only(bottom: 50),
-            constraints: maxWidthConstraints,
+            constraints: AppSizes.maxWidthConstraints,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -219,13 +219,13 @@ class _SetUserDataComponentState extends State<SetUserDataComponent> {
                         Container(
                             margin: const EdgeInsets.only(bottom: 50),
                             child: ImageWithUpload(
-                              onUpload: onUpload,
+                              onSelected: onImageSelected,
                               isSquare: true,
                               path: uploadImage?.path ?? widget.initialData.userPic,
                             )),
                         Container(
                           margin: EdgeInsets.symmetric(
-                              horizontal: marginHorizontal),
+                              horizontal: AppSizes.marginHorizontal),
                           child: Column(
                             children: [
                               Container(
