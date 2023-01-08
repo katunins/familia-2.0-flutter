@@ -24,36 +24,32 @@ class ProfileScreen extends StatelessWidget {
     }
 
     return ScaffoldWrapper(
-      title: 'Профиль пользователя',
+        title: 'Профиль пользователя',
         body: Observer(builder: (_) {
-      var userData = userStore.user!.userData;
+          var userData = userStore.user!.userData;
 
-      return SingleChildScrollView(
-        child: Column(
-          children: [
-            if (userData?.userPic != null)
-              getImageWidget(path: userData!.userPic),
-            Container(
-              margin: EdgeInsets.all(AppSizes.marginHorizontal),
-              child: Column(
-                children: [
-                  UserDetail(
-                      name: userData.name,
-                      about: userData.about,
-                      parents: userData.parents,
-                      editOnPressed: editOnPressed),
-                  AppButton(
-                      title: 'Выйти из аккаунта',
-                      type: IAppButtonTypes.link,
-                      onPressed: appStore.logOut),
-                  const SizedBox(height: 50),
-                ],
-              ),
-            )
-          ],
-        ),
-      );
-    })
-    );
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                if (userData?.userPic != null) getImageWidget(path: userData!.userPic),
+                Container(
+                  margin: EdgeInsets.all(AppSizes.marginHorizontal),
+                  child: Column(
+                    children: [
+                      UserDetail(
+                          name: userData.name,
+                          about: userData.about,
+                          parents: userData.parents,
+                          editOnPressed: editOnPressed),
+                      AppButton(
+                          title: 'Выйти из аккаунта', type: IAppButtonTypes.link, onPressed: appStore.logOut),
+                      const SizedBox(height: 50),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        }));
   }
 }

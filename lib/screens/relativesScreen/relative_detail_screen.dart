@@ -64,6 +64,8 @@ class _RelativeDetailScreenState extends State<RelativeDetailScreen> {
           context.pushRoute(EditRelativeRouter(relative: relative));
         }
 
+        String? familyTiesType = relativesStore.getFamilyTies(relative.toTreeElement());
+
         return ScaffoldWrapper(
             title: userData.name,
             body: SingleChildScrollView(
@@ -78,12 +80,12 @@ class _RelativeDetailScreenState extends State<RelativeDetailScreen> {
                             name: userData.name,
                             about: userData.about,
                             parents: userData.parents,
-                            editOnPressed: editOnPressed),
+                            editOnPressed: editOnPressed,
+                            familyTiesType: familyTiesType),
                         if (totalNotes > 0)
                           AppButton(
                               title: 'Отмечен в $totalNotes публикации(ях)',
-                              onPressed: () =>
-                                  context.pushRoute(RelativeNotesRouter(relativeId: widget.id)),
+                              onPressed: () => context.pushRoute(RelativeNotesRouter(relativeId: widget.id)),
                               type: IAppButtonTypes.secondary),
                         AppButton(
                             title: 'Удалить родственника',

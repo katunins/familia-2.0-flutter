@@ -13,42 +13,42 @@ class FamilyTies {
   String? getType(TreeElementModel user) {
     Map<Gender, String> result = {};
 
-    if (children.contains(user)) {
+    if (_getIdList(children).contains(user.id)) {
       result = {
         Gender.male: 'Сын',
         Gender.female: 'Дочь',
         Gender.none: 'Дети',
       };
     }
-    if (grandSons.contains(user)) {
+    if (_getIdList(grandSons).contains(user.id)) {
       result = {
         Gender.male: 'Внук',
         Gender.female: 'Внучка',
         Gender.none: 'Внуки',
       };
     }
-    if (sisterBrothers.contains(user)) {
+    if (_getIdList(sisterBrothers).contains(user.id)) {
       result = {
         Gender.male: 'Брат',
         Gender.female: 'Сестра',
         Gender.none: 'Братья и сестры',
       };
     }
-    if (grandParents.contains(user)) {
+    if (_getIdList(grandParents).contains(user.id)) {
       result = {
         Gender.male: 'Дед',
         Gender.female: 'Бабушка',
         Gender.none: 'Дедушки и бабушки',
       };
     }
-    if (greatGrandParents.contains(user)) {
+    if (_getIdList(greatGrandParents).contains(user.id)) {
       result = {
         Gender.male: 'Прадед',
         Gender.female: 'Прабабушка',
         Gender.none: 'Прабабушки и прадедушки',
       };
     }
-    if (greatGreatGrandParents.contains(user)) {
+    if (_getIdList(greatGreatGrandParents).contains(user.id)) {
       result = {
         Gender.male: 'Прапрадед',
         Gender.female: 'Прапрабабушка',
@@ -56,7 +56,7 @@ class FamilyTies {
       };
     }
 
-    if (spouses.contains(user)) {
+    if (_getIdList(spouses).contains(user.id)) {
       result = {
         Gender.male: 'Супруг',
         Gender.female: 'Супруга',
@@ -64,12 +64,37 @@ class FamilyTies {
       };
     }
 
-    if (rootUser.parents.toTreeElements().contains(user)) {
+    if (rootUser.parents.toList().contains(user.id)) {
       result = {
         Gender.male: 'Отец',
         Gender.female: 'Мать',
         Gender.none: 'Родители',
       };
+    }
+
+    if (_getIdList(parentsInLaw).contains(user.id)) {
+      switch (rootUser.gender) {
+        case Gender.male:
+          result = {
+            Gender.male: 'Тесть',
+            Gender.female: 'Теща',
+            Gender.none: 'Родители суруги',
+          };
+          break;
+        case Gender.female:
+          result = {
+            Gender.male: 'Свекр',
+            Gender.female: 'Свекровь',
+            Gender.none: 'Родители суруга',
+          };
+          break;
+        default:
+          result = {
+            Gender.male: 'Родители супругов',
+            Gender.female: 'Родители супругов',
+            Gender.none: 'Родители супругов',
+          };
+      }
     }
 
     return result[user.gender];
@@ -91,8 +116,9 @@ class FamilyTies {
 
   List<TreeElementModel> get sisterBrothers => _allUsers.fold(
       <TreeElementModel>[],
-      (previousValue, user) =>
-          user.parents.toList().contains(rootUser.id) ? [...previousValue, user] : previousValue);
+      (previousValue, user) => searchListInList(user.parents.toList(), rootUser.parents.toList())
+          ? [...previousValue, user]
+          : previousValue);
 
   List<TreeElementModel> get grandParents => _allUsers.fold(
       <TreeElementModel>[],
@@ -114,4 +140,7 @@ class FamilyTies {
       <TreeElementModel>[],
       (previousValue, user) =>
           searchListInList(_getChildren(user), children) ? [...previousValue, user] : previousValue);
+
+  List<TreeElementModel> get parentsInLaw => spouses.fold(<TreeElementModel>[],
+      (previousValue, spouse) => [...previousValue, ...spouse.parents.toTreeElements()]);
 }

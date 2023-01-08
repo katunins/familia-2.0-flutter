@@ -1,9 +1,12 @@
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
+import 'package:familia_flutter/stores/user.store.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
+import '../helpers/family_ties.dart';
 import '../models/base_user_data.model.dart';
+import '../models/tree_element.dart';
 import '../services/storage.service.dart';
 
 part 'relatives.store.g.dart';
@@ -15,18 +18,20 @@ class RelativesStore = RelativesStoreBase with _$RelativesStore;
 abstract class RelativesStoreBase with Store {
   var isLoading = false;
 
+  late FamilyTies _familyTies;
+
+  String? getFamilyTies(TreeElementModel relative) => _familyTies?.getType(relative);
+
   @observable
   var relatives = ObservableList<RelativeModel>.of([]);
 
   init() async {
     await loadData();
+    _familyTies = FamilyTies(rootUser: userStore.user!.toTreeElement());
   }
 
   Future<bool> updateUserPic({required XFile image, required String id}) async {
     var relative = getRelativeById(id);
-    if (relative == null) {
-      return false;
-    }
     List<String> filesToDelete =
         relative.userData.userPic != null ? [relative.userData.userPic!] : [];
     List? imageUrls = await StorageApi().uploadImages(

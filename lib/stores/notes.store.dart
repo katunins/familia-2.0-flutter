@@ -30,7 +30,10 @@ abstract class NotesStoreBase with Store {
   @observable
   PaginationModel pagination = PaginationModel();
 
-  NoteModel getById(String id) => notes.firstWhere((element) => element.id == id);
+  NoteModel getById(String id) {
+    var res = notes.firstWhere((element) => element.id == id);
+    return res;
+  }
 
   @action
   setSearch(val) {

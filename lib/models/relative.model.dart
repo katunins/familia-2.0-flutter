@@ -21,7 +21,7 @@ class RelativeModel {
     access = RelativeAccessModel.fromJson(json['access']);
   }
 
-  toTreeElement() {
+  TreeElementModel toTreeElement() {
     return TreeElementModel(
         id: id,
         userPic: userData.userPic,
