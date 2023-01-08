@@ -68,26 +68,6 @@ List<TreeElementModel> getTreeElements(List<String> userIds) {
   }).toList();
 }
 
-// /// Возвращает список treeElements для двух родителей
-// /// Если родителей меньше двух, то добавляет treeElement.empty
-// List<TreeElementModel> getParentElements(ParentsModel? parents,
-//     {parentsCount = 2}) {
-//   List<TreeElementModel> result = [];
-//   if (parents != null) {
-//     for (var id in parents.toList()) {
-//       var treeElement = getFromAllFamily(id);
-//       if (treeElement == null) {
-//         Exception(['04 - Не найден пользователь $id']);
-//       }
-//       result.add(treeElement!);
-//     }
-//   }
-//   while (result.length < parentsCount) {
-//     result.add(TreeElementModel.empty());
-//   }
-//   return result;
-// }
-
 /// сравнивает id двух родителей
 /// если они одинаковые, то возвращает true
 bool isSameParentsModels(ParentsModel parent1, ParentsModel parent2) {
@@ -112,9 +92,9 @@ List<TreeElementModel> getAllUsers({List<String>? excluded}) {
     res.add(userStore.user!.toTreeElement());
   }
   var filterRelatives = relativesStore.relatives.where((element) =>
-      excluded!.firstWhere((id) => element.data.id == id, orElse: () => '') ==
+      excluded!.firstWhere((id) => element.id == id, orElse: () => '') ==
       '');
-  res.addAll(filterRelatives.map((item) => item.data.toTreeElement()));
+  res.addAll(filterRelatives.map((item) => item.toTreeElement()));
   return res;
 }
 

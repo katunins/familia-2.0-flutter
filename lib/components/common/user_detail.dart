@@ -16,7 +16,7 @@ class UserDetail extends StatelessWidget {
 
   final String name;
   final String? about;
-  final ParentsModel? parents;
+  final ParentsModel parents;
   final Function()? editOnPressed;
 
   @override

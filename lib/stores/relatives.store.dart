@@ -1,6 +1,5 @@
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
-import 'package:familia_flutter/stores/relative_item.store.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
@@ -17,7 +16,7 @@ abstract class RelativesStoreBase with Store {
   var isLoading = false;
 
   @observable
-  var relatives = ObservableList<RelativeItemStore>.of([]);
+  var relatives = ObservableList<RelativeModel>.of([]);
 
   init() async {
     await loadData();
@@ -45,6 +44,7 @@ abstract class RelativesStoreBase with Store {
     return true;
   }
 
+  @action
   Future<String?> updateUserData(
       {required BaseUserDataModel userData, required String relativeId}) async {
 
@@ -60,23 +60,22 @@ abstract class RelativesStoreBase with Store {
     var newRelative = await RelativesService().createRelative(dataObj: userData.toMap());
 
     if (newRelative != null) {
-      addRelative(newRelative);
+      relatives.add(newRelative);
     }
 
     return newRelative?.id;
   }
 
   updateRelative(RelativeModel relative) {
-    var relativeItem =
-        relatives.firstWhere((element) => element.data.id == relative.id);
-    relativeItem.set(relative);
+    int index = relatives.indexWhere((element) => element.id == relative.id);
+    relatives[index] = relative;
   }
 
   @action
   deleteRelative(String relativeId) async {
     var result = await RelativesService().deleteRelative(relativeId);
     if (result) {
-      relatives.removeWhere((element) => element.data.id == relativeId);
+      relatives.removeWhere((element) => element.id == relativeId);
     }
     return result;
   }
@@ -84,12 +83,8 @@ abstract class RelativesStoreBase with Store {
   @action
   loadData({bool loadMore = false}) async {
     isLoading = true;
-    var json = await RelativesService().getRelatives();
-
-    if (json != null) {
-      var newData = json
-          .map((item) => RelativeItemStore(RelativeModel.fromJson(item)))
-          .toList();
+    List<RelativeModel>? newData = await RelativesService().getRelatives();
+    if (newData != null) {
       if (!loadMore) {
         relatives.clear();
       }
@@ -98,11 +93,5 @@ abstract class RelativesStoreBase with Store {
     isLoading = false;
   }
 
-  @action
-  addRelative(RelativeModel relative) {
-    relatives.add(RelativeItemStore(relative));
-  }
-
-  RelativeModel? getRelativeById(relativeId) => relatives
-      .firstWhere((element) => element.data.id == relativeId).data;
+  RelativeModel getRelativeById(relativeId) => relatives.firstWhere((element) => element.id == relativeId);
 }

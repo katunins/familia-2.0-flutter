@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../../themes/colors.dart';
 import '../../../themes/text.theme.dart';
+import '../../models/tree_element.dart';
 import '../relatives/relatives_line_block.dart';
 
 /// Блок двух родителей с линиями ветвей
@@ -19,10 +20,22 @@ class Parents extends StatelessWidget {
       this.decoration})
       : super(key: key);
 
-  final ParentsModel? parents;
+  final ParentsModel parents;
   final Function(String userId)? onPressed;
   final String emptyTitle;
   final Decoration? decoration;
+
+  /// Возвращает список treeElements для двух родителей
+  /// Если родителей меньше двух, то добавляет treeElement.empty
+  List<TreeElementModel> getParentElementsWithEmpty(ParentsModel parents,
+      {parentsCount = 2}) {
+    List<TreeElementModel> result = [];
+    parents.toTreeElements().forEach((element) => result.add(element));
+    while (result.length < parentsCount) {
+      result.add(TreeElementModel.empty());
+    }
+    return result;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +57,7 @@ class Parents extends StatelessWidget {
             RelativesLineBlock(
               emptyTitle: emptyTitle,
               key: GlobalKey(),
-              elements: parents?.toTreeElements() ?? [],
+              elements: getParentElementsWithEmpty(parents),
               onPressed: onPressed,
             )
           ],

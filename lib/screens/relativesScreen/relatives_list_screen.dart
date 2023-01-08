@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:familia_flutter/components/common/empty_data.dart';
 import 'package:familia_flutter/components/root/scaffold_wrapper.dart';
+import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/models/search_store_bar.model.dart';
 import 'package:familia_flutter/screens/relativesScreen/create_relative_screen.dart';
 import 'package:familia_flutter/screens/relativesScreen/relatives_list_item.dart';
-import 'package:familia_flutter/stores/relative_item.store.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -36,12 +36,11 @@ class _RelativesListScreenState extends State<RelativesListScreen> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
-      List<RelativeItemStore> data = relativesStore.relatives.where((element) {
+      List<RelativeModel> data = relativesStore.relatives.where((element) {
         if (search == '') {
           return true;
         }
-        return element.data.userData.name.contains(search) ||
-            element.data.userData.about.contains(search);
+        return element.userData.name.contains(search) || element.userData.about.contains(search);
       }).toList();
 
       return ScaffoldWrapper(

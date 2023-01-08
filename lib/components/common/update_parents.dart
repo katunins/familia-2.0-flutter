@@ -21,7 +21,7 @@ class UpdateParents extends StatelessWidget {
     required this.hideBottomSheetAddRelativeButton,
   }) : super(key: key);
 
-  final ParentsModel? parents;
+  final ParentsModel parents;
   final String? childId;
   final bool hideBottomSheetAddRelativeButton;
   final Function({required String oldParentId, required String newParentId})
@@ -29,9 +29,7 @@ class UpdateParents extends StatelessWidget {
 
   onPressed(BuildContext context, String oldParentId) {
     List<String> excluded = childId == null ? [] : [childId!];
-    if (parents != null) {
-      excluded.addAll(parents!.toList());
-    }
+    excluded.addAll(parents.toList());
     BottomSheetHelper.show(
         context: context,
         isScrollControlled: true,

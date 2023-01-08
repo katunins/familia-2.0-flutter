@@ -14,8 +14,9 @@
 import 'package:auto_route/auto_route.dart' as _i15;
 import 'package:flutter/material.dart' as _i16;
 
-import '../models/note.model.dart' as _i17;
+import '../models/note.model.dart' as _i18;
 import '../models/relative.model.dart' as _i19;
+import '../models/tree_element.dart' as _i17;
 import '../screens/mainRootScreen/main_root_screen.dart' as _i1;
 import '../screens/notesScreen/create_note_screen.dart' as _i6;
 import '../screens/notesScreen/edit_note_screen.dart' as _i7;
@@ -29,7 +30,6 @@ import '../screens/relativesScreen/relative_detail_screen.dart' as _i9;
 import '../screens/relativesScreen/relative_notes_list.dart' as _i11;
 import '../screens/relativesScreen/relatives_list_screen.dart' as _i8;
 import '../screens/treeScreen/tree_screen.dart' as _i3;
-import '../stores/relative_item.store.dart' as _i18;
 import 'empty_router.dart' as _i2;
 
 class AppRouter extends _i15.RootStackRouter {
@@ -51,9 +51,14 @@ class AppRouter extends _i15.RootStackRouter {
       );
     },
     TreeRouter.name: (routeData) {
+      final args = routeData.argsAs<TreeRouterArgs>(
+          orElse: () => const TreeRouterArgs());
       return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i3.TreeScreen(),
+        child: _i3.TreeScreen(
+          key: args.key,
+          initialUser: args.initialUser,
+        ),
       );
     },
     RelativesRouter.name: (routeData) {
@@ -112,7 +117,7 @@ class AppRouter extends _i15.RootStackRouter {
         routeData: routeData,
         child: _i9.RelativeDetailScreen(
           key: args.key,
-          relative: args.relative,
+          id: args.id,
         ),
       );
     },
@@ -309,14 +314,36 @@ class NotesRouter extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.TreeScreen]
-class TreeRouter extends _i15.PageRouteInfo<void> {
-  const TreeRouter()
-      : super(
+class TreeRouter extends _i15.PageRouteInfo<TreeRouterArgs> {
+  TreeRouter({
+    _i16.Key? key,
+    _i17.TreeElementModel? initialUser,
+  }) : super(
           TreeRouter.name,
           path: 'tree',
+          args: TreeRouterArgs(
+            key: key,
+            initialUser: initialUser,
+          ),
         );
 
   static const String name = 'TreeRouter';
+}
+
+class TreeRouterArgs {
+  const TreeRouterArgs({
+    this.key,
+    this.initialUser,
+  });
+
+  final _i16.Key? key;
+
+  final _i17.TreeElementModel? initialUser;
+
+  @override
+  String toString() {
+    return 'TreeRouterArgs{key: $key, initialUser: $initialUser}';
+  }
 }
 
 /// generated route for
@@ -408,7 +435,7 @@ class CreateNoteRouter extends _i15.PageRouteInfo<void> {
 class EditNoteRouter extends _i15.PageRouteInfo<EditNoteRouterArgs> {
   EditNoteRouter({
     _i16.Key? key,
-    required _i17.NoteModel note,
+    required _i18.NoteModel note,
   }) : super(
           EditNoteRouter.name,
           path: 'editNote',
@@ -429,7 +456,7 @@ class EditNoteRouterArgs {
 
   final _i16.Key? key;
 
-  final _i17.NoteModel note;
+  final _i18.NoteModel note;
 
   @override
   String toString() {
@@ -455,13 +482,13 @@ class RelativeDetailRouter
     extends _i15.PageRouteInfo<RelativeDetailRouterArgs> {
   RelativeDetailRouter({
     _i16.Key? key,
-    required _i18.RelativeItemStore relative,
+    required String id,
   }) : super(
           RelativeDetailRouter.name,
           path: 'relativeDetail',
           args: RelativeDetailRouterArgs(
             key: key,
-            relative: relative,
+            id: id,
           ),
         );
 
@@ -471,16 +498,16 @@ class RelativeDetailRouter
 class RelativeDetailRouterArgs {
   const RelativeDetailRouterArgs({
     this.key,
-    required this.relative,
+    required this.id,
   });
 
   final _i16.Key? key;
 
-  final _i18.RelativeItemStore relative;
+  final String id;
 
   @override
   String toString() {
-    return 'RelativeDetailRouterArgs{key: $key, relative: $relative}';
+    return 'RelativeDetailRouterArgs{key: $key, id: $id}';
   }
 }
 

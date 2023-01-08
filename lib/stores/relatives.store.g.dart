@@ -13,16 +13,26 @@ mixin _$RelativesStore on RelativesStoreBase, Store {
       Atom(name: 'RelativesStoreBase.relatives', context: context);
 
   @override
-  ObservableList<RelativeItemStore> get relatives {
+  ObservableList<RelativeModel> get relatives {
     _$relativesAtom.reportRead();
     return super.relatives;
   }
 
   @override
-  set relatives(ObservableList<RelativeItemStore> value) {
+  set relatives(ObservableList<RelativeModel> value) {
     _$relativesAtom.reportWrite(value, super.relatives, () {
       super.relatives = value;
     });
+  }
+
+  late final _$updateUserDataAsyncAction =
+      AsyncAction('RelativesStoreBase.updateUserData', context: context);
+
+  @override
+  Future<String?> updateUserData(
+      {required BaseUserDataModel userData, required String relativeId}) {
+    return _$updateUserDataAsyncAction.run(
+        () => super.updateUserData(userData: userData, relativeId: relativeId));
   }
 
   late final _$deleteRelativeAsyncAction =
@@ -40,20 +50,6 @@ mixin _$RelativesStore on RelativesStoreBase, Store {
   @override
   Future loadData({bool loadMore = false}) {
     return _$loadDataAsyncAction.run(() => super.loadData(loadMore: loadMore));
-  }
-
-  late final _$RelativesStoreBaseActionController =
-      ActionController(name: 'RelativesStoreBase', context: context);
-
-  @override
-  dynamic addRelative(RelativeModel relative) {
-    final _$actionInfo = _$RelativesStoreBaseActionController.startAction(
-        name: 'RelativesStoreBase.addRelative');
-    try {
-      return super.addRelative(relative);
-    } finally {
-      _$RelativesStoreBaseActionController.endAction(_$actionInfo);
-    }
   }
 
   @override
