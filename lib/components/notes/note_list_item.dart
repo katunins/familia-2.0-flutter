@@ -30,7 +30,7 @@ class NoteListItem extends StatelessWidget {
             child: Stack(
               children: [
                 getImageWidget(path: note.images.first),
-                if (!hideCountLabel)
+                if (!hideCountLabel && note.images.length > 1)
                   Positioned(
                       right: AppSizes.marginHorizontal,
                       bottom: 20,

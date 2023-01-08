@@ -8,9 +8,25 @@ part of 'family_tires.store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
-mixin _$FamilyTiresStore on FamilyTiresBase, Store {
+mixin _$FamilyTreesStore on FamilyTreesBase, Store {
+  late final _$rootUserAtom =
+      Atom(name: 'FamilyTreesBase.rootUser', context: context);
+
+  @override
+  TreeElementModel get rootUser {
+    _$rootUserAtom.reportRead();
+    return super.rootUser;
+  }
+
+  @override
+  set rootUser(TreeElementModel value) {
+    _$rootUserAtom.reportWrite(value, super.rootUser, () {
+      super.rootUser = value;
+    });
+  }
+
   late final _$childrenAtom =
-      Atom(name: 'FamilyTiresBase.children', context: context);
+      Atom(name: 'FamilyTreesBase.children', context: context);
 
   @override
   List<String> get children {
@@ -26,7 +42,7 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   late final _$grandsonsAtom =
-      Atom(name: 'FamilyTiresBase.grandsons', context: context);
+      Atom(name: 'FamilyTreesBase.grandsons', context: context);
 
   @override
   List<String> get grandsons {
@@ -42,7 +58,7 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   late final _$sisterBrothersAtom =
-      Atom(name: 'FamilyTiresBase.sisterBrothers', context: context);
+      Atom(name: 'FamilyTreesBase.sisterBrothers', context: context);
 
   @override
   List<String> get sisterBrothers {
@@ -58,7 +74,7 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   late final _$grandParentsAtom =
-      Atom(name: 'FamilyTiresBase.grandParents', context: context);
+      Atom(name: 'FamilyTreesBase.grandParents', context: context);
 
   @override
   List<String> get grandParents {
@@ -74,7 +90,7 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   late final _$greatGrandParentsAtom =
-      Atom(name: 'FamilyTiresBase.greatGrandParents', context: context);
+      Atom(name: 'FamilyTreesBase.greatGrandParents', context: context);
 
   @override
   List<String> get greatGrandParents {
@@ -90,7 +106,7 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   late final _$greatGreatGrandParentsAtom =
-      Atom(name: 'FamilyTiresBase.greatGreatGrandParents', context: context);
+      Atom(name: 'FamilyTreesBase.greatGreatGrandParents', context: context);
 
   @override
   List<String> get greatGreatGrandParents {
@@ -107,7 +123,7 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
   }
 
   late final _$spousesAtom =
-      Atom(name: 'FamilyTiresBase.spouses', context: context);
+      Atom(name: 'FamilyTreesBase.spouses', context: context);
 
   @override
   List<String> get spouses {
@@ -122,89 +138,90 @@ mixin _$FamilyTiresStore on FamilyTiresBase, Store {
     });
   }
 
-  late final _$FamilyTiresBaseActionController =
-      ActionController(name: 'FamilyTiresBase', context: context);
+  late final _$FamilyTreesBaseActionController =
+      ActionController(name: 'FamilyTreesBase', context: context);
 
   @override
   dynamic _getChildren() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getChildren');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getChildren');
     try {
       return super._getChildren();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic _getGrandsons() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getGrandsons');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getGrandsons');
     try {
       return super._getGrandsons();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic _getSisterBrothers() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getSisterBrothers');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getSisterBrothers');
     try {
       return super._getSisterBrothers();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic _getGrandParents() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getGrandParents');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getGrandParents');
     try {
       return super._getGrandParents();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic _getGreatGrandParents() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getGreatGrandParents');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getGreatGrandParents');
     try {
       return super._getGreatGrandParents();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic _getGreatGreatGrandParents() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getGreatGreatGrandParents');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getGreatGreatGrandParents');
     try {
       return super._getGreatGreatGrandParents();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   dynamic _getSpouses() {
-    final _$actionInfo = _$FamilyTiresBaseActionController.startAction(
-        name: 'FamilyTiresBase._getSpouses');
+    final _$actionInfo = _$FamilyTreesBaseActionController.startAction(
+        name: 'FamilyTreesBase._getSpouses');
     try {
       return super._getSpouses();
     } finally {
-      _$FamilyTiresBaseActionController.endAction(_$actionInfo);
+      _$FamilyTreesBaseActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   String toString() {
     return '''
+rootUser: ${rootUser},
 children: ${children},
 grandsons: ${grandsons},
 sisterBrothers: ${sisterBrothers},

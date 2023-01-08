@@ -1,17 +1,24 @@
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/gender.enum.dart';
 import 'package:familia_flutter/models/relative.model.dart';
+import 'package:familia_flutter/models/tree_element.dart';
 import 'package:familia_flutter/models/user.model.dart';
+import 'package:familia_flutter/stores/user.store.dart';
 import 'package:mobx/mobx.dart';
 
 part 'family_tires.store.g.dart';
 
-var familyTires = FamilyTiresStore();
+var familyTires = FamilyTreesStore(userStore.user!.toTreeElement());
 
-class FamilyTiresStore = FamilyTiresBase with _$FamilyTiresStore;
+class FamilyTreesStore = FamilyTreesBase with _$FamilyTreesStore;
 
-abstract class FamilyTiresBase with Store {
-  init(UserModel user) {
+abstract class FamilyTreesBase with Store {
+
+  FamilyTreesBase(this.rootUser){
+    init(rootUser);
+  }
+
+  init(TreeElementModel user) {
     rootUser = user;
     _getChildren();
     _getGrandsons();
@@ -22,7 +29,8 @@ abstract class FamilyTiresBase with Store {
     _getSpouses();
   }
 
-  UserModel? rootUser;
+  @observable
+  TreeElementModel rootUser;
 
   @observable
   List<String> children = [];
@@ -106,7 +114,7 @@ abstract class FamilyTiresBase with Store {
           return 'Прарабабушки и прапрадедушки';
       }
     }
-    var parents = rootUser?.userData.parents;
+    var parents = rootUser?.parents;
     if (parents?.father == relative.id) {
       return 'Отец';
     }
@@ -146,9 +154,9 @@ abstract class FamilyTiresBase with Store {
     getAllUsers().map((element) {
       var parents = element.parents;
       if ((parents.father != '' &&
-              parents.father == rootUser?.userData.parents.father) ||
+              parents.father == rootUser?.parents.father) ||
           (parents.mother != '' &&
-              parents.mother == rootUser?.userData.parents.mother)) {
+              parents.mother == rootUser?.parents.mother)) {
         sisterBrothers.add(element.id);
       }
     }).toList();
@@ -159,7 +167,7 @@ abstract class FamilyTiresBase with Store {
     if (rootUser == null) {
       return;
     }
-    var parents = rootUser!.userData.parents;
+    var parents = rootUser!.parents;
     parents.toIdsList().where((id) => id.isNotEmpty).map((id) {
       var parent = getFromAllFamily(id);
       if (parent != null) {

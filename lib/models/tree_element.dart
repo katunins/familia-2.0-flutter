@@ -8,7 +8,7 @@ enum TreeElementTypes {
 class TreeElementModel {
   late final String id;
   late final String? userPic;
-  late final String? title;
+  late final String title;
   late final ParentsModel parents;
   TreeElementTypes type = TreeElementTypes.relative;
 

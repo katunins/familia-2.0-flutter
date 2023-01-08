@@ -23,7 +23,7 @@ abstract class RelativesStoreBase with Store {
 
   init() async {
     await loadData();
-    familyTires.init(userStore.user!);
+    familyTires.init(userStore.user!.toTreeElement());
   }
 
   Future<bool> updateUserPic({required XFile image, required String id}) async {
