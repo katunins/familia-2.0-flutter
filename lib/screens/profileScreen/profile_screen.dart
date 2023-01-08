@@ -31,7 +31,7 @@ class ProfileScreen extends StatelessWidget {
           return SingleChildScrollView(
             child: Column(
               children: [
-                if (userData?.userPic != null) getImageWidget(path: userData!.userPic),
+                if (userData.userPic != null) getImageWidget(path: userData.userPic),
                 Container(
                   margin: EdgeInsets.all(AppSizes.marginHorizontal),
                   child: Column(

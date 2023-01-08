@@ -1,11 +1,9 @@
 import 'package:familia_flutter/components/tree/parents.dart';
 import 'package:familia_flutter/components/common/button.dart';
 import 'package:familia_flutter/models/parents.model.dart';
-import 'package:familia_flutter/models/tree_element.dart';
 import 'package:familia_flutter/themes/text.theme.dart';
 import 'package:flutter/material.dart';
 import '../../../themes/colors.dart';
-import '../../stores/relatives.store.dart';
 
 class UserDetail extends StatelessWidget {
   const UserDetail(
@@ -47,7 +45,7 @@ class UserDetail extends StatelessWidget {
         else
           Container(
             margin: const EdgeInsets.only(top: 12, bottom: 36.0),
-            child: Text(about ?? '', style: bodyTextStyle),
+            child: Text(about, style: bodyTextStyle),
           ),
         Parents(
           parents: parents,

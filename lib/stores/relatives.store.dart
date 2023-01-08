@@ -20,7 +20,7 @@ abstract class RelativesStoreBase with Store {
 
   late FamilyTies _familyTies;
 
-  String? getFamilyTies(TreeElementModel relative) => _familyTies?.getType(relative);
+  String? getFamilyTies(TreeElementModel relative) => _familyTies.getType(relative);
 
   @observable
   var relatives = ObservableList<RelativeModel>.of([]);

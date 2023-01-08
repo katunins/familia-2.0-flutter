@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:familia_flutter/helpers/family_ties.dart';
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/routers/app_router.gr.dart';
 import 'package:familia_flutter/stores/relatives.store.dart';

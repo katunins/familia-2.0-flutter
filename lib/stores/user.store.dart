@@ -1,13 +1,10 @@
 import 'package:familia_flutter/models/base_user_data.model.dart';
 import 'package:familia_flutter/models/gender.enum.dart';
-import 'package:familia_flutter/models/tree_element.dart';
 import 'package:familia_flutter/models/user.model.dart';
 import 'package:familia_flutter/services/storage.service.dart';
 import 'package:familia_flutter/services/user.service.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
-
-import '../helpers/family_ties.dart';
 
 part 'user.store.g.dart';
 
