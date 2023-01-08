@@ -93,7 +93,7 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
                     )
                   : RelativeItemWithDescription(
                       key: widget.parentsElementsKeys[item.id],
-                      title: item.title!,
+                      title: item.title,
                       userPick: item.userPic,
                       userId: item.id,
                       onPressed: widget.onPressed,

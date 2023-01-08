@@ -1,15 +1,16 @@
 import 'package:auto_route/auto_route.dart';
+import 'package:familia_flutter/helpers/family_ties.dart';
 import 'package:familia_flutter/routers/app_router.gr.dart';
 import 'package:familia_flutter/stores/relative_item.store.dart';
+import 'package:familia_flutter/stores/user.store.dart';
 import 'package:familia_flutter/themes/sizes.dart';
 import 'package:familia_flutter/themes/text.theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../components/common/user_pic.dart';
-import '../../stores/family_tires.store.dart';
 
 class RelativeListItem extends StatelessWidget {
-  const RelativeListItem({Key? key, required this.relative}) : super(key: key);
+  const RelativeListItem({super.key, required this.relative});
 
   final RelativeItemStore relative;
 
@@ -17,7 +18,7 @@ class RelativeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
       builder: (_) {
-        var tireType = familyTires.getType(relative.data);
+        var tireType = FamilyTies(rootUser: userStore.user!.toTreeElement()).getType(relative.data.toTreeElement());
         var userPic = relative.data.userData.userPic;
 
         return Container(

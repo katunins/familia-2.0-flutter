@@ -21,13 +21,13 @@ class RelativeModel {
     access = RelativeAccessModel.fromJson(json['access']);
   }
 
-  toTreeElement(){
+  toTreeElement() {
     return TreeElementModel(
         id: id,
         userPic: userData.userPic,
         title: userData.name.isNotEmpty ? userData.name : 'Без имени',
-        parents: userData.parents
-    );
+        parents: userData.parents,
+        gender: userData.gender);
   }
 }
 

@@ -51,7 +51,7 @@ class _RelativesListSheetComponentState
   }
 
   List<TreeElementModel> get filteredElements => elements
-      .where((item) => item.title!.toUpperCase().contains(search.toUpperCase()))
+      .where((item) => item.title.toUpperCase().contains(search.toUpperCase()))
       .toList();
 
   @override
@@ -95,7 +95,7 @@ class _RelativesListSheetComponentState
                                     )),
                                 Expanded(
                                     child:
-                                        Text(filteredElements[index].title!)),
+                                        Text(filteredElements[index].title)),
                                 if (widget.getCheckBox != null)
                                   Container(
                                     margin: EdgeInsets.only(left: AppSizes.marginHorizontal),

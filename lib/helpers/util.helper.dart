@@ -64,32 +64,29 @@ RenderBox? getRenderFromContext(BuildContext context) {
 List<TreeElementModel> getTreeElements(List<String> userIds) {
   return userIds.map<TreeElementModel>((id) {
     var treeElement = getFromAllFamily(id);
-    if (treeElement == null) {
-      Exception(['02 -Не найден пользователь $id']);
-    }
-    return treeElement!;
+    return treeElement;
   }).toList();
 }
 
-/// Возвращает список treeElements для двух родителей
-/// Если родителей меньше двух, то добавляет treeElement.empty
-List<TreeElementModel> getParentElements(ParentsModel? parents,
-    {parentsCount = 2}) {
-  List<TreeElementModel> result = [];
-  if (parents != null) {
-    for (var id in parents.toIdsList()) {
-      var treeElement = getFromAllFamily(id);
-      if (treeElement == null) {
-        Exception(['04 - Не найден пользователь $id']);
-      }
-      result.add(treeElement!);
-    }
-  }
-  while (result.length < parentsCount) {
-    result.add(TreeElementModel.empty());
-  }
-  return result;
-}
+// /// Возвращает список treeElements для двух родителей
+// /// Если родителей меньше двух, то добавляет treeElement.empty
+// List<TreeElementModel> getParentElements(ParentsModel? parents,
+//     {parentsCount = 2}) {
+//   List<TreeElementModel> result = [];
+//   if (parents != null) {
+//     for (var id in parents.toList()) {
+//       var treeElement = getFromAllFamily(id);
+//       if (treeElement == null) {
+//         Exception(['04 - Не найден пользователь $id']);
+//       }
+//       result.add(treeElement!);
+//     }
+//   }
+//   while (result.length < parentsCount) {
+//     result.add(TreeElementModel.empty());
+//   }
+//   return result;
+// }
 
 /// сравнивает id двух родителей
 /// если они одинаковые, то возвращает true
@@ -121,7 +118,7 @@ List<TreeElementModel> getAllUsers({List<String>? excluded}) {
   return res;
 }
 
-TreeElementModel? getFromAllFamily(String id) {
+TreeElementModel getFromAllFamily(String id) {
   return getAllUsers().firstWhere((element) => element.id == id);
 }
 
@@ -131,8 +128,8 @@ List<String> getUserPicsList(List<String> userIds) {
   List<String> res = [];
   for (var id in userIds) {
     var user = getFromAllFamily(id);
-    if (user?.userPic != null) {
-      res.add(user!.userPic!);
+    if (user.userPic != null) {
+      res.add(user.userPic!);
     }
   }
   return res;
@@ -141,4 +138,14 @@ List<String> getUserPicsList(List<String> userIds) {
 void showSnackBar(String message) {
   var currentState = GetIt.I<GlobalKey<ScaffoldMessengerState>>().currentState;
   currentState?.showSnackBar(SnackBar(content: Text(message)));
+}
+
+/// ищет значения  list1 в list2
+bool searchListInList(List list_1,List list_2) {
+  for (var element in list_1) {
+    if (list_2.contains(element)) {
+      return true;
+    }
+  }
+  return false;
 }

@@ -30,7 +30,7 @@ class UpdateParents extends StatelessWidget {
   onPressed(BuildContext context, String oldParentId) {
     List<String> excluded = childId == null ? [] : [childId!];
     if (parents != null) {
-      excluded.addAll(parents!.toIdsList());
+      excluded.addAll(parents!.toList());
     }
     BottomSheetHelper.show(
         context: context,

@@ -1,10 +1,13 @@
+import 'package:familia_flutter/helpers/util.helper.dart';
+import 'package:familia_flutter/models/tree_element.dart';
+
 class ParentsModel {
   late String mother;
   late String father;
 
   ParentsModel({required this.mother, required this.father});
 
-  ParentsModel.createEmpty(){
+  ParentsModel.createEmpty() {
     mother = '';
     father = '';
   }
@@ -20,7 +23,7 @@ class ParentsModel {
     return {'mother': mother, 'father': father};
   }
 
-  List<String> toIdsList() {
+  List<String> toList() {
     List<String> list = [];
     if (mother != '') {
       list.add(mother);
@@ -30,4 +33,17 @@ class ParentsModel {
     }
     return list;
   }
+
+  List<TreeElementModel> toTreeElements() {
+    var list = <TreeElementModel>[];
+    if (mother != '') {
+      list.add(getFromAllFamily(mother));
+    }
+    if (father != '') {
+      list.add(getFromAllFamily(father));
+    }
+    return list;
+  }
+
+  bool contains(String id) => toList().contains(id);
 }

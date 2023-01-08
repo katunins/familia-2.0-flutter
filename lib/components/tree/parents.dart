@@ -1,4 +1,3 @@
-import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/parents.model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +44,7 @@ class Parents extends StatelessWidget {
             RelativesLineBlock(
               emptyTitle: emptyTitle,
               key: GlobalKey(),
-              elements: getParentElements(parents),
+              elements: parents?.toTreeElements() ?? [],
               onPressed: onPressed,
             )
           ],

@@ -1,12 +1,10 @@
 import 'package:familia_flutter/models/relative.model.dart';
 import 'package:familia_flutter/services/relatives.service.dart';
 import 'package:familia_flutter/stores/relative_item.store.dart';
-import 'package:familia_flutter/stores/user.store.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 
 import '../models/base_user_data.model.dart';
-import 'family_tires.store.dart';
 import '../services/storage.service.dart';
 
 part 'relatives.store.g.dart';
@@ -23,7 +21,6 @@ abstract class RelativesStoreBase with Store {
 
   init() async {
     await loadData();
-    familyTires.init(userStore.user!.toTreeElement());
   }
 
   Future<bool> updateUserPic({required XFile image, required String id}) async {

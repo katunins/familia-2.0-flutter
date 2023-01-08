@@ -24,14 +24,13 @@ class UserModel {
       parents: json['parents'] == null ? ParentsModel.createEmpty() : ParentsModel.fromJson(json['parents']),
       gender: getGenderFromJson(json['gender']),
       userPic: getImageUrl(json['userPic']),
-
     );
   }
 
   toMap() {
     var dataObj = {
-      'name':userData.name,
-      'about':userData.about,
+      'name': userData.name,
+      'about': userData.about,
       'parents': userData.parents.toMap(),
       'gender': userData.gender.name,
       'email': email,
@@ -40,12 +39,12 @@ class UserModel {
     return dataObj;
   }
 
-  toTreeElement(){
+  toTreeElement() {
     return TreeElementModel(
         id: id,
         userPic: userData.userPic,
         title: userData.name.isNotEmpty ? userData.name : 'Без имени',
-        parents: userData.parents
-    );
+        parents: userData.parents,
+        gender: userData.gender);
   }
 }
