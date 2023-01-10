@@ -14,9 +14,8 @@
 import 'package:auto_route/auto_route.dart' as _i15;
 import 'package:flutter/material.dart' as _i16;
 
-import '../models/note.model.dart' as _i18;
-import '../models/relative.model.dart' as _i19;
-import '../models/tree_element.dart' as _i17;
+import '../models/note.model.dart' as _i17;
+import '../models/relative.model.dart' as _i18;
 import '../screens/mainRootScreen/main_root_screen.dart' as _i1;
 import '../screens/notesScreen/create_note_screen.dart' as _i6;
 import '../screens/notesScreen/edit_note_screen.dart' as _i7;
@@ -55,10 +54,7 @@ class AppRouter extends _i15.RootStackRouter {
           orElse: () => const TreeRouterArgs());
       return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i3.TreeScreen(
-          key: args.key,
-          initialUser: args.initialUser,
-        ),
+        child: _i3.TreeScreen(key: args.key),
       );
     },
     RelativesRouter.name: (routeData) {
@@ -315,34 +311,24 @@ class NotesRouter extends _i15.PageRouteInfo<void> {
 /// generated route for
 /// [_i3.TreeScreen]
 class TreeRouter extends _i15.PageRouteInfo<TreeRouterArgs> {
-  TreeRouter({
-    _i16.Key? key,
-    _i17.TreeElementModel? initialUser,
-  }) : super(
+  TreeRouter({_i16.Key? key})
+      : super(
           TreeRouter.name,
           path: 'tree',
-          args: TreeRouterArgs(
-            key: key,
-            initialUser: initialUser,
-          ),
+          args: TreeRouterArgs(key: key),
         );
 
   static const String name = 'TreeRouter';
 }
 
 class TreeRouterArgs {
-  const TreeRouterArgs({
-    this.key,
-    this.initialUser,
-  });
+  const TreeRouterArgs({this.key});
 
   final _i16.Key? key;
 
-  final _i17.TreeElementModel? initialUser;
-
   @override
   String toString() {
-    return 'TreeRouterArgs{key: $key, initialUser: $initialUser}';
+    return 'TreeRouterArgs{key: $key}';
   }
 }
 
@@ -435,7 +421,7 @@ class CreateNoteRouter extends _i15.PageRouteInfo<void> {
 class EditNoteRouter extends _i15.PageRouteInfo<EditNoteRouterArgs> {
   EditNoteRouter({
     _i16.Key? key,
-    required _i18.NoteModel note,
+    required _i17.NoteModel note,
   }) : super(
           EditNoteRouter.name,
           path: 'editNote',
@@ -456,7 +442,7 @@ class EditNoteRouterArgs {
 
   final _i16.Key? key;
 
-  final _i18.NoteModel note;
+  final _i17.NoteModel note;
 
   @override
   String toString() {
@@ -516,7 +502,7 @@ class RelativeDetailRouterArgs {
 class EditRelativeRouter extends _i15.PageRouteInfo<EditRelativeRouterArgs> {
   EditRelativeRouter({
     _i16.Key? key,
-    required _i19.RelativeModel relative,
+    required _i18.RelativeModel relative,
   }) : super(
           EditRelativeRouter.name,
           path: 'editRelative',
@@ -537,7 +523,7 @@ class EditRelativeRouterArgs {
 
   final _i16.Key? key;
 
-  final _i19.RelativeModel relative;
+  final _i18.RelativeModel relative;
 
   @override
   String toString() {

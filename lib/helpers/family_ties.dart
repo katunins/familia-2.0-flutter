@@ -105,6 +105,8 @@ class FamilyTies {
   List<TreeElementModel> _getChildren(TreeElementModel user) =>
       _allUsers.where((el) => el.parents.contains(user.id)).toList();
 
+  List<TreeElementModel> get parents => rootUser.parents.toTreeElements();
+
   List<TreeElementModel> get children => _allUsers.fold(<TreeElementModel>[],
       (previousValue, user) => user.parents.contains(rootUser.id) ? [...previousValue, user] : previousValue);
 
@@ -114,11 +116,12 @@ class FamilyTies {
           ? [...previousValue, user]
           : previousValue);
 
-  List<TreeElementModel> get sisterBrothers => _allUsers.fold(
-      <TreeElementModel>[],
-      (previousValue, user) => searchListInList(user.parents.toList(), rootUser.parents.toList())
-          ? [...previousValue, user]
-          : previousValue);
+  List<TreeElementModel> get sisterBrothers =>
+      getAllUsers().where((element) => element.id != rootUser.id).fold(
+          <TreeElementModel>[],
+          (previousValue, user) => searchListInList(user.parents.toList(), rootUser.parents.toList())
+              ? [...previousValue, user]
+              : previousValue);
 
   List<TreeElementModel> get grandParents => _allUsers.fold(
       <TreeElementModel>[],

@@ -16,8 +16,8 @@ class UserPic extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(8.0),
       child: getImageWidget(
-          width: size ?? AppSizes.userPickWidth,
-          height: size ?? AppSizes.userPickWidth,
+          width: size ?? AppSizes.userPicSize,
+          height: size ?? AppSizes.userPicSize,
           fit: BoxFit.cover,
           path: userPic,
       ),

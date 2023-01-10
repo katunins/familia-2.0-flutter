@@ -12,8 +12,8 @@ class MainRootScreen extends StatelessWidget {
       bottomNavigationBuilder: (_, tabsRouter) =>
           CustomBottomNavigationBar(tabsRouter: tabsRouter),
       routes: [
-        const NotesRouter(),
         TreeRouter(),
+        const NotesRouter(),
         const RelativesRouter(),
         const ProfileRouter()
       ],

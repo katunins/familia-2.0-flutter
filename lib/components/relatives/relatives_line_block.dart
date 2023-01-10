@@ -1,12 +1,11 @@
+import 'package:familia_flutter/components/relatives/user_item_description.dart';
 import 'package:familia_flutter/components/tree/branch_line_painter.dart';
-import 'package:familia_flutter/components/tree/emty_relative.dart';
-import 'package:familia_flutter/components/relatives/relative_item_description.dart';
-import 'package:familia_flutter/components/tree/vertical_brach_line.dart';
+import 'package:familia_flutter/components/tree/vertical_branch_line.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/tree_element.dart';
+import 'package:familia_flutter/themes/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 
 /// Компонент пользователей в одной линии с элементами древа
 /// elements - список элементов
@@ -14,10 +13,8 @@ import 'package:flutter/material.dart';
 /// emptyTitle - если в списке элементов есть элемент с type == empty,
 /// то в линии рендерится Empty компонент, в котором будет подпись emptyTitle
 
-
 class RelativesLineBlock extends StatefulWidget {
-  RelativesLineBlock(
-      {super.key, required this.elements, this.onPressed, this.emptyTitle});
+  RelativesLineBlock({super.key, required this.elements, this.onPressed, this.emptyTitle});
 
   final List<TreeElementModel> elements;
   final Function(String userId)? onPressed;
@@ -30,7 +27,6 @@ class RelativesLineBlock extends StatefulWidget {
 }
 
 class _RelativesLineBlockState extends State<RelativesLineBlock> {
-
   bool buildIsReady = false; // список элементов выведен, можно рисовать линии
   RenderBox? containerRenderBox;
   Map<String, RenderBox> elementsRenderBoxes = {};
@@ -48,7 +44,6 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
 
   @override
   void initState() {
-
     // Заполняет parentsElementsKeys ключами GlobalKey
     for (var element in widget.elements) {
       if (widget.parentsElementsKeys[element.id] == null) {
@@ -68,14 +63,14 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
   @override
   Widget build(BuildContext context) {
     return Column(key: widget._containerKey, children: [
-      const VerticalBranchLine(),
+      VerticalBranchLine(size: AppSizes.minBranchLineSize),
       if (containerRenderBox != null)
         Container(
           margin: const EdgeInsets.only(bottom: 8),
           child: BranchLinePainter(
             containerRenderBox: containerRenderBox,
             elementsRenderBoxes: elementsRenderBoxes,
-            direction: BranchDirection.down,
+            verticalDirection: AxisDirection.down,
           ),
         ),
       Row(
@@ -83,21 +78,21 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: widget.elements
-              .map((item) => item.type == TreeElementTypes.empty
-                  ? EmptyRelative(
-                      key: widget.parentsElementsKeys[item.id],
-                      title: widget.emptyTitle,
-                      onTap: widget.onPressed == null
-                          ? null
-                          : () => widget.onPressed!(''),
-                    )
-                  : RelativeItemWithDescription(
-                      key: widget.parentsElementsKeys[item.id],
-                      title: item.title,
-                      userPick: item.userPic,
-                      userId: item.id,
-                      onPressed: widget.onPressed,
-                    ))
+              .map(
+                (item) => item.type == TreeElementTypes.empty
+                    ? UserItemWithDescription(
+                        horizontalPadding: AppSizes.marginHorizontal,
+                        title: widget.emptyTitle,
+                        key: widget.parentsElementsKeys[item.id],
+                        onPressed: widget.onPressed,
+                      )
+                    : UserItemWithDescription(
+                        horizontalPadding: AppSizes.marginHorizontal,
+                        user: item,
+                        key: widget.parentsElementsKeys[item.id],
+                        onPressed: widget.onPressed,
+                      ),
+              )
               .toList()),
     ]);
   }
