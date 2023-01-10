@@ -21,7 +21,19 @@ class TreeScreen extends StatelessWidget {
       body: Observer(
           builder: (_) => Center(
                 child: FreeScrollView(
-                  child: TreeRootColumn(rootUser: treeStore.rootUser, alignment: CrossAxisAlignment.end),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      TreeRootColumn(
+                          rootUser: treeStore.rootUser,
+                          alignment: familyTies.spouses.isEmpty
+                              ? CrossAxisAlignment.center
+                              : CrossAxisAlignment.end),
+                      if (familyTies.spouses.isNotEmpty)
+                        TreeRootColumn(
+                            rootUser: familyTies.spouses.first, alignment: CrossAxisAlignment.start),
+                    ],
+                  ),
                 ),
               )),
     );

@@ -14,6 +14,7 @@ class TreeElement extends StatelessWidget {
   Widget build(BuildContext context) {
     return Observer(
         builder: (_) => Container(
+          height: treeStore.treeElementHeight,
           margin: EdgeInsets.all(treeStore.paddingBetween),
           child: UserItemWithDescription(
             userPicSize: treeStore.userPicSize,

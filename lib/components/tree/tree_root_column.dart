@@ -21,7 +21,7 @@ class TreeRootColumn extends StatelessWidget {
           elements: FamilyTies(rootUser: rootUser).sisterBrothers,
           alignment: alignment,
         ),
-        TreeVerticalBuilder(rootUser: rootUser, verticalDirection: AxisDirection.down, showRoot: false, alignment: alignment),
+        // TreeVerticalBuilder(rootUser: rootUser, verticalDirection: AxisDirection.down, showRoot: false, alignment: alignment),
       ],
     );
   }

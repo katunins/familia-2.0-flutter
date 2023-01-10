@@ -19,6 +19,8 @@ abstract class TreeStoreBase with Store {
   @computed
   double get userPicSize => AppSizes.userPicSize * zoom;
 
+  double get treeElementHeight => 133 * zoom;
+
   double get paddingBetween => 5 * zoom;
 
   double get itemBlockWidth => userPicSize + paddingBetween*2;

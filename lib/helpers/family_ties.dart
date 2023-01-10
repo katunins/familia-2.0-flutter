@@ -139,7 +139,7 @@ class FamilyTies {
       (previousValue, user) =>
           searchListInList(greatGrandParents, _getChildren(user)) ? [...previousValue, user] : previousValue);
 
-  List<TreeElementModel> get spouses => _allUsers.fold(
+  List<TreeElementModel> get spouses => getAllUsers().where((element) => element.id != rootUser.id).fold(
       <TreeElementModel>[],
       (previousValue, user) =>
           searchListInList(_getChildren(user), children) ? [...previousValue, user] : previousValue);
