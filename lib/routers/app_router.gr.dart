@@ -50,11 +50,9 @@ class AppRouter extends _i15.RootStackRouter {
       );
     },
     TreeRouter.name: (routeData) {
-      final args = routeData.argsAs<TreeRouterArgs>(
-          orElse: () => const TreeRouterArgs());
       return _i15.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i3.TreeScreen(key: args.key),
+        child: const _i3.TreeScreen(),
       );
     },
     RelativesRouter.name: (routeData) {
@@ -310,26 +308,14 @@ class NotesRouter extends _i15.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i3.TreeScreen]
-class TreeRouter extends _i15.PageRouteInfo<TreeRouterArgs> {
-  TreeRouter({_i16.Key? key})
+class TreeRouter extends _i15.PageRouteInfo<void> {
+  const TreeRouter()
       : super(
           TreeRouter.name,
           path: 'tree',
-          args: TreeRouterArgs(key: key),
         );
 
   static const String name = 'TreeRouter';
-}
-
-class TreeRouterArgs {
-  const TreeRouterArgs({this.key});
-
-  final _i16.Key? key;
-
-  @override
-  String toString() {
-    return 'TreeRouterArgs{key: $key}';
-  }
 }
 
 /// generated route for

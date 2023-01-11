@@ -1,22 +1,28 @@
-import 'package:familia_flutter/config.dart';
 import 'package:familia_flutter/themes/colors.dart';
+import 'package:familia_flutter/themes/sizes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-enum BranchElementPositionType { left, middle, right }
+/// Компонент рендера веток между элементами
+/// containerRenderBox - RenderBox контейнера - холста
+/// elementsRenderBoxes - список RenderBoxes элементов слева на право (элемента может быть более двух)
+/// verticalDirection - направление широкой частивверх - вниз
+/// alignment - горизонтальное расположение
+/// AppSizes.minBranchLineSize - высота ветки
 
 class BranchLinePainter extends StatelessWidget {
-
   const BranchLinePainter(
       {Key? key,
-        required this.containerRenderBox,
-        required this.elementsRenderBoxes,
-        required this.verticalDirection})
+      required this.containerRenderBox,
+      required this.elementsRenderBoxes,
+      required this.verticalDirection,
+      required this.alignment})
       : super(key: key);
 
   final RenderBox? containerRenderBox;
-  final Map<String, RenderBox> elementsRenderBoxes;
+  final List<RenderBox> elementsRenderBoxes;
   final AxisDirection verticalDirection;
+  final CrossAxisAlignment alignment;
 
   @override
   Widget build(BuildContext context) {
@@ -24,26 +30,34 @@ class BranchLinePainter extends StatelessWidget {
       return Container();
     }
 
+    double containerHeight = AppSizes.minBranchLineSize;
+    if (elementsRenderBoxes.length > 1) {
+      containerHeight = containerHeight * 2;
+    }
+
     return CustomPaint(
-        size: Size(containerRenderBox!.size.width, Config.branchLineHeight),
+        size: Size(containerRenderBox!.size.width, containerHeight),
         painter: _BranchLinePainter(
             elementsRenderBoxes: elementsRenderBoxes,
             containerRenderBox: containerRenderBox!,
-            verticalDirection: verticalDirection)
-    );
+            verticalDirection: verticalDirection,
+            alignment: alignment));
   }
 }
 
 class _BranchLinePainter extends CustomPainter {
-
   _BranchLinePainter(
-      {required this.containerRenderBox,
+      {required this.alignment,
+      required this.containerRenderBox,
       required this.elementsRenderBoxes,
       required this.verticalDirection});
 
-  final Map<String, RenderBox> elementsRenderBoxes;
+  final List<RenderBox> elementsRenderBoxes;
   final RenderBox containerRenderBox;
   final AxisDirection verticalDirection;
+  final CrossAxisAlignment alignment;
+
+  final Path path = Path();
 
   // get Offset relative parent widget
   Offset getRelativeOffset(RenderBox child) {
@@ -51,20 +65,9 @@ class _BranchLinePainter extends CustomPainter {
     return containerRenderBox.globalToLocal(childOffset);
   }
 
-  getPositionType(MapEntry<String, RenderBox> item) {
-    if (elementsRenderBoxes.length == 1) {
-      return BranchElementPositionType.middle;
-    }
-
-    if (item.key == elementsRenderBoxes.keys.first) {
-      return BranchElementPositionType.left;
-    }
-
-    if (item.key == elementsRenderBoxes.keys.last) {
-      return BranchElementPositionType.right;
-    }
-
-    return BranchElementPositionType.middle;
+  double getCenterElementPositionX(RenderBox renderBox){
+    Offset offset = getRelativeOffset(renderBox);
+    return offset.dx + renderBox.size.width / 2;
   }
 
   @override
@@ -75,33 +78,59 @@ class _BranchLinePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeJoin = StrokeJoin.round;
 
-    var path = Path();
-    for (var item in elementsRenderBoxes.entries) {
-      var xPosition = getRelativeOffset(item.value);
+    // X позиции центра элементов
+    var xLeftElement = getCenterElementPositionX(elementsRenderBoxes.first);
+    var xRightElement = getCenterElementPositionX(elementsRenderBoxes.last);
+    var xMiddle = xLeftElement + (xRightElement - xLeftElement)/2;
 
-      // x - центр элемента
-      var centerX = xPosition.dx + item.value.size.width / 2;
-      var type = getPositionType(item);
+    // Y позциции низа, середины и верха контейнера
+    var yStart = verticalDirection == AxisDirection.up ? 0.0 : size.height;
+    var yMiddle = size.height / 2;
+    var halfLineSize = size.height / 2;
+    var yEnd = verticalDirection == AxisDirection.up ? size.height : 0.0;
 
-      var yStart = verticalDirection == AxisDirection.up ? 0.0 : size.height;
-      var yEnd = verticalDirection == AxisDirection.up ? size.height : 0.0;
-
-      path.moveTo(centerX, yStart);
-
-      switch (type) {
-        case BranchElementPositionType.left:
-          path.quadraticBezierTo(centerX, yEnd, centerX + size.height, yEnd);
-          path.lineTo(containerRenderBox.size.width / 2, yEnd);
+    if (elementsRenderBoxes.length > 1) {
+      switch (alignment) {
+        // center
+        case CrossAxisAlignment.center:
+          path.moveTo(xMiddle, yMiddle);
+          path.lineTo(xMiddle, yEnd);
+          path.moveTo(xLeftElement, yStart);
+          path.quadraticBezierTo(xLeftElement, yMiddle, xLeftElement + halfLineSize, yMiddle);
+          path.lineTo(xRightElement - halfLineSize, yMiddle);
+          path.quadraticBezierTo(xRightElement, yMiddle, xRightElement, yStart);
           break;
-        case BranchElementPositionType.right:
-          path.quadraticBezierTo(centerX, yEnd, centerX - size.height, yEnd);
-          path.lineTo(containerRenderBox.size.width / 2, yEnd);
+        // left
+        case CrossAxisAlignment.start:
+          path.moveTo(xLeftElement, yStart);
+          path.lineTo(xLeftElement, yEnd);
+          path.moveTo(xLeftElement, yMiddle);
+          path.lineTo(xRightElement - halfLineSize, yMiddle);
+          path.quadraticBezierTo(xRightElement, yMiddle, xRightElement, yStart);
+          break;
+        // right
+        case CrossAxisAlignment.end:
+          path.moveTo(xRightElement, yStart);
+          path.lineTo(xRightElement, yEnd);
+          path.moveTo(xRightElement, yMiddle);
+          path.lineTo(xLeftElement + halfLineSize, yMiddle);
+          path.quadraticBezierTo(xLeftElement, yMiddle, xLeftElement, yStart);
           break;
         default:
-          path.lineTo(centerX, yEnd);
+          break;
       }
+      // К каждому элементу child отрисовать по ветке
+      // if (elementsRenderBoxes.length> 2){
+      //   for (var index = 1; index < elementsRenderBoxes.length - 1; index ++){
+      //     var xItemElement = getCenterElementPositionX(elementsRenderBoxes[index]);
+      //     path.moveTo(xItemElement, yMiddle);
+      //     path.lineTo(xItemElement, yStart);
+      //   }
+      // }
+    } else {
+      path.moveTo(xLeftElement, yStart);
+      path.lineTo(xLeftElement, yEnd);
     }
-
     canvas.drawPath(path, paint);
   }
 

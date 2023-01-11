@@ -11,11 +11,11 @@ class MainRootScreen extends StatelessWidget {
     return SafeArea(child: AutoTabsScaffold(
       bottomNavigationBuilder: (_, tabsRouter) =>
           CustomBottomNavigationBar(tabsRouter: tabsRouter),
-      routes: [
+      routes: const [
         TreeRouter(),
-        const NotesRouter(),
-        const RelativesRouter(),
-        const ProfileRouter()
+        NotesRouter(),
+        RelativesRouter(),
+        ProfileRouter()
       ],
     ));
   }

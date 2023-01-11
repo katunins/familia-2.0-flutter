@@ -1,6 +1,5 @@
 import 'package:familia_flutter/components/relatives/user_item_description.dart';
 import 'package:familia_flutter/components/tree/branch_line_painter.dart';
-import 'package:familia_flutter/components/tree/vertical_branch_line.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/tree_element.dart';
 import 'package:familia_flutter/themes/sizes.dart';
@@ -29,7 +28,7 @@ class RelativesLineBlock extends StatefulWidget {
 class _RelativesLineBlockState extends State<RelativesLineBlock> {
   bool buildIsReady = false; // список элементов выведен, можно рисовать линии
   RenderBox? containerRenderBox;
-  Map<String, RenderBox> elementsRenderBoxes = {};
+  List<RenderBox> elementsRenderBoxes = [];
 
   // Записывает создает в объекте elementsRenderBoxes
   // значения RenderBox для каждого элемента по id GlobalKey
@@ -37,7 +36,7 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
     for (var globalKeys in widget.parentsElementsKeys.entries) {
       var renderBox = getRenderBox(globalKeys.value);
       if (renderBox != null) {
-        elementsRenderBoxes[globalKeys.key] = renderBox;
+        elementsRenderBoxes.add(renderBox);
       }
     }
   }
@@ -63,7 +62,6 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
   @override
   Widget build(BuildContext context) {
     return Column(key: widget._containerKey, children: [
-      VerticalBranchLine(size: AppSizes.minBranchLineSize),
       if (containerRenderBox != null)
         Container(
           margin: const EdgeInsets.only(bottom: 8),
@@ -71,6 +69,7 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
             containerRenderBox: containerRenderBox,
             elementsRenderBoxes: elementsRenderBoxes,
             verticalDirection: AxisDirection.down,
+            alignment: CrossAxisAlignment.center,
           ),
         ),
       Row(

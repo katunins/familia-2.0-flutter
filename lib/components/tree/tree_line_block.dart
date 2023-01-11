@@ -1,19 +1,22 @@
 import 'package:familia_flutter/components/tree/tree_element.dart';
 import 'package:familia_flutter/components/tree/tree_vertical_builder.dart';
-import 'package:familia_flutter/components/tree/vertical_tree_branch_line.dart';
+import 'package:familia_flutter/stores/tree.store.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../helpers/family_ties.dart';
+import '../../helpers/util.helper.dart';
 import '../../models/tree_element.dart';
+import 'branch_line_painter.dart';
 
 /// блок для отрисовки элементов в одной линии древа
 /// elements - элементы (дети или родители) юзера
 /// verticalDirection - направление (ниже / выше основного юзера)
 /// onPressed - клик на элемент древа
 
-class TreeHorizontalLineBlock extends StatelessWidget {
-  TreeHorizontalLineBlock({
+class TreeHorizontalLineBlock extends StatefulWidget {
+  const TreeHorizontalLineBlock({
     super.key,
     required this.elements,
     this.onPressed,
@@ -24,39 +27,65 @@ class TreeHorizontalLineBlock extends StatelessWidget {
   final List<TreeElementModel> elements;
   final Function(String userId)? onPressed;
 
-  final GlobalKey _containerKey = GlobalKey();
   final AxisDirection verticalDirection;
   final CrossAxisAlignment alignment;
 
   @override
+  State<TreeHorizontalLineBlock> createState() => _TreeHorizontalLineBlockState();
+}
+
+class _TreeHorizontalLineBlockState extends State<TreeHorizontalLineBlock> {
+  final GlobalKey _containerKey = GlobalKey();
+  RenderBox? containerRenderBox;
+  bool readyToPaintLines = false;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      containerRenderBox = getRenderFromContext(context);
+      readyToPaintLines = true;
+      setState(() {});
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) => Observer(builder: (_) {
         var childrenWidgets = <Widget>[
-          const VerticalTreeBranchLine(),
+          if (readyToPaintLines)
+            BranchLinePainter(
+              containerRenderBox: containerRenderBox,
+              elementsRenderBoxes:
+                  treeStore.getRenderBoxes(widget.elements.map((element) => element.id).toList()),
+              verticalDirection: widget.verticalDirection,
+              alignment: widget.alignment,
+            ),
           Row(
-            mainAxisSize: MainAxisSize.min,
+              mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment:
-                  verticalDirection == AxisDirection.down ? CrossAxisAlignment.start : CrossAxisAlignment.end,
-              children: elements.map((item) {
+              crossAxisAlignment: widget.verticalDirection == AxisDirection.down
+                  ? CrossAxisAlignment.start
+                  : CrossAxisAlignment.end,
+              children: widget.elements.map((item) {
                 var familyTies = FamilyTies(rootUser: item);
                 if (familyTies.children.isNotEmpty) {
                   return TreeVerticalBuilder(
                     rootUser: item,
-                    verticalDirection: verticalDirection,
+                    verticalDirection: widget.verticalDirection,
                     showRoot: true,
-                    alignment: alignment,
+                    alignment: widget.alignment,
                   );
                 }
                 return TreeElement(user: item);
               }).toList()),
         ];
 
-        if (verticalDirection == AxisDirection.up) {
+        if (widget.verticalDirection == AxisDirection.up) {
           childrenWidgets = childrenWidgets.reversed.toList();
         }
 
         return Column(
-          crossAxisAlignment: alignment,
+          crossAxisAlignment: widget.alignment,
           key: _containerKey,
           children: childrenWidgets,
         );

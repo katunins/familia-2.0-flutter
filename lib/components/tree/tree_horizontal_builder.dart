@@ -56,7 +56,7 @@ class TreeHorizontalBuilder extends StatelessWidget {
     //при нечетном количестве элементов правая ветка всегда меньше первой
     //добавим прозрачный элемент для симметрии
     if (alignment == CrossAxisAlignment.center && !elements.length.isEven) {
-      res.add(SizedBox(width: treeStore.itemBlockWidth + AppSizes.minBranchLineSize + treeStore.paddingBetween * 2));
+      res.add(SizedBox(width: treeStore.itemBlockWidth + AppSizes.minBranchLineSize + treeStore.paddingBetween/2));
     }
     return res; //alignment == Alignment.centerLeft ? res : res.reversed.toList();
   }
