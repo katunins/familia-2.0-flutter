@@ -33,6 +33,7 @@ class TreeHorizontalLineBlock extends StatelessWidget {
         var childrenWidgets = <Widget>[
           const VerticalTreeBranchLine(),
           Row(
+            mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment:
                   verticalDirection == AxisDirection.down ? CrossAxisAlignment.start : CrossAxisAlignment.end,

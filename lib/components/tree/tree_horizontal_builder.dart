@@ -64,6 +64,7 @@ class TreeHorizontalBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [...leftChildren, TreeElement(user: rootUser), ...rightChildren],
     );

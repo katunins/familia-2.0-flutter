@@ -15,13 +15,13 @@ class TreeRootColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: alignment,
       children: [
-        TreeVerticalBuilder(rootUser: rootUser, verticalDirection: AxisDirection.up, showRoot: false, alignment: alignment),
+        TreeVerticalBuilder(
+            rootUser: rootUser, verticalDirection: AxisDirection.up, showRoot: false, alignment: alignment),
         TreeHorizontalBuilder(
           rootUser: rootUser,
           elements: FamilyTies(rootUser: rootUser).sisterBrothers,
           alignment: alignment,
         ),
-        // TreeVerticalBuilder(rootUser: rootUser, verticalDirection: AxisDirection.down, showRoot: false, alignment: alignment),
       ],
     );
   }
