@@ -12,9 +12,7 @@ isEmailFormat(String? email) {
   if (email == null) {
     return false;
   }
-  return RegExp(
-          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-      .hasMatch(email);
+  return RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+").hasMatch(email);
 }
 
 String? getImageUrl(String? imageUrl) {
@@ -87,13 +85,11 @@ List<TreeElementModel> getAllUsers({List<String>? excluded}) {
 
   List<TreeElementModel> res = [];
 
-  if (excluded.firstWhere((id) => userStore.user?.id == id, orElse: () => '') ==
-      '') {
+  if (excluded.firstWhere((id) => userStore.user?.id == id, orElse: () => '') == '') {
     res.add(userStore.user!.toTreeElement());
   }
-  var filterRelatives = relativesStore.relatives.where((element) =>
-      excluded!.firstWhere((id) => element.id == id, orElse: () => '') ==
-      '');
+  var filterRelatives = relativesStore.relatives
+      .where((element) => excluded!.firstWhere((id) => element.id == id, orElse: () => '') == '');
   res.addAll(filterRelatives.map((item) => item.toTreeElement()));
   return res;
 }
@@ -121,11 +117,28 @@ void showSnackBar(String message) {
 }
 
 /// ищет значения  list1 в list2
-bool searchListInList(List list_1,List list_2) {
+bool searchListInList(List list_1, List list_2) {
   for (var element in list_1) {
     if (list_2.contains(element)) {
       return true;
     }
   }
   return false;
+}
+
+/// Возвращает оффсет для определния позиции элемента
+Offset getRelativeOffset({required RenderBox containerRenderBox, required RenderBox child}) {
+  Offset childOffset = child.localToGlobal(Offset.zero);
+  return containerRenderBox.globalToLocal(childOffset);
+}
+
+/// Возвращает оффсет для определния позиции элемента
+double getCenterElementXPosition({required GlobalKey containerKey, required GlobalKey childKey}) {
+  RenderBox? containerRenderBox = getRenderBox(containerKey);
+  RenderBox? childRenderBox = getRenderBox(childKey);
+  if (containerRenderBox == null || childRenderBox == null) {
+    return 0;
+  }
+  double xChildPosition = getRelativeOffset(containerRenderBox: containerRenderBox, child: childRenderBox).dx;
+  return xChildPosition + childRenderBox.size.width / 2;
 }
