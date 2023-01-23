@@ -15,6 +15,7 @@ class TreeRootColumn extends StatelessWidget {
     return Column(
       crossAxisAlignment: alignment,
       children: [
+        // TreeBlock(familyTies: FamilyTies(rootUser: rootUser), verticalDirection: AxisDirection.up, level: 0),
         TreeVerticalBuilder(
             rootUser: rootUser, verticalDirection: AxisDirection.up, showRoot: false, alignment: alignment),
         TreeHorizontalBuilder(

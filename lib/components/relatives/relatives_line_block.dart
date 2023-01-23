@@ -1,5 +1,5 @@
 import 'package:familia_flutter/components/relatives/user_item_description.dart';
-import 'package:familia_flutter/components/tree/branch_line_painter.dart';
+import 'package:familia_flutter/components/tree/branch_builder.dart';
 import 'package:familia_flutter/helpers/util.helper.dart';
 import 'package:familia_flutter/models/tree_element.dart';
 import 'package:familia_flutter/themes/sizes.dart';
@@ -65,8 +65,7 @@ class _RelativesLineBlockState extends State<RelativesLineBlock> {
       if (containerRenderBox != null)
         Container(
           margin: const EdgeInsets.only(bottom: 8),
-          child: BranchLinePainter(
-            containerRenderBox: containerRenderBox,
+          child: BranchBuilder(
             elementsRenderBoxes: elementsRenderBoxes,
             verticalDirection: AxisDirection.down,
             alignment: CrossAxisAlignment.center,

@@ -45,23 +45,6 @@ mixin _$TreeStore on TreeStoreBase, Store {
               name: 'TreeStoreBase.rootFamilyTies'))
       .value;
 
-  late final _$readyToPaintBranchesAtom =
-      Atom(name: 'TreeStoreBase.readyToPaintBranches', context: context);
-
-  @override
-  bool get readyToPaintBranches {
-    _$readyToPaintBranchesAtom.reportRead();
-    return super.readyToPaintBranches;
-  }
-
-  @override
-  set readyToPaintBranches(bool value) {
-    _$readyToPaintBranchesAtom.reportWrite(value, super.readyToPaintBranches,
-        () {
-      super.readyToPaintBranches = value;
-    });
-  }
-
   late final _$rootUserAtom =
       Atom(name: 'TreeStoreBase.rootUser', context: context);
 
@@ -78,89 +61,24 @@ mixin _$TreeStore on TreeStoreBase, Store {
     });
   }
 
-  late final _$zoomAtom = Atom(name: 'TreeStoreBase.zoom', context: context);
+  late final _$elementKeysAtom =
+      Atom(name: 'TreeStoreBase.elementKeys', context: context);
 
   @override
-  double get zoom {
-    _$zoomAtom.reportRead();
-    return super.zoom;
+  Map<String, GlobalKey<State<StatefulWidget>>> get elementKeys {
+    _$elementKeysAtom.reportRead();
+    return super.elementKeys;
   }
 
   @override
-  set zoom(double value) {
-    _$zoomAtom.reportWrite(value, super.zoom, () {
-      super.zoom = value;
-    });
-  }
-
-  late final _$elementElementsAtom =
-      Atom(name: 'TreeStoreBase.elementElements', context: context);
-
-  @override
-  Map<String, List<String>> get elementElements {
-    _$elementElementsAtom.reportRead();
-    return super.elementElements;
-  }
-
-  @override
-  set elementElements(Map<String, List<String>> value) {
-    _$elementElementsAtom.reportWrite(value, super.elementElements, () {
-      super.elementElements = value;
-    });
-  }
-
-  late final _$elementEdgeInsetsAtom =
-      Atom(name: 'TreeStoreBase.elementEdgeInsets', context: context);
-
-  @override
-  Map<String, EdgeInsets> get elementEdgeInsets {
-    _$elementEdgeInsetsAtom.reportRead();
-    return super.elementEdgeInsets;
-  }
-
-  @override
-  set elementEdgeInsets(Map<String, EdgeInsets> value) {
-    _$elementEdgeInsetsAtom.reportWrite(value, super.elementEdgeInsets, () {
-      super.elementEdgeInsets = value;
+  set elementKeys(Map<String, GlobalKey<State<StatefulWidget>>> value) {
+    _$elementKeysAtom.reportWrite(value, super.elementKeys, () {
+      super.elementKeys = value;
     });
   }
 
   late final _$TreeStoreBaseActionController =
       ActionController(name: 'TreeStoreBase', context: context);
-
-  @override
-  dynamic setOneColumnElementsShift() {
-    final _$actionInfo = _$TreeStoreBaseActionController.startAction(
-        name: 'TreeStoreBase.setOneColumnElementsShift');
-    try {
-      return super.setOneColumnElementsShift();
-    } finally {
-      _$TreeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic setReadyToPaintBranches() {
-    final _$actionInfo = _$TreeStoreBaseActionController.startAction(
-        name: 'TreeStoreBase.setReadyToPaintBranches');
-    try {
-      return super.setReadyToPaintBranches();
-    } finally {
-      _$TreeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  dynamic setElementElements(
-      {required String userId, required List<String> elements}) {
-    final _$actionInfo = _$TreeStoreBaseActionController.startAction(
-        name: 'TreeStoreBase.setElementElements');
-    try {
-      return super.setElementElements(userId: userId, elements: elements);
-    } finally {
-      _$TreeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
 
   @override
   dynamic setElementKey(
@@ -187,24 +105,10 @@ mixin _$TreeStore on TreeStoreBase, Store {
   }
 
   @override
-  dynamic setUserPicSize(double val) {
-    final _$actionInfo = _$TreeStoreBaseActionController.startAction(
-        name: 'TreeStoreBase.setUserPicSize');
-    try {
-      return super.setUserPicSize(val);
-    } finally {
-      _$TreeStoreBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   String toString() {
     return '''
-readyToPaintBranches: ${readyToPaintBranches},
 rootUser: ${rootUser},
-zoom: ${zoom},
-elementElements: ${elementElements},
-elementEdgeInsets: ${elementEdgeInsets},
+elementKeys: ${elementKeys},
 userPicSize: ${userPicSize},
 treeElementHeight: ${treeElementHeight},
 paddingBetween: ${paddingBetween},

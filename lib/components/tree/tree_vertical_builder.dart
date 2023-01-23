@@ -1,13 +1,9 @@
 import 'package:familia_flutter/components/tree/tree_element.dart';
-import 'package:familia_flutter/components/tree/tree_line_block.dart';
-import 'package:familia_flutter/helpers/util.helper.dart';
-import 'package:familia_flutter/main.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../helpers/family_ties.dart';
 import '../../models/tree_element.dart';
-import '../../stores/tree.store.dart';
 
 /// компонент построения вертикального и горизонтального древа
 /// должен учавствовать в рекурсивной функции
@@ -44,23 +40,15 @@ class _TreeVerticalBuilderState extends State<TreeVerticalBuilder> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       addUserToElementElementsStore();
-      // treeStore.setOneColumnElementsShift();
     });
     super.initState();
-  }
-
-  @override
-  didUpdateWidget(oldWidget){
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      treeStore.setOneColumnElementsShift();
-    });
   }
 
   addUserToElementElementsStore() {
     var familyTies = FamilyTies(rootUser: widget.rootUser);
     var nextUsers = widget.verticalDirection == AxisDirection.down ? familyTies.children : familyTies.parents;
     if (nextUsers.isNotEmpty) {
-      treeStore.setElementElements(userId: widget.rootUser.id, elements: nextUsers.map((e) => e.id).toList());
+      // treeStore.setElementElements(userId: widget.rootUser.id, elements: nextUsers.map((e) => e.id).toList());
     }
   }
 
@@ -141,22 +129,22 @@ class _TreeVerticalBuilderState extends State<TreeVerticalBuilder> {
         var columnWidgets = [
           if (widget.showRoot)
             Container(
-              margin: treeStore.elementEdgeInsets[widget.rootUser.id],
+              // margin: treeStore.elementEdgeInsets[widget.rootUser.id],
               // margin: edgeInsets,
               // key: _rootKey,
               child: TreeElement(user: widget.rootUser),
             ),
-          if (nextUsers.isNotEmpty)
-            Container(
-              // key: _childKey,
-              // margin: edgeInsets,
-              child: TreeHorizontalLineBlock(
-                  verticalDirection: widget.verticalDirection,
-                  alignment: widget.alignment,
-                  // key: GlobalKey(),
-                  elements: nextUsers,
-                  onPressed: (id) {}),
-            ),
+          // if (nextUsers.isNotEmpty)
+          //   Container(
+          //     // key: _childKey,
+          //     // margin: edgeInsets,
+          //     child: TreeHorizontalLineBlock(
+          //         verticalDirection: widget.verticalDirection,
+          //         alignment: widget.alignment,
+          //         // key: GlobalKey(),
+          //         elements: nextUsers,
+          //         onPressed: (id) {}),
+          //   ),
         ];
 
         if (widget.verticalDirection == AxisDirection.up) {

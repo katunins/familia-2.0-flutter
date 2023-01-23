@@ -1,12 +1,9 @@
+import 'package:familia_flutter/components/tree/tree_block.dart';
 import 'package:familia_flutter/components/tree/tree_root_column.dart';
-import 'package:familia_flutter/components/tree/tree_vertical_builder.dart';
-import 'package:familia_flutter/models/tree_element.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../helpers/family_ties.dart';
-import '../../helpers/util.helper.dart';
-import '../../main.dart';
 import '../../stores/tree.store.dart';
 
 class TreeRootComponent extends StatefulWidget {
@@ -19,10 +16,10 @@ class TreeRootComponent extends StatefulWidget {
 class _TreeRootComponentState extends State<TreeRootComponent> {
   double rightShift = 0;
   double leftShift = 0;
+  double leftChildrenShift = 0;
 
   final GlobalKey _rootBlockKey = GlobalKey();
   final GlobalKey _spouseBlockKey = GlobalKey();
-  final GlobalKey _childrenBlockKey = GlobalKey();
 
   @override
   void initState() {
@@ -35,11 +32,11 @@ class _TreeRootComponentState extends State<TreeRootComponent> {
       _shiftRootSpouseContainers();
     }
     _shiftTopBottomContainers();
+    // treeStore.setReadyToPaintBranches();
   }
 
   //  Если нижний контейнер с детьми не симметричный, то сдвинем верхний контейнер
-  _shiftTopBottomContainers(){}
-
+  _shiftTopBottomContainers() {}
 
   // делает левый и правый контейнер равными по ширине
   _shiftRootSpouseContainers() {
@@ -76,14 +73,11 @@ class _TreeRootComponentState extends State<TreeRootComponent> {
                       alignment: CrossAxisAlignment.start),
               ],
             ),
-            Container(
-                margin: EdgeInsets.only(left: leftShift, right: rightShift),
-                child: TreeVerticalBuilder(
-                    key: _childrenBlockKey,
-                    rootUser: treeStore.rootUser,
-                    verticalDirection: AxisDirection.down,
-                    showRoot: false,
-                    alignment: CrossAxisAlignment.center)),
+            TreeBlock(
+              afterBuildCallback: (){},
+                level: 0,
+                familyTies: FamilyTies(rootUser: treeStore.rootUser),
+                verticalDirection: AxisDirection.down),
           ],
         );
       });

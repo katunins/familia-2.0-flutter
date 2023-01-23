@@ -47,8 +47,8 @@ Gender getGenderFromJson(String? value) {
   }
 }
 
-RenderBox? getRenderBox(GlobalKey globalKey) {
-  if (globalKey.currentContext == null) {
+RenderBox? getRenderBox(GlobalKey? globalKey) {
+  if (globalKey == null || globalKey.currentContext == null) {
     return null;
   }
   return globalKey.currentContext!.findRenderObject() as RenderBox;
@@ -133,12 +133,14 @@ Offset getRelativeOffset({required RenderBox containerRenderBox, required Render
 }
 
 /// Возвращает оффсет для определния позиции элемента
-double getCenterElementXPosition({required GlobalKey containerKey, required GlobalKey childKey}) {
+double? getCenterElementXPosition({required GlobalKey containerKey, required GlobalKey childKey}) {
   RenderBox? containerRenderBox = getRenderBox(containerKey);
   RenderBox? childRenderBox = getRenderBox(childKey);
   if (containerRenderBox == null || childRenderBox == null) {
-    return 0;
+    return null;
   }
   double xChildPosition = getRelativeOffset(containerRenderBox: containerRenderBox, child: childRenderBox).dx;
   return xChildPosition + childRenderBox.size.width / 2;
 }
+
+String getHexColor (Color color) => '#${color.value.toRadixString(16).substring(2, 8)}';
