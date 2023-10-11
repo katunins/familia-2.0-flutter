@@ -9,6 +9,7 @@ import '../../models/base_user_data.model.dart';
 /// finishCallback - функция, вызывающаяся после сохранения нового пользователя
 /// hideBottomSheetAddRelativeButton - при выборе родителя скрывать кнопку Добавить пользователя
 
+@RoutePage(name: 'CreateNewRelativeRouter')
 class CreateRelativeScreen extends StatelessWidget {
   const CreateRelativeScreen(
       {Key? key,

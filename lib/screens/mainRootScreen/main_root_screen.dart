@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../components/root/custom_bottom_navigation_bar.dart';
 import '../../routers/app_router.gr.dart';
 
+@RoutePage()
 class MainRootScreen extends StatelessWidget {
   const MainRootScreen({Key? key}) : super(key: key);
   @override

@@ -12,6 +12,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 
 import '../../themes/sizes.dart';
 
+@RoutePage(name: 'RelativesListRouter')
 class RelativesListScreen extends StatefulWidget {
   const RelativesListScreen({Key? key}) : super(key: key);
 

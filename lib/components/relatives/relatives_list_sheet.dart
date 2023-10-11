@@ -7,6 +7,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:get_it/get_it.dart';
 import '../../../helpers/util.helper.dart';
 import '../../helpers/bottom_sheet.dart';
+import '../../routers/app_router.dart';
 import '../../routers/app_router.gr.dart';
 
 /// BottomSheet со списком пользователея и родственников, которые можно выбрать

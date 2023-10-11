@@ -12,6 +12,7 @@ import '../../services/notes.service.dart';
 import '../../stores/relatives.store.dart';
 import '../../themes/sizes.dart';
 
+@RoutePage(name: 'RelativeDetailRouter')
 class RelativeDetailScreen extends StatefulWidget {
   const RelativeDetailScreen({Key? key, required this.id}) : super(key: key);
 

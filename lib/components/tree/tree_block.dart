@@ -95,36 +95,37 @@ class _TreeBlockState extends State<TreeBlock> {
   // }
 
   @override
-  Widget build(BuildContext context) =>Observer(builder: (_){
+  Widget build(BuildContext context) => Observer(builder: (_) {
+        List<Widget> children = [
+          Padding(
+              padding: EdgeInsets.only(left: leftShift),
+              child: Column(
+                children: [
+                  if (widget.level > 0)
+                    GestureDetector(
+                        onTap: () => treeStore.setRootUser(widget.familyTies.rootUser),
+                        child: TreeElement(user: widget.familyTies.rootUser)),
+                  BranchBuilder(
+                      elementsRenderBoxes:
+                          elements.map((element) => getRenderBox(treeStore.elementKeys[element.id])).toList(),
+                      verticalDirection: widget.verticalDirection,
+                      alignment: CrossAxisAlignment.center)
+                ],
+              )),
+          TreeElementsLine(
+              afterBuildCallback: alignment,
+              elements: elements,
+              verticalDirection: widget.verticalDirection,
+              level: widget.level)
+        ];
 
-    List<Widget> children = [
-      Padding(
-          padding: EdgeInsets.only(left: leftShift),
-          child: Column(
-            children: [
-              if (widget.level > 0) GestureDetector(
-          onTap: ()=>treeStore.setRootUser(widget.familyTies.rootUser), child: TreeElement(user: widget.familyTies.rootUser)),
-              BranchBuilder(
-                  elementsRenderBoxes:
-                  elements.map((element) => getRenderBox(treeStore.elementKeys[element.id])).toList(),
-                  verticalDirection: widget.verticalDirection,
-                  alignment: CrossAxisAlignment.center)
-            ],
-          )),
-      TreeElementsLine(
-          afterBuildCallback: alignment,
-          elements: elements,
-          verticalDirection: widget.verticalDirection,
-          level: widget.level)
-    ];
+        if (widget.verticalDirection == AxisDirection.up) {
+          children = children.reversed.toList();
+        }
 
-    if (widget.verticalDirection == AxisDirection.up) {
-      children = children.reversed.toList();
-    }
-
-    return Column(
-      key: containerKey,
-      children: children,
-    );
-  });
+        return Column(
+          key: containerKey,
+          children: children,
+        );
+      });
 }

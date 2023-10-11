@@ -13,6 +13,7 @@ import '../../components/notes/note_list_item.dart';
 import '../../components/widgets/notes_separator.dart';
 import '../../helpers/bottom_sheet.dart';
 
+@RoutePage(name: 'NotesListRouter')
 class NotesListScreen extends StatelessWidget {
   const NotesListScreen({Key? key}) : super(key: key);
 

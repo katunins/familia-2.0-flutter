@@ -1,5 +1,5 @@
-import 'package:familia_flutter/routers/app_router.gr.dart';
-import 'package:familia_flutter/routers/guest_router.gr.dart';
+import 'package:familia_flutter/routers/app_router.dart';
+import 'package:familia_flutter/routers/guest_router.dart';
 import 'package:familia_flutter/screens/splash_screen.dart';
 import 'package:familia_flutter/stores/app.store.dart';
 import 'package:familia_flutter/themes/main.theme.dart';

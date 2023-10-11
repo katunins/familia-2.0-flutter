@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../components/notes/note_list_item.dart';
@@ -7,6 +8,7 @@ import '../../models/note.model.dart';
 import '../../models/search_store_bar.model.dart';
 import '../../services/notes.service.dart';
 
+@RoutePage(name: 'RelativeNotesRouter')
 class RelativeNotesListScreen extends StatefulWidget {
   const RelativeNotesListScreen({Key? key, required this.relativeId}) : super(key: key);
 

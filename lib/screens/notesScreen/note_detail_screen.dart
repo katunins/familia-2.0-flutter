@@ -12,6 +12,7 @@ import '../../components/common/button.dart';
 import '../../components/common/image_widget.dart';
 import '../../routers/app_router.gr.dart';
 
+@RoutePage(name: 'NoteDetailRouter')
 class NoteDetailScreen extends StatelessWidget {
   const NoteDetailScreen({Key? key, required this.id}) : super(key: key);
 

@@ -1,10 +1,17 @@
 import 'package:familia_flutter/helpers/util.helper.dart';
+import 'package:mobx/mobx.dart';
 
 import '../models/gender.enum.dart';
 import '../models/tree_element.dart';
 
-class FamilyTies {
-  FamilyTies({required this.rootUser});
+part 'familyTies.store.g.dart';
+
+class FamilyTies = FamilyTiesBase with _$FamilyTiesStore;
+
+abstract class FamilyTiesBase with Store {
+
+// class FamilyTiesBase {
+  FamilyTiesBase({required this.rootUser});
 
   final TreeElementModel rootUser;
 

@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import '../../stores/relatives.store.dart';
 import '../../components/common/set_user_data_component.dart';
 
+@RoutePage(name: 'EditRelativeRouter')
 class EditRelativeScreen extends StatelessWidget {
   const EditRelativeScreen({Key? key, required this.relative})
       : super(key: key);

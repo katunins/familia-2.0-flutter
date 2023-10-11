@@ -58,21 +58,21 @@ class _TreeRootComponentState extends State<TreeRootComponent> {
   Widget build(BuildContext context) => Observer(builder: (_) {
         return Column(
           children: [
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TreeRootColumn(
-                    key: _rootBlockKey,
-                    rootUser: treeStore.rootUser,
-                    alignment: twoColumnMode ? CrossAxisAlignment.end : CrossAxisAlignment.center),
-                if (twoColumnMode)
-                  TreeRootColumn(
-                      key: _spouseBlockKey,
-                      rootUser: treeStore.rootFamilyTies.spouses.first,
-                      alignment: CrossAxisAlignment.start),
-              ],
-            ),
+            // Row(
+            //   crossAxisAlignment: CrossAxisAlignment.end,
+            //   mainAxisAlignment: MainAxisAlignment.center,
+            //   children: [
+            //     TreeRootColumn(
+            //         key: _rootBlockKey,
+            //         rootUser: treeStore.rootUser,
+            //         alignment: twoColumnMode ? CrossAxisAlignment.end : CrossAxisAlignment.center),
+            //     if (twoColumnMode)
+            //       TreeRootColumn(
+            //           key: _spouseBlockKey,
+            //           rootUser: treeStore.rootFamilyTies.spouses.first,
+            //           alignment: CrossAxisAlignment.start),
+            //   ],
+            // ),
             TreeBlock(
               afterBuildCallback: (){},
                 level: 0,

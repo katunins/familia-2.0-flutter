@@ -66,7 +66,6 @@ class Api {
       default:
         appStore.setIsLoading(false);
     }
-
     var errorMessage = error.response?.data['message'];
     if (errorMessage != null && errorMessage != '') {
       showSnackBar(error.response?.data['message']);

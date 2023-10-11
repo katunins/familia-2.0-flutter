@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../themes/sizes.dart';
 import '../signUpScreen/sign_up_screen.dart';
 
+@RoutePage(name: 'SignInRouter')
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
 

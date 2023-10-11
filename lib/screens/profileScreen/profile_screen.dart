@@ -12,6 +12,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import '../../components/root/scaffold_wrapper.dart';
 import '../../themes/sizes.dart';
 
+@RoutePage(name: 'ProfileScreenRouter')
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({Key? key}) : super(key: key);
 

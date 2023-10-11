@@ -14,81 +14,54 @@ import 'package:familia_flutter/screens/treeScreen/tree_screen.dart';
 import '../screens/notesScreen/edit_note_screen.dart';
 import '../screens/relativesScreen/create_relative_screen.dart';
 import '../screens/relativesScreen/edit_relative_screen.dart';
+import 'app_router.gr.dart';
 import 'empty_router.dart';
 
-const commonRoutes = <AutoRoute>[
-  AutoRoute(
-      name: 'CreateNewRelativeRouter',
-      path: CreateRelativeScreen.pathName,
-      page: CreateRelativeScreen)
+var commonRoutes = [
+  AutoRoute(path: CreateRelativeScreen.pathName, page: CreateNewRelativeRouter.page),
 ];
 
-@MaterialAutoRouter(routes: [
-  AutoRoute(path: '/', page: MainRootScreen, initial: true, children: [
-    AutoRoute(
-        name: 'NotesRouter',
-        path: 'notes',
-        page: EmptyRouterPage,
-        children: [
-          AutoRoute(
-              initial: true,
-              name: 'NotesListRouter',
-              path: NotesListScreen.pathName,
-              page: NotesListScreen),
-          AutoRoute(
-              name: 'NoteDetailRouter',
-              path: 'noteDetail',
-              page: NoteDetailScreen),
-          AutoRoute(
-              name: 'CreateNoteRouter',
-              path: CreateNoteScreen.pathName,
-              page: CreateNoteScreen),
-          AutoRoute(
-              name: 'EditNoteRouter',
-              path: EditNoteScreen.pathName,
-              page: EditNoteScreen),
-        ]),
-    AutoRoute(name: 'TreeRouter', path: 'tree', page: TreeScreen),
-    AutoRoute(
-        name: 'RelativesRouter',
-        path: 'relatives',
-        page: EmptyRouterPage,
-        children: [
-          AutoRoute(
-              initial: true,
-              name: 'RelativesListRouter',
-              path: RelativesListScreen.pathName,
-              page: RelativesListScreen),
-          AutoRoute(
-              name: 'RelativeDetailRouter',
-              path: 'relativeDetail',
-              page: RelativeDetailScreen),
-          AutoRoute(
-              name: 'EditRelativeRouter',
-              path: EditRelativeScreen.pathName,
-              page: EditRelativeScreen),
-          AutoRoute(
-              name: 'RelativeNotesRouter',
-              path: RelativeNotesListScreen.pathName,
-              page: RelativeNotesListScreen),
-          ...commonRoutes,
-        ]),
-    AutoRoute(
-        name: 'ProfileRouter',
-        path: 'profile',
-        page: EmptyRouterPage,
-        children: [
-          AutoRoute(
-              initial: true,
-              name: 'ProfileScreenRouter',
-              path: ProfileScreen.pathName,
-              page: ProfileScreen),
-          AutoRoute(
-              name: 'EditProfileRouter',
-              path: EditProfileScreen.pathName,
-              page: EditProfileScreen),
-          ...commonRoutes
-        ]),
-  ])
-])
-class $AppRouter {}
+@AutoRouterConfig()
+class AppRouter extends $AppRouter {
+  @override
+  RouteType get defaultRouteType => const RouteType.material();
+  @override
+  final List<AutoRoute> routes = [
+    AutoRoute(path: '/', page: MainRootScreen.page, children: [
+      // AutoRoute(path: 'notes', page: NotesRouter.page, children: [
+        // AutoRoute(path: NotesListScreen.pathName, page: NotesListRouter.page),
+        // AutoRoute(path: 'noteDetail', page: NoteDetailRouter.page),
+        // AutoRoute(path: CreateNoteScreen.pathName, page: CreateNoteRouter.page),
+        // AutoRoute(path: EditNoteScreen.pathName, page: EditNoteRouter.page),
+      // ]),
+      // AutoRoute(path: 'tree', page: TreeRouter.page),
+      // AutoRoute(path: 'relatives', page: RelativesRouter.page, children: [
+      //   AutoRoute(path: '', path: RelativesListScreen.pathName, page: RelativesListRouter.page),
+      //   AutoRoute(path: 'relativeDetail', page: RelativeDetailRouter.page),
+      //   AutoRoute(path: EditRelativeScreen.pathName, page: EditRelativeRouter.page),
+      //   AutoRoute(path: RelativeNotesListScreen.pathName, page: RelativeNotesRouter.page),
+      //   ...commonRoutes
+      // ]),
+      // AutoRoute(path: 'profile', page: ProfileRouter.page, children: [
+      //   AutoRoute(path: '', path: ProfileScreen.pathName, page: ProfileScreenRouter.page),
+      //   AutoRoute(path: EditProfileScreen.pathName, page: EditProfileRouter.page),
+      //   ...commonRoutes
+      // ]),
+    ]),
+  ];
+}
+
+@RoutePage()
+class NotesRouter extends AutoRouter {
+  const NotesRouter({super.key});
+}
+
+@RoutePage()
+class RelativesRouter extends AutoRouter {
+  const RelativesRouter({super.key});
+}
+
+@RoutePage()
+class ProfileRouter extends AutoRouter {
+  const ProfileRouter({super.key});
+}

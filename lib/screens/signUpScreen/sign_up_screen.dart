@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../themes/sizes.dart';
 
+@RoutePage(name: 'SignUpRouter')
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
